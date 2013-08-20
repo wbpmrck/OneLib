@@ -53,7 +53,12 @@ OneLib.CMDSyntax = (function (my,global) {
      * @param name
      */
     _Module.prototype.getExportsCopy = function(){
-       return _copy(this.exports);
+        if(this.exports!==global){
+            return _copy(this.exports);
+        }
+        else{
+            return this.exports;
+        }
     };
     _Module.prototype.init = function(){
         var self = this;//save the this ref
@@ -108,7 +113,6 @@ OneLib.CMDSyntax = (function (my,global) {
         _reserved={'global':1,'window':1},
         //已经加载的模块
         _modules={
-          'global':global//模块载入的时候，把window缓存起来备用
         },
         //配置项
         _configs={
@@ -245,6 +249,12 @@ OneLib.CMDSyntax = (function (my,global) {
 
     //使用console输出信息
     _logger.setMode(0);
+
+    //把内置模块封装进去
+    _modules['global'] =  new _Module('global',[],function(){
+        return window;
+    },window);
+
     my.wrapToModule('OneLib.Log',OneLib.Log);
     my.wrapToModule('OneLib.ScriptLoader',OneLib.ScriptLoader);
     //根据浏览器queryString是否含有 CMDSyntaxDebug 选项，来决定是否开启日志
