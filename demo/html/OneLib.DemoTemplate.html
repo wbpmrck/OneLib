@@ -5,9 +5,17 @@
     <meta charset='utf-8'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!--布局-->
     <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.css" media="all">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap-responsive.css" media="all">
+    <!--基础样式调整-->
     <link rel="stylesheet" type="text/css" href="../css/demoBase.css" media="all">
+    <!--代码高亮-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/rainbow/themes/blackboard.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCore.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDefault.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreRDark.css" media="all">
+
 </head>
 <body id="root">
 
@@ -37,84 +45,72 @@
     <div class="row-fluid">
         <div id="justTakePosition" class="span3">
         </div>
+        <!--左侧导航-->
         <div id="demo_leftSlider"  class="span3 leftSlideContainer">
             <div class="well sidebar-nav">
-                <ul class="nav nav-list" data-bind="style:{maxHeight:leftSliderStyle.maxHeight}">
-                    <li class="nav-header">Sidebar</li>
-                    <li class="active"><a href="#">Link</a></li>
-                    <li><a href="#demo_define">define</a></li>
-                    <li><a href="#demo_define2">define2</a></li>
-                    <li><a href="#demo_define3">define3</a></li>
-                    <li class="nav-header">Sidebar</li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li class="nav-header">Sidebar</li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
+                <ul class="nav nav-list" data-bind="style:{maxHeight:leftSliderStyle.maxHeight},foreach:{data:groups,as:'group'}">
+
+                    <li class="nav-header" data-bind="text:group.name">
+                        <!-- ko foreach: {data:group.apis,as:'api'} -->
+                        <li class="apiSlider"  data-bind="css:{ active:api.selected}">
+                            <a data-bind="attr:{href:'#demo_'+api.name},text:api.name,click:api.apiClick"></a>
+                        </li>
+                        <!-- /ko -->
+                    </li>
+
                 </ul>
             </div><!--/.well -->
         </div><!--/span-->
+        <!--右侧demo区域-->
         <div  id="demo_rightDemos" class="span9">
-            <div class="hero-unit" data-bind="style:{minHeight:rightDemoStyle.minHeight}">
+            <div class="hero-unit" data-bind="foreach:{data:groups,as:'group'},style:{minHeight:rightDemoStyle.minHeight}">
 
-                <div class="apiRegion">
-                    <a class="anchor" name="demo_define" href="#demo_define">define 方法</a>
-                    <ul class="apiParams">
-                        <li class="apiParam">122</li>
-                        <li class="apiParam">333</li>
-                    </ul>
-                    <span>示例:</span><br/>
-                    <pre>
-                        <code data-language="javascript">
-                            def openFile(path):
-                            file = open(path, "r")
-                            content = file.read()
-                            file.close()
-                            return content
-                        </code>
-                    </pre>
+                <hr class="groupSpliter"/>
+                <div class="groupRegion">
+                    <h2 class="groupHeader" data-bind="text:group.name+'('+group.apis.length+')'"></h2>
+                    <hr  class="groupSpliter"/>
+                    <!-- ko foreach: {data:group.apis,as:'api'} -->
+                    <div class="apiregion">
+                        <a class="anchor" data-bind="attr:{name:'demo_'+api.name}"></a>
+                        <a data-bind="attr:{href:'#demo_'+api.name},text:api.name+'(:'+type+')'">$parent.name</a>
+                        <ul class="apiParams" data-bind="foreach:api.params">
+                            <li class="apiParam" data-bind="text:name+'(:'+type+')'">122</li>
+                            <pre data-bind="if:desc.length>0,text:desc">参数描述</pre>
+                        </ul>
+                        <!--代码示例区域-->
+                        <!-- ko foreach: {data:api.demoCodes,as:'demo'} -->
+                        <div class="codeDemo">
+                            <span data-bind="text:'示例:'+name">示例名称:</span><br/>
+
+                            <!--代码样例的处理-->
+                            <!--<span data-bind="if:codeContent&&type=='example'">-->
+                            <span data-bind="if:showSample">
+                                <pre class="brush: js;" data-bind="text:codeContent">
+
+                                </pre>
+                            </span>
+
+                            <!--真实demo的处理-->
+                            <!-- ko if: showRealDemo -->
+                            <div class="realDemoContainer" data-bind="html:codeContent">
+
+                            </div>
+                            <!-- /ko -->
+
+                            <!--没有数据的处理-->
+                            <span data-bind="ifnot:codeContent">
+                                <pre  class="brush: js;">
+                                    alert('demo内容没有加载成功 ^_^||');
+                                </pre>
+                            </span>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
                 </div>
 
-                <div class="APIRegion">
-                    <a class="anchor" name="demo_define2" href="#demo_define2">define2 方法</a>
-                    <ul class="apiParams">
-                        <li class="apiParam">122</li>
-                        <li class="apiParam">333</li>
-                    </ul>
-                    <span>示例:</span><br/>
-                    <pre>
-                        <code data-language="javascript">
-                            def openFile(path):
-                            file = open(path, "r")
-                            content = file.read()
-                            file.close()
-                            return content
-                        </code>
-                    </pre>
-                </div>
 
-                <div class="APIRegion">
-                    <a class="anchor" name="demo_define3" href="#demo_define3">define3 方法</a>
-                    <ul class="apiParams">
-                        <li class="apiParam">122</li>
-                        <li class="apiParam">333</li>
-                    </ul>
-                    <span>示例:</span><br/>
-                    <pre>
-                        <code data-language="javascript">
-                            def openFile(path):
-                            file = open(path, "r")
-                            content = file.read()
-                            file.close()
-                            return content
-                        </code>
-                    </pre>
-                </div>
+
                 
             </div>
         </div><!--/span-->
@@ -128,6 +124,7 @@
 
 </div><!--/.fluid-container-->
 
+<!--<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushJScript.js"></script>-->
 <!--通用脚本-->
 <script type="text/javascript" src="../scripts/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="../scripts/knockout-2.3.0.js"></script>
@@ -136,9 +133,24 @@
 <script type="text/javascript" src="../../src/OneLib.ScriptLoader.js"></script>
 <script type="text/javascript" src="../../src/OneLib.CMDSyntax.js"></script>
 <script type="text/javascript" src="../../src/OneLib.CSSLoader.js"></script>
+<script type="text/javascript" src="../../src/OneLib.Scroll.js"></script>
 <script type="text/javascript" src="../scripts/jquery.wrap.CMD.js"></script>
 <script type="text/javascript" src="../scripts/knockout.wrap.CMD.js"></script>
+
+<!--语法高亮-->
+<!--<script type="text/javascript" src="../css/rainbow/rainbow.min.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/generic.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/javascript.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/html.js"></script>-->
+
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/sh.wrap.CMD.js"></script>
+
+<!--业务代码-->
 <script type="text/javascript" src="../scripts/demo.common.js"></script>
+
 
 <!--demo脚本-->
 <!--<script type="text/javascript" src="../scripts/demo.OneLib.GUID.js"></script>-->

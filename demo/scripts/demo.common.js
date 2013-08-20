@@ -1,9 +1,9 @@
 /**
  * 定义所有示例页面公用的js对象、类
  */
-define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'], function (require, exports, module) {
+define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','OneLib.Scroll','sh'], function (require, exports, module) {
     var $ = require('jQuery'),ko = require('ko'),jsLoader = require('OneLib.ScriptLoader'),
-        cssLoader = require('OneLib.CSSLoader');
+        cssLoader = require('OneLib.CSSLoader'),scroll = require('OneLib.Scroll'),highlighter = require('sh');
     var viewModel,factory,moduleName;
 
     var _getQueryString = function(item){
@@ -20,6 +20,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         var self = this;//save the this ref
 
         self.name = name;
+//        self.apis = ko.observableArray(apis||[]);
         self.apis = apis||[];
     }
 
@@ -49,6 +50,12 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         self.codeUrl = codeUrl;
         self.codeContent = ko.observable('');//绑定到页面进行展示
         self.javascriptUrls=javascriptUrls; //这是一个数组，数组的元素可以是string,也可以是数组，每个数组内部元素之间按顺序一个个下载。数组之间并行下载
+        self.showSample = ko.computed(function(){
+            return this.type==='example'&&this.codeContent().length>0;
+        },self);
+        self.showRealDemo = ko.computed(function(){
+            return this.type==='real'&&this.codeContent().length>0;
+        },self);
     }
     DemoCode.prototype.getAllContent = function(){
         var self = this;//save the this ref
@@ -58,7 +65,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         if(self.cssUrls&&self.cssUrls.length>0){
             for(var i=0,j=self.cssUrls.length;i<j;i++){
                 var _cssUrl = self.cssUrls[i];
-                cssLoader.loadCSS(_cssUrl);
+                cssLoader.loadCSS(_cssUrl,undefined,'utf-8');
             }
         }
         //再看有没有要下载的文件内容，下载后，设置到codeContent
@@ -68,17 +75,17 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
             dataType:'html',
             success: function(codeContent){
                 self.codeContent(codeContent);
+                highlighter.highlight();//下载完内容后，设置代码高亮
+                //设置完content后，最后看有没有要下载的js列表，有的话按顺序下载
+                if(self.javascriptUrls&&self.javascriptUrls.length>0){
+                    jsLoader.beginQueue('demoScripts',self.javascriptUrls).
+                        onFinish(function(st,end){
+
+                        }).
+                        start();
+                }
             }
         });
-        //设置完content后，最后看有没有要下载的js列表，有的话按顺序下载
-        if(self.javascriptUrls&&self.javascriptUrls.length>0){
-            for(var i=0,j=self.javascriptUrls.length;i<j;i++){
-                var _jsUrl = self.javascriptUrls[i];
-                //todo:这里可能不是直接调用loadScript,而是把任务加入一个队列。等先把scriptLoader完善后再写
-                jsLoader.loadScript(_jsUrl);
-            }
-        }
-
 
     };
     /**
@@ -91,7 +98,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         var self = this;//save the this ref
 
         self.name = name;
-        self.typeName = typeName;
+        self.type = typeName;
         self.params = params||[];
         self.selected = ko.observable(false);
         self.demoCodes=[];
@@ -102,11 +109,20 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
                 var _demo = new DemoCode(_item.name,_item.desc,_item.type,_item.codeUrl,_item.cssUrls,
                 _item.javascriptUrls);
                 _demo.getAllContent();
+                self.demoCodes.push(_demo);
             }
         }
     }
 
 
+
+    API.prototype.apiClick = function(api){
+        this.selected(true);
+        viewModel.selectedAPI()&&viewModel.selectedAPI().selected(false);
+        viewModel.selectedAPI(this);
+        scroll.scrollDown(1);//fix the chrome bug:http://stackoverflow.com/questions/11258877/fixed-element-disappears-in-chrome
+        return true;
+    };
     /**
      * 添加一个或者多个参数
      * @param param
@@ -134,7 +150,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         var self = this;//save the this ref
 
         self.name = name;
-        self.typeName = typeName;
+        self.type = typeName;
         self.desc = desc;
     }
 
@@ -158,7 +174,6 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
         self.groups=[];
         self.selectedAPI = ko.observable();
     }
-
 
     exports.vm=viewModel=new ViewModel();
     exports.factory =factory= {
@@ -189,6 +204,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
                 for(var m=0,n=_g.apis.length;m<n;m++){
                     var _a = _g.apis[m];
                     var api = factory.createAPI(_a.name,_a.type,[],_a.demoCodeRefs);
+                    i===0&&m===0&&api.apiClick();
                     for(var o=0,p=_a.params.length;o<p;o++){
                         var _p = _a.params[o];
                         var param = factory.createParam(_p.name,_p.type,_p.desc);
@@ -201,6 +217,10 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader'],
 
             //页面绑定
             ko.applyBindings(viewModel,document.getElementById("root"));
+
+//            setTimeout(function(){
+//                highlighter.highlight();//启动代码高亮（该逻辑应该在所有内容加载完成之后执行，先简单延迟处理）
+//            },1000);
         }
     });
 });

@@ -140,9 +140,7 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
                 //继续补充几个任务再启动该队列
                 loader.theQueue('queueOne').
                     clearCallbacks().
-                    load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a3.js').
-                    load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b3.js').
-                    load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c3.js').
+                    load(_toLoad3).
                     onLoadedOne(function(url,beginAt,endAt){
                         _loaded3.push(url);
                         _logger.writeLine('queue1:file:'+url+' begin load at:'+beginAt+' end at:'+endAt);

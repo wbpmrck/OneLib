@@ -71,9 +71,7 @@ OneLib.ScriptLoader = (function (my) {
         self.name = name;
         self.fileUrls = []; //所有待下载的文件列表 每个项目:{url:'http://xxx/js',state:0/1,desc:'下载出错',beginAt:Date,endAt:Date}
         var urlArray = fileUrls||[];
-        for(var i=0,j=urlArray.length;i<j;i++){
-            self.load(urlArray[i]);
-        }
+        self.load(urlArray);
 
         self.running = false;//当前是否在现在
         self.runAt = -1;//当前下载到的节点下标
@@ -86,17 +84,32 @@ OneLib.ScriptLoader = (function (my) {
 
     /**
      * 添加一个项目到当前待下载队列尾部
-     * @param url
+     * @param url:可以是一个string,或者是一个array
      */
     ScriptQueue.prototype.load = function(url){
         var self = this;//save the this ref
-        self.fileUrls.push({
-            url:url,
-            state:0,
-            desc:'初始化',
-            beginAt:undefined,//开始下载时间
-            endAt:undefined//下载完成时间
-        });
+
+        if(url.constructor === Array){
+            for(var i=0,j=url.length;i<j;i++){
+                var _item = url[i];
+                self.fileUrls.push({
+                    url:_item,
+                    state:0,
+                    desc:'初始化',
+                    beginAt:undefined,//开始下载时间
+                    endAt:undefined//下载完成时间
+                });
+            }
+        }
+        else{
+            self.fileUrls.push({
+                url:url,
+                state:0,
+                desc:'初始化',
+                beginAt:undefined,//开始下载时间
+                endAt:undefined//下载完成时间
+            });
+        }
         return self;
     };
     /**
