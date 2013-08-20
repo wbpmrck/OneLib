@@ -44,6 +44,10 @@ a:focus {
     cursor: pointer;
 }
 /*分组的分隔符*/
+.nav-header{
+    font-size: 20px;
+    color: black;
+}
 .groupSpliter{
     border:none;
     border-top:2px solid black;
@@ -77,4 +81,9 @@ a:focus {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
+}
+/*文档项目说明的样式*/
+.itemDesc{
+    font-weight: bold;
+    color: #F6851F;
 }

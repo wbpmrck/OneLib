@@ -14,7 +14,12 @@
     <!--<link rel="stylesheet" type="text/css" href="../css/rainbow/themes/blackboard.css" media="all">-->
     <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCore.css" media="all">
     <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDefault.css" media="all">
-    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreRDark.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreEmacs.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDjango.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreFadeToGrey.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMDUltra.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMidnight.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreRDark.css" media="all">-->
 
 </head>
 <body id="root">
@@ -73,19 +78,26 @@
                     <div class="apiregion">
                         <a class="anchor" data-bind="attr:{name:'demo_'+api.name}"></a>
                         <a data-bind="attr:{href:'#demo_'+api.name},text:api.name+'(:'+type+')'">$parent.name</a>
+                        <pre class="apiDesc" data-bind="text:api.desc"></pre>
+                        <span class="itemDesc">参数说明：</span><br/>
                         <ul class="apiParams" data-bind="foreach:api.params">
                             <li class="apiParam" data-bind="text:name+'(:'+type+')'">122</li>
                             <pre data-bind="if:desc.length>0,text:desc">参数描述</pre>
                         </ul>
                         <!--代码示例区域-->
+                        <span class="itemDesc">代码示例：</span><br/>
                         <!-- ko foreach: {data:api.demoCodes,as:'demo'} -->
                         <div class="codeDemo">
-                            <span data-bind="text:'示例:'+name">示例名称:</span><br/>
+                            <!-- ko if: demo.name -->
+                            <span data-bind="text:name">示例名称:</span><br/>
+                            <!-- /ko -->
+                            <!-- ko if: demo.desc -->
+                            <pre class="demoDesc" data-bind="text:demo.desc"></pre>
+                            <!-- /ko -->
 
                             <!--代码样例的处理-->
-                            <!--<span data-bind="if:codeContent&&type=='example'">-->
                             <span data-bind="if:showSample">
-                                <pre class="brush: js;" data-bind="text:codeContent">
+                                <pre class="brush: js;toolbar: false;" data-bind="text:codeContent">
 
                                 </pre>
                             </span>

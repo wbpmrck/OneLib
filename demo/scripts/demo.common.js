@@ -94,11 +94,12 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
      * @param typeName
      * @constructor
      */
-    function API(name,typeName,params,demoCodes){
+    function API(name,typeName,desc,params,demoCodes){
         var self = this;//save the this ref
 
         self.name = name;
         self.type = typeName;
+        self.desc = desc;
         self.params = params||[];
         self.selected = ko.observable(false);
         self.demoCodes=[];
@@ -180,8 +181,8 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
         createParam:function(name,typeName,desc){
             return new Param(name,typeName,desc);
         },
-        createAPI:function(name,typeName,params,demoCodes){
-            return new API(name,typeName,params,demoCodes);
+        createAPI:function(name,typeName,desc,params,demoCodes){
+            return new API(name,typeName,desc,params,demoCodes);
         },
         createAPIGroup:function(name,apis){
             return new APIGroup(name,apis);
@@ -203,7 +204,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
                 var group = factory.createAPIGroup(_g.name,[]);
                 for(var m=0,n=_g.apis.length;m<n;m++){
                     var _a = _g.apis[m];
-                    var api = factory.createAPI(_a.name,_a.type,[],_a.demoCodeRefs);
+                    var api = factory.createAPI(_a.name,_a.type,_a.desc,[],_a.demoCodeRefs);
                     i===0&&m===0&&api.apiClick();
                     for(var o=0,p=_a.params.length;o<p;o++){
                         var _p = _a.params[o];
