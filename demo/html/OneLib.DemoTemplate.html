@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--布局-->
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.css" media="all">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap-responsive.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap-responsive.min.css" media="all">
     <!--基础样式调整-->
     <link rel="stylesheet" type="text/css" href="../css/demoBase.css" media="all">
     <!--代码高亮-->
     <!--<link rel="stylesheet" type="text/css" href="../css/rainbow/themes/blackboard.css" media="all">-->
     <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCore.css" media="all">
     <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDefault.css" media="all">
-    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreEmacs.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreEmacs.css" media="all">-->
     <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDjango.css" media="all">-->
-    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreFadeToGrey.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreFadeToGrey.css" media="all">
     <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMDUltra.css" media="all">-->
     <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMidnight.css" media="all">-->
     <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreRDark.css" media="all">-->
@@ -77,13 +77,15 @@
                     <!-- ko foreach: {data:group.apis,as:'api'} -->
                     <div class="apiregion">
                         <a class="anchor" data-bind="attr:{name:'demo_'+api.name}"></a>
-                        <a data-bind="attr:{href:'#demo_'+api.name},text:api.name+'(:'+type+')'">$parent.name</a>
+                        <a data-bind="attr:{href:'#demo_'+api.name},text:api.apiNameAndParams()+typeAndReturnDesc()">$parent.name</a>
                         <pre class="apiDesc" data-bind="text:api.desc"></pre>
+                        <!-- ko if: api.params().length>0 -->
                         <span class="itemDesc">参数说明：</span><br/>
                         <ul class="apiParams" data-bind="foreach:api.params">
-                            <li class="apiParam" data-bind="text:name+'(:'+type+')'">122</li>
+                            <li class="apiParam" data-bind="text:name+':('+type+')'">122</li>
                             <pre data-bind="if:desc.length>0,text:desc">参数描述</pre>
                         </ul>
+                        <!-- /ko -->
                         <!--代码示例区域-->
                         <span class="itemDesc">代码示例：</span><br/>
                         <!-- ko foreach: {data:api.demoCodes,as:'demo'} -->
@@ -138,9 +140,10 @@
 
 <!--<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushJScript.js"></script>-->
 <!--通用脚本-->
+<script type="text/javascript" src="../scripts/config.js"></script>
 <script type="text/javascript" src="../scripts/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="../scripts/knockout-2.3.0.js"></script>
-<script type="text/javascript" src="../css/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../src/OneLib.Log.js"></script>
 <script type="text/javascript" src="../../src/OneLib.ScriptLoader.js"></script>
 <script type="text/javascript" src="../../src/OneLib.CMDSyntax.js"></script>
@@ -163,7 +166,13 @@
 <!--业务代码-->
 <script type="text/javascript" src="../scripts/demo.common.js"></script>
 
+<script type="text/javascript">
 
+    //统一配置：为了加载不同demo依赖的js的时候不会报模块重复定义的错误，将模块名冲突的处理方式定为“忽略”
+    OneLib.CMDSyntax.configDealConflicts({
+        moduleNameConflict:'return'
+    });
+</script>
 <!--demo脚本-->
 <!--<script type="text/javascript" src="../scripts/demo.OneLib.GUID.js"></script>-->
 

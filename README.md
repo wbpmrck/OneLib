@@ -42,6 +42,7 @@
 
 ###Doing
 <ul>
+  <li>ok|修改OneLib.CMDSyntax的bug,在模块require的时候，被需要的模块如果本身是一个函数，则需要复制一个函数供外部使用</li>
   <li>集成jquery.coffee.</li>
   <li>增强scriptLoader
     <ul>
@@ -53,6 +54,7 @@
 
 ###To be done
 <ul>
+ <li>新增OneLib.Promise库，提供优雅的异步编程模型</li>
  <li>完成OneLib.Scroll的测试用例</li>
  <li>url、queryString的操作类.</li>
  <li>日期对象辅助类，生成格式化的显示等方法.</li>

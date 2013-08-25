@@ -65,12 +65,12 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
         if(self.cssUrls&&self.cssUrls.length>0){
             for(var i=0,j=self.cssUrls.length;i<j;i++){
                 var _cssUrl = self.cssUrls[i];
-                cssLoader.loadCSS(_cssUrl,undefined,'utf-8');
+                cssLoader.loadCSS(__subdomain__+_cssUrl+'?_='+Math.floor(Math.random()*100000),undefined,'utf-8');
             }
         }
         //再看有没有要下载的文件内容，下载后，设置到codeContent
         $.ajax({
-            url: self.codeUrl,
+            url:  __subdomain__+self.codeUrl+'?_="'+Math.floor(Math.random()*100000),
             cache: false,
             dataType:'html',
             success: function(codeContent){
@@ -78,6 +78,10 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
                 highlighter.highlight();//下载完内容后，设置代码高亮
                 //设置完content后，最后看有没有要下载的js列表，有的话按顺序下载
                 if(self.javascriptUrls&&self.javascriptUrls.length>0){
+                    for(var i in self.javascriptUrls){
+                        self.javascriptUrls[i] = __subdomain__+ self.javascriptUrls[i]+'?_='+Math.floor(Math.random()*100000)
+                    }
+
                     jsLoader.beginQueue('demoScripts',self.javascriptUrls).
                         onFinish(function(st,end){
 
@@ -94,15 +98,39 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
      * @param typeName
      * @constructor
      */
-    function API(name,typeName,desc,params,demoCodes){
+    function API(name,typeName,returned,desc,params,demoCodes){
         var self = this;//save the this ref
 
         self.name = name;
         self.type = typeName;
+        self.returned = returned;
         self.desc = desc;
-        self.params = params||[];
+        self.params = ko.observableArray(params||[]);
         self.selected = ko.observable(false);
         self.demoCodes=[];
+
+        self.typeAndReturnDesc = ko.computed(function(){
+            if(this.type.toLowerCase()==='function'){
+                return ':  ('+this.returned+'<<'+this.type+')';
+            }
+            else{
+                return ':  ('+this.type+')';
+            }
+
+        },self);
+
+        self.apiNameAndParams = ko.computed(function(){
+            if(this.type.toLowerCase()==='function'){
+                var paramDesc='',array=self.params();
+                for(var i in array){
+                    paramDesc+=array[i].name+(i<array.length-1?',':'');
+                }
+                return this.name+'('+paramDesc+')';
+            }
+            else{
+                return this.name;
+            }
+        },self);
 
         if(demoCodes&&demoCodes.length>0){
             for(var i=0,j=demoCodes.length;i<j;i++){
@@ -118,8 +146,8 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
 
 
     API.prototype.apiClick = function(api){
-        this.selected(true);
         viewModel.selectedAPI()&&viewModel.selectedAPI().selected(false);
+        this.selected(true);
         viewModel.selectedAPI(this);
         scroll.scrollDown(1);//fix the chrome bug:http://stackoverflow.com/questions/11258877/fixed-element-disappears-in-chrome
         return true;
@@ -159,10 +187,10 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
      * 头部的viewModel类
      * @constructor
      */
-    function ViewModel(){
+    function ViewModel(projectName){
         var self = this;//save the this ref
 
-        self.projectName='OneLib.GUID';
+        self.projectName=projectName;
 
         self.leftSliderStyle={
             maxHeight:'400px'
@@ -176,25 +204,25 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
         self.selectedAPI = ko.observable();
     }
 
-    exports.vm=viewModel=new ViewModel();
+    //根据queryString里的module属性,加载指定的APIGroup.json文件，并最终完成页面绑定
+    moduleName =_getQueryString('module');
+    exports.vm=viewModel=new ViewModel(moduleName);
     exports.factory =factory= {
         createParam:function(name,typeName,desc){
             return new Param(name,typeName,desc);
         },
-        createAPI:function(name,typeName,desc,params,demoCodes){
-            return new API(name,typeName,desc,params,demoCodes);
+        createAPI:function(name,typeName,returned,desc,params,demoCodes){
+            return new API(name,typeName,returned,desc,params,demoCodes);
         },
         createAPIGroup:function(name,apis){
             return new APIGroup(name,apis);
         }
     };
 
-    //根据queryString里的module属性,加载指定的APIGroup.json文件，并最终完成页面绑定
-    moduleName =_getQueryString('module');
 
     //获取模块列表数据，并开始页面绑定
     $.ajax({
-        url: "/demo/demoData/"+moduleName+"/api.js",
+        url:  __subdomain__+"/demo/demoData/"+moduleName+"/api.json"+'?_="'+Math.floor(Math.random()*100000),
         cache: false,
         dataType:'json',
         success: function(_groups){
@@ -204,8 +232,9 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
                 var group = factory.createAPIGroup(_g.name,[]);
                 for(var m=0,n=_g.apis.length;m<n;m++){
                     var _a = _g.apis[m];
-                    var api = factory.createAPI(_a.name,_a.type,_a.desc,[],_a.demoCodeRefs);
+                    var api = factory.createAPI(_a.name,_a.type,_a.returned,_a.desc,[],_a.demoCodeRefs);
                     i===0&&m===0&&api.apiClick();
+                    _a.params||(_a.params=[]);
                     for(var o=0,p=_a.params.length;o<p;o++){
                         var _p = _a.params[o];
                         var param = factory.createParam(_p.name,_p.type,_p.desc);

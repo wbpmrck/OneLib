@@ -20,7 +20,16 @@ OneLib.CMDSyntax = (function (my,global) {
         throw new Error('need OneLib.ScriptLoader Module!');
     }
     var _copy=function(obj){
-        var _dump ={};
+        var _dump;
+        //判断原对象是否是函数
+        if(typeof(obj)==='function'){
+            _dump = function(){
+                return obj.apply(this,arguments);
+            };
+        }
+        else{
+            _dump ={};
+        }
         for(var i in obj){
             _dump[i] = obj[i];
         }
@@ -102,6 +111,9 @@ OneLib.CMDSyntax = (function (my,global) {
         else{
             self.exports =_innerModule.exports;
         }
+
+        //update alias
+        _configs.alias[self.name] = self.name;
     };
 
     var _logger = new OneLib.Log.Logger(false),
@@ -116,6 +128,10 @@ OneLib.CMDSyntax = (function (my,global) {
         },
         //配置项
         _configs={
+            //配置:处理冲突
+            dealConflicts:{
+                moduleNameConflict:'throw' //当定义的模块名冲突的时候如何处理：'throw':抛出异常, 'return':忽略本次模块定义 , 'overwrite':使用本次定义的模块覆盖已有模块
+            },
             //配置:别名
             alias:{
                 '_Log':'OneLib.Log',//OneLib 日志模块
@@ -141,19 +157,44 @@ OneLib.CMDSyntax = (function (my,global) {
         },
     //检查模块名，可以使用则返回true,否则抛出异常
         _checkNameAndThrow = function(name){
-          if(_reserved[name]||_modules.hasOwnProperty(name)){
-              throw new Error('ModuleName:['+name+'] has been used!');
-          }
-          else if(name===null||name==undefined||name===''){
-              throw new Error('ModuleName cannot be empty!');
-          }
-            return true;
+            if(_reserved[name]||_modules.hasOwnProperty(name)){
+                throw new Error('ModuleName:['+name+'] has been used!');
+            }
+            else if(name===null||name==undefined||name===''){
+                throw new Error('ModuleName cannot be empty!');
+            }
+            else{
+                return true;
+            }
+        },
+        _checkNameInLegal = function(name){
+            if(_reserved[name]||_modules.hasOwnProperty(name)){
+                return 'existed';
+            }
+            else if(name===null||name==undefined||name===''){
+                throw new Error('ModuleName cannot be empty!');
+            }
+            else{
+                return undefined;
+            }
         },
 
         _getRealModule = function(moduleName){
             moduleName = _transAlias(moduleName);
             return _modules[moduleName];
         };
+
+    /**
+     * 配置冲突处理策略(moduleNameConflict:'throw'/'return'/'overwrite')
+     * @param conflictConfig
+     */
+    my.configDealConflicts = function(conflictConfig){
+        for(var i in conflictConfig){
+            if(_configs.dealConflicts.hasOwnProperty(i)){
+                _configs.dealConflicts[i] = conflictConfig[i];
+            }
+        }
+    }
 
     /**
      * 添加/重写别名，系统保护的别名不允许重写。
@@ -168,8 +209,23 @@ OneLib.CMDSyntax = (function (my,global) {
     };
     global['define']=my.define = function(moduleName,dependency,factory){
         _log('>>define:: [' + moduleName + '] begin...');
-        if(_checkNameAndThrow(moduleName)){
+        //如果模块名合法、没有冲突
+        if(!_checkNameInLegal(moduleName)){
             _modules[moduleName] =  new _Module(moduleName,dependency,factory);
+        }
+        //模块名有冲突，则查看配置
+        else{
+            var _deal = _configs.dealConflicts.moduleNameConflict;
+            if(_deal==='overwrite'){
+                _log('>>define:: [' + moduleName + '] overwrite exist module...');
+                _modules[moduleName] =  new _Module(moduleName,dependency,factory);
+            }
+            else if(_deal==='return'){
+                _log('>>define:: [' + moduleName + '] name existed,return...');
+            }
+            else{
+                throw new Error('ModuleName:['+moduleName+'] has been used!');
+            }
         }
         _log('>>define:: [' + moduleName + '] end(success)...');
     };
@@ -190,10 +246,27 @@ OneLib.CMDSyntax = (function (my,global) {
      */
     my.wrapToModule = function(moduleName,exports){
         _log('>>wrapToModule:: [' + moduleName + '] begin...');
-        if(_checkNameAndThrow(moduleName)){
+        //如果模块名合法、没有冲突
+        if(!_checkNameInLegal(moduleName)){
             _modules[moduleName] =  new _Module(moduleName,[],function(){
                 return exports;
             },exports);
+        }
+        //模块名有冲突，则查看配置
+        else{
+            var _deal = _configs.dealConflicts.moduleNameConflict;
+            if(_deal==='overwrite'){
+                _log('>>wrapToModule:: [' + moduleName + '] overwrite exist module...');
+                _modules[moduleName] =  new _Module(moduleName,[],function(){
+                    return exports;
+                },exports);
+            }
+            else if(_deal==='return'){
+                _log('>>wrapToModule:: [' + moduleName + '] name existed,return...');
+            }
+            else{
+                throw new Error('ModuleName:['+moduleName+'] has been used!');
+            }
         }
         _log('>>wrapToModule:: [' + moduleName + '] end(success)...');
     };
