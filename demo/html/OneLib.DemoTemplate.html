@@ -78,12 +78,14 @@
                     <div class="apiregion">
                         <a class="anchor" data-bind="attr:{name:'demo_'+api.name}"></a>
                         <a data-bind="attr:{href:'#demo_'+api.name},text:api.apiNameAndParams()+typeAndReturnDesc()">$parent.name</a>
-                        <pre class="apiDesc" data-bind="text:api.desc"></pre>
+                        <pre class="apiDesc" data-bind="html:api.desc"></pre>
                         <!-- ko if: api.params().length>0 -->
                         <span class="itemDesc">参数说明：</span><br/>
                         <ul class="apiParams" data-bind="foreach:api.params">
                             <li class="apiParam" data-bind="text:name+':('+type+')'">122</li>
-                            <pre data-bind="if:desc.length>0,text:desc">参数描述</pre>
+                            <!-- ko if: desc.length>0 -->
+                            <pre data-bind="html:desc">参数描述</pre>
+                            <!-- /ko -->
                         </ul>
                         <!-- /ko -->
                         <!--代码示例区域-->
@@ -94,7 +96,7 @@
                             <span data-bind="text:name">示例名称:</span><br/>
                             <!-- /ko -->
                             <!-- ko if: demo.desc -->
-                            <pre class="demoDesc" data-bind="text:demo.desc"></pre>
+                            <pre class="demoDesc" data-bind="html:demo.desc"></pre>
                             <!-- /ko -->
 
                             <!--代码样例的处理-->

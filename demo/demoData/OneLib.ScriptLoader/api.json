@@ -3,7 +3,7 @@
         "name":"单个加载脚本",
         "apis":[
             {
-                "name":"OneLib.ScriptLoader.loadScript",
+                "name":"loadScript",
                 "type":"Function",
                 "desc":"加载一个js脚本,并且立即执行。",
                 "params":[
@@ -50,7 +50,7 @@
         "name":"批量加载脚本",
         "apis":[
             {
-                "name":"OneLib.ScriptLoader.beginQueue",
+                "name":"beginQueue",
                 "type":"Function",
                 "returned":"ScriptQueue",
                 "desc":"开启一个脚本加载队列。返回对象是一个ScriptQueue,可以通过它进行链式调用",
@@ -223,7 +223,7 @@
         "name":"其他",
         "apis":[
             {
-                "name":"OneLib.ScriptLoader.theQueue",
+                "name":"theQueue",
                 "type":"Function",
                 "returned":"ScriptQueue",
                 "desc":"根据队列名称，获取指定队列的对象引用",
