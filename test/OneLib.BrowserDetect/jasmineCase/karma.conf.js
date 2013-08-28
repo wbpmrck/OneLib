@@ -20,7 +20,7 @@ module.exports = function(config) {
         '../../../src/OneLib.Log.js',
         '../../../src/OneLib.ScriptLoader.js',
         '../../../src/OneLib.CMDSyntax.js',
-        '../../../src/OneLib.GUID.js',
+        '../../../src/OneLib.BrowserDetect.js',
         '*.js'
     ],
 

@@ -37,36 +37,42 @@
 
     </ul>
  </li>
-  <li>ok|修改OneLib.CMDSyntax的bug,在模块require的时候，被需要的模块如果本身是一个函数，则需要复制一个函数供外部使用</li>
-  <li>完成CMDSyntax相关Demo的制作</li>
+  <li>修改OneLib.CMDSyntax的bug,在模块require的时候，被需要的模块如果本身是一个函数，则需要复制一个函数供外部使用</li>
+    <li>增加库：浏览器版本判断.并完善对手机浏览器的支持</li>
 </ul>
 
 ###Doing
 <ul>
+    <li>ES5的兼容性实现+demo,包括:
+        <ul>
+            <li>1、<undefined> Array.prototype.forEach(val,idx,array)</li>
+            <li>1、<Array> Array.prototype.filter(val,idx,array)</li>
+            <li>1、<bool> Array.isArray</li>
+            <li>1、Function.prototype.bind(thisArg [, arg1 [, arg2, …]])</li>
+        </ul>
+    </li>
+  <li>集成fis环境，发布的文件进行压缩.</li>
 </ul>
 
 ###To be done
 <ul>
- <li>日期对象辅助类，生成格式化的显示等方法.</li>
- <li>新增OneLib.Promise库，提供优雅的异步编程模型</li>
- <li>完成OneLib.Scroll的测试用例</li>
+  <li>集成jquery.coffee.</li>
+  <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>
  <li>url、queryString的操作类.</li>
  <li>常用设计模式模块封装.</li>
- <li>浏览器版本判断.</li>
- <li>ES5的兼容性实现.</li>
  <li>Json序(反序)列化模块.</li>
  <li>在ScriptLoader里面增加jsonp功能（需要定义一个接受json string的函数，然后外部json文件通过func(<json>)实现。要用到json反序列化）.</li>
  <li>DOM模块.</li>
  <li>类jQuery选择器实现.</li>
  <li>优化js和css加载器，不仅可以发出下载完成的回调，还可以知道文件是加载成还是失败了</li>
  <li>进行HTML escape和unescape.</li>
- <li>demo项目中集成jquery.coffee，使用“烟雾”的形式把当前所有的模块显示出来，提高用户体验.</li>
- <li>增强scriptLoader
-     <ul>
-         <li>不用定义moduleName和dependencies,直接使用文件所在路径作为模块名，require的模块作为依赖</li>
-         <li>可以使用path配置各种路径的简称，让编写更方便，比如，var ko = require('$common$/tip.js')</li>
-     </ul>
-  </li>
+ <li>完成OneLib.Scroll的测试用例</li>
+  <li>增强scriptLoader
+    <ul>
+        <li>不用定义moduleName和dependencies,直接使用文件所在路径作为模块名，require的模块作为依赖</li>
+        <li>可以使用path配置各种路径的简称，让编写更方便，比如，var ko = require('$common$/tip.js')</li>
+    </ul>
+ </li>
 </ul>
 
 

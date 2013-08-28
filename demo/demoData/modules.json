@@ -5,6 +5,11 @@
         "linkEnable":true
     },
     {
+        "moduleName":"OneLib.ES5",
+        "desc":"对ECMAScript5的新特性中有用的部分进行实现，让其他不支持ES5的浏览器也可以使用到这些功能",
+        "linkEnable":true
+    },
+    {
         "moduleName":"OneLib.ScriptLoader",
         "desc":"一个异步加载脚本的库，支持分队列并行下载，队列内部串行下载功能。支持事件通知",
         "linkEnable":true
@@ -22,11 +27,6 @@
     {
         "moduleName":"OneLib.BrowserDetect",
         "desc":"封装对浏览器版本进行检测的功能",
-        "linkEnable":true
-    },
-    {
-        "moduleName":"OneLib.ES5",
-        "desc":"对ECMAScript5的新特性中有用的部分进行实现，让其他不支持ES5的浏览器也可以使用到这些功能",
         "linkEnable":true
     }
 ]

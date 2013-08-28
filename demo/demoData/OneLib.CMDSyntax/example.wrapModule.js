@@ -1,2 +1,2 @@
 
-OneLib.CMDSyntax.wrapToModule('$',jQuery);//把$对象包装为模块:'jQuery'
+OneLib.CMDSyntax.wrapToModule('$',jQuery);//把jQuery对象包装为模块:'$'

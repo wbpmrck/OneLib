@@ -7,8 +7,8 @@
                 "type":"Function",
                 "desc":"GUID是一种由算法生成的二进制长度为128位的数字标识符。GUID 的格式为“xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx” 。其中的 x 是 0-9 或 a-f 范围内的一个32位十六进制数。在理想情况下，任何计算机和计算机集群都不会生成两个相同的GUID",
                 "params":[
-                    {"name":"len","type":"Number","desc":"限制生成的GUID的数量"},
-                    {"name":"radix","type":"Number","desc":"生成的guid的数制，如2,10,16"}
+                    {"name":"[len]","type":"Number","desc":"非必传参数,限制生成的GUID的数量"},
+                    {"name":"[radix]","type":"Number","desc":"非必传参数,生成的guid的数制，如2,10,16"}
                 ],
                 "demoCodeRefs":[
                     {
