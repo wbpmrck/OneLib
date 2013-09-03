@@ -150,7 +150,7 @@
             {
                 "name":"configDealConflicts",
                 "type":"Function",
-                "returned":"undefined",
+                "returned":"this",
                 "desc":"配置当模块名定义出现冲突的时候，框架如何反应.",
                 "params":[
                     {"name":"mode","type":"Object","desc":"格式为:{moduleNameConflict:'xxxx'}:<ul><li>'throw':默认模式，当模块名重复定义的时候，抛出异常</li><li>'return':冲突发生的时候,不抛出异常,直接返回</li><li>'overwrite':冲突发生的时候,仍然允许模块定义，并用新定义的模块覆盖旧的(旧模块的所有实现都将被删除)</li></ul>"}
@@ -212,7 +212,7 @@
             {
                 "name":"addAlias",
                 "type":"Function",
-                "returned":"undefined",
+                "returned":"this",
                 "desc":"给一个模块起别名。有了别名之后，就可以通过 require(<别名>) 来访问模块了<br/><span class='warn-notice'>别名的一个很有效的使用场景就是你既想通过模块名来准确的表达这个模块的含义，又想在引用的时候使用简化的标记来引入，这时候就可以起一个简单的别名</span>",
                 "params":[
                     {"name":"aliasObj","type":"Dic<alia,originName>","desc":"一个对象字典，key为别名，value为原来的模块名"}

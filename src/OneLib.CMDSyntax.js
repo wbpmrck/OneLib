@@ -128,6 +128,20 @@ OneLib.CMDSyntax = (function (my,global) {
         },
         //配置项
         _configs={
+            // 基础路径（其他所有模块的路径都以它为基础）
+            base: 'http://asada',
+            // 变量配置
+            vars: {
+//                'home': '',
+//                'pack': '/pack'
+            },
+            //配置模块的下载地址:可以使用{vars}来简化路径
+            modulePath:{
+//                'Module1':'{home}/{mode}/m1.js'
+            },
+            packs:{
+//                '{pack}/{mode}/p1.js':['Module1','Module2']
+            },
             //配置:处理冲突
             dealConflicts:{
                 moduleNameConflict:'throw' //当定义的模块名冲突的时候如何处理：'throw':抛出异常, 'return':忽略本次模块定义 , 'overwrite':使用本次定义的模块覆盖已有模块
@@ -182,7 +196,48 @@ OneLib.CMDSyntax = (function (my,global) {
         _getRealModule = function(moduleName){
             moduleName = _transAlias(moduleName);
             return _modules[moduleName];
-        };
+        },
+        _;
+
+    /**
+     * 加载入口模块
+     * @param moduleName:入口模块的名称
+     * @param callback:{Function(module)}获取到该入口模块后，执行的回调.
+     */
+    my.use =function(moduleName,callback){
+        _log('>>use:: [' + moduleName + '] begin...');
+        //检查缓存里有没有
+        var _used = _getRealModule(moduleName);
+        if(_used){
+            callback&&callback(_used.getExportsCopy())
+        }
+        //没有的话获取其下载地址，然后异步加载
+        else{
+
+        }
+    };
+
+    /**
+     * 设置基础路径
+     * @param baseUrl
+     */
+    my.setBase = function(baseUrl){
+        _configs.base = baseUrl;
+        return my;
+    };
+
+
+    /**
+     * 设置变量
+     * @param vars:{key,value}
+     * @return {*}
+     */
+    my.setVars = function(vars){
+        for(var i in vars){
+            _configs[i]=vars[i];
+        }
+        return my;
+    };
 
     /**
      * 配置冲突处理策略(moduleNameConflict:'throw'/'return'/'overwrite')
@@ -194,6 +249,7 @@ OneLib.CMDSyntax = (function (my,global) {
                 _configs.dealConflicts[i] = conflictConfig[i];
             }
         }
+        return my;
     }
 
     /**
@@ -206,6 +262,7 @@ OneLib.CMDSyntax = (function (my,global) {
                 _configs.alias[i] = alias[i];
             }
         }
+        return my;
     };
     global['define']=my.define = function(moduleName,dependency,factory){
         _log('>>define:: [' + moduleName + '] begin...');

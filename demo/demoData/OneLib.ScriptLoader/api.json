@@ -116,7 +116,7 @@
                 "name":"ScriptQueue.load",
                 "type":"Function",
                 "returned":"ScriptQueue",
-                "desc":"把一个文件添加到下载队列(不会立刻下载，要等到start才开始下载)。返回对象是一个 ScriptQueue,可以通过它进行链式调用",
+                "desc":"把一个文件添加到下载队列(不会立刻下载，要等到start/asyncStart才开始下载)。返回对象是一个 ScriptQueue,可以通过它进行链式调用",
                 "params":[
                     {"name":"url","type":"String","desc":"要下载的脚本路径"}
                 ],
@@ -201,7 +201,7 @@
                 "name":"ScriptQueue.start",
                 "type":"Function",
                 "returned":"undefined",
-                "desc":"开启队列的下载动作.脚本下载过程中如果多次调用，不会多次触发下载。（等队列下载完成后，还可以继续往里添加文件，再调用下载。此时队列只会下载新加入的文件，并重新触发对应的相关事件）",
+                "desc":"同步开启队列的下载动作.脚本下载过程中如果多次调用，不会多次触发下载。（等队列下载完成后，还可以继续往里添加文件，再调用下载。此时队列只会下载新加入的文件，并重新触发对应的相关事件）",
                 "params":[
                 ],
                 "demoCodeRefs":[
@@ -213,6 +213,37 @@
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"ScriptQueue.asyncStart",
+                "type":"Function",
+                "returned":"undefined",
+                "desc":"异步开启队列的下载动作.脚本下载过程中如果多次调用，不会多次触发下载。（等队列下载完成后，还可以继续往里添加文件，再调用下载。此时队列只会下载新加入的文件，并重新触发对应的相关事件）",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"演示队列并发下载文件",
+                        "desc":"队列使用异步下载模式的时候,队列内部的所有文件都是并行下载的(依赖浏览器实现).可以观察timeline看文件的下载是否并行",
+                        "type":"example",
+                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.asyncStart.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例,并观察控制台看js的下载顺序情况",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.asyncStart.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "/demo/demoData/OneLib.ScriptLoader/example.asyncStart.js"
                         ]
                     }
                 ]

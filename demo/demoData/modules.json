@@ -16,7 +16,7 @@
     },
     {
         "moduleName":"OneLib.CMDSyntax",
-        "desc":"CMD的模块封装库，依赖OneLib.Log. 从本模块往右开始，所有其他模块都以这个模块为基础，编写基于CMD风格的代码。所以先学习本模块才能适应后续的代码风格哦~",
+        "desc":"CMD的模块封装库，依赖OneLib.Log、ScriptLoader. 从本模块往右开始，所有其他模块都以这个模块为基础，编写基于CMD风格的代码。所以先学习本模块才能适应后续的代码风格哦~",
         "linkEnable":true
     },
     {

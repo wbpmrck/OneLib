@@ -21,7 +21,7 @@ OneLib.ScriptLoader = (function (my) {
      * @param url
      * @param callback:参数里会有当时下载的url带出（url,beginAt,endAt）
      */
-    my.loadScript = function(url,callback){
+    my.loadScript = function(url,callback,charset){
         var beginAt,backCall=function(){
             callback&&callback(url, beginAt,new Date());
         };
@@ -35,6 +35,7 @@ OneLib.ScriptLoader = (function (my) {
         };
         var _script = document.createElement('script');
         _script.type ='text/javascript';
+        _script.charset =charset||'utf-8';
         if (_script.readyState) {//IE
             _script.onreadystatechange =function(){
                 if (_script.readyState=='loaded'||_script.readyState=='complete') {
@@ -74,6 +75,7 @@ OneLib.ScriptLoader = (function (my) {
 
         self.running = false;//当前是否在现在
         self.runAt = -1;//当前下载到的节点下标
+        self.loaded =0; //已经成下载的文件个数
 
         self.callbacks={
             onOne:[],
@@ -141,7 +143,61 @@ OneLib.ScriptLoader = (function (my) {
     };
 
     /**
-     * 开始队列的下载行为(如果已经在下载，则不处理)
+     * 开始队列的异步下载行为(如果已经在下载，则不处理)
+     */
+    ScriptQueue.prototype.asyncStart = function(){
+        var self = this;//save the this ref
+
+        //如果正在下载，则什么都不做
+        if(self.running){
+            return;
+        }
+//        var _oldStart =-1;
+        //如果有需要下载的文件，才触发下载循环
+        if(self.runAt<self.fileUrls.length-1){
+//            _oldStart = self.runAt;
+            _asyncDownloadOne();
+        }
+
+        function _asyncDownloadOne(){
+            //看是否有要下载的文件
+            if(self.runAt<self.fileUrls.length-1){
+                //开始下载下一个文件
+                self.running = true;
+                self.runAt+=1;
+
+                var _nowFile = self.fileUrls[self.runAt];
+                my.loadScript(_nowFile.url,function(url,begin,end){
+                    _nowFile.beginAt = begin;
+                    _nowFile.endAt = end;
+                    self.loaded++;
+
+                    //每个下载完成之后，触发对应的事件
+                    for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
+                        var _item = self.callbacks.onOne[m];
+                        _item(url,begin,end);
+                    }
+
+                    //如果已经下载成功的个数等于所有文件个数
+                    if(self.loaded===self.fileUrls.length){
+                        for(var m2=0,n2=self.callbacks.onFinish.length;m2<n2;m2++){
+                            var _item2 = self.callbacks.onFinish[m2];
+                            _item2(self.fileUrls[self.runAt].beginAt,self.fileUrls[self.runAt].endAt);
+                        }
+                    }
+                });
+                _asyncDownloadOne(); //继续触发下一次调用
+            }
+            //队列全部下载完，触发finish
+            else{
+                self.running = false;//异步模式下，只要所有文件都开始下载了，running就恢复false.而不是全部下载成功才为false
+            }
+        }
+
+    };
+
+    /**
+     * 开始队列的同步下载行为(如果已经在下载，则不处理)
      */
     ScriptQueue.prototype.start = function(){
         var self = this;//save the this ref
@@ -150,10 +206,10 @@ OneLib.ScriptLoader = (function (my) {
         if(self.running){
             return;
         }
-        var _oldStart =-1;
+//        var _oldStart =-1;
         //如果有需要下载的文件，才触发下载循环
         if(self.runAt<self.fileUrls.length-1){
-            _oldStart = self.runAt;
+//            _oldStart = self.runAt;
             _downloadOne();
         }
 
@@ -168,6 +224,8 @@ OneLib.ScriptLoader = (function (my) {
                 my.loadScript(_nowFile.url,function(url,begin,end){
                     _nowFile.beginAt = begin;
                     _nowFile.endAt = end;
+
+                    self.loaded++;
 
                     //每个下载完成之后，触发对应的事件
                     for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
@@ -184,7 +242,8 @@ OneLib.ScriptLoader = (function (my) {
 
                 for(var m=0,n=self.callbacks.onFinish.length;m<n;m++){
                     var _item = self.callbacks.onFinish[m];
-                    _item(self.fileUrls[_oldStart+1].beginAt,self.fileUrls[_oldStart+1].endAt);
+//                    _item(self.fileUrls[_oldStart+1].beginAt,self.fileUrls[_oldStart+1].endAt);
+                    _item(self.fileUrls[self.runAt].beginAt,self.fileUrls[self.runAt].endAt);
                 }
 
             }

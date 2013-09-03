@@ -56,17 +56,62 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
     });
 
 
-    module( "group 2:使用Queue来并行加载多个文件，同时每个队列内部保持顺序加载(通过console查看文件并行下载timeline)", {
+    module( "group 2:使用Queue来加载多个文件，队列内部可以使用串行、并行下载控制。队列之间并行下载(通过console查看文件并行下载timeline)", {
         setup: function() {
             // prepare something for all following tests
-            $(".__log__").remove();
+//            $(".__log__").remove();
         },
         teardown: function() {
             // clean up after each test
         }
     });
 
-    asyncTest( "loader.beginQueue", function() {
+
+
+
+
+
+    asyncTest( "loader.beginQueue.asyncStart", function() {
+        expect(4);
+
+        var _logger = new OneLib.Log.Logger(true);
+        _logger.writeLine('begin load');
+
+        var _loaded4=[],
+            _toLoad4 = [
+                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a4.js',
+                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b4.js',
+                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c4.js'
+            ];
+        var loadOK4 = function(url){
+            for(var i=0,j=_toLoad4.length;i<j;i++){
+                var _item = _toLoad4[i];
+                if(url === _item){
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        loader.beginQueue('queue4',_toLoad4).
+            onLoadedOne(function(url,beginAt,endAt){
+                _loaded4.push(url);
+                _logger.writeLine('queue4:file:'+url+' begin load at:'+beginAt+' end at:'+endAt);
+            }).onFinish(function(beginAt,endAt){
+                _logger.writeLine('queue4:all file begin load at:'+beginAt+' end at:'+endAt);
+                equal(beginAt!=endAt,true,'beginAt must diff with endAt!');
+                //由于css加载顺序不一定严格，所以要查找在不在
+                for(var m=0,n=_loaded4.length;m<n;m++){
+                    var _loadedJs = _loaded4[m];
+                    equal(loadOK4(_loadedJs),true,_loadedJs+' must right!');
+                }
+                start();
+            }).
+            asyncStart();
+    });
+
+
+    asyncTest( "loader.beginQueue.start", function() {
         expect(12);
         var _logger = new OneLib.Log.Logger(true);
         _logger.writeLine('begin load');
@@ -120,6 +165,7 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
             }
             return false;
         };
+
 
         //这个队列先完成一批下载，然后再添加3个任务下载
         loader.beginQueue('queueOne').
@@ -178,5 +224,6 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
             }).
             start();
     });
+
 
 });
