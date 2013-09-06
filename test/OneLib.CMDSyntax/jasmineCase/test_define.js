@@ -5,18 +5,22 @@ describe('define:', function () {
 
     afterEach(function () {
         //run after each test
-        OneLib.CMDSyntax.removeAllModulesExcept('_log');
+        OneLib.CMDSyntax.removeAll();
     });
 
     describe('require method:', function () {
 
         it('should can require other modules from dependencies', function () {
             //do some assert
-            define('testModule', ['_log'], function (require, exports, module) {
-                var logModule = require('_Log'); //built-in alias has allready give OneLib.Log Module two name,_log and _Log
-                var logModule2 = require('_log'); //built-in alias has allready give OneLib.Log Module two name,_log and _Log
-                expect(logModule).toBeDefined();
-                expect(logModule).toBe(logModule2);
+            define('some module', [], function (require, exports, module) {
+
+
+            });
+            define('testModule', ['some module'], function (require, exports, module) {
+                var m1 = require('some module'); //built-in alias has allready give OneLib.Log Module two name,_log and _Log
+                var m2 = require('some module'); //built-in alias has allready give OneLib.Log Module two name,_log and _Log
+                expect(m1).toBeDefined();
+                expect(m1).toBe(m2);
             });
         });
 
@@ -64,6 +68,7 @@ describe('define:', function () {
 
         afterEach(function () {
             //run after each test
+            OneLib.CMDSyntax.removeAll();
         });
 
         it('should exports its properties to outside', function () {
@@ -101,21 +106,25 @@ describe('define:', function () {
 
         afterEach(function () {
             //run after each test
+            OneLib.CMDSyntax.removeAll();
         });
 
         it('should can visit some meta information from the "module" param ', function () {
+            define('_log', [], function (require, exports, module) {
+
+            });
             //do some assert
             define('calculator', ['_log','notExist'], function (require, exports, module) {
                 expect(require('notExist')).toBeUndefined();
                 expect(module.id).toBe('calculator');
                 expect(module.name).toBe('calculator');
-                expect(module.dependencies).toEqual(['OneLib.Log','notExist']);
+                expect(module.dependencies).toEqual(['_log','notExist']);
 
                 module.dependencies[1]="aaa";//update inside the factory,but does not infect the real data
             });
 
             var calModule = OneLib.CMDSyntax.require('calculator');
-            expect(calModule.dependencies).toEqual(['OneLib.Log','notExist']);//update inside the factory,but does not infect the real data
+            expect(calModule.dependencies).toEqual(['_log','notExist']);//update inside the factory,but does not infect the real data
 
         });
 
@@ -174,10 +183,13 @@ describe('defined Module:', function () {
 
     afterEach(function () {
         //run after each test
-        OneLib.CMDSyntax.removeAllModulesExcept('_log');
+        OneLib.CMDSyntax.removeAll();
     });
 
     it('should have id,name,dependencies and other properties,alias must be transformed', function () {
+        define('_log', [], function (require, exports, module) {
+
+        });
         //do some assert
         define('testModule', ['_log'], function (require, exports, module) {
         });
@@ -186,7 +198,7 @@ describe('defined Module:', function () {
 
         expect(_testModule.id).toBe('testModule');
         expect(_testModule.name).toBe('testModule');
-        expect(_testModule.dependencies).toEqual(['OneLib.Log']);
+        expect(_testModule.dependencies).toEqual(['_log']);
         expect(_testModule.exports).toBeDefined();
         expect(_testModule.factory).toBeDefined();
     });

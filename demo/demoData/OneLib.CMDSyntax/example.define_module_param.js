@@ -15,9 +15,9 @@ define('module1', [], function (require, exports, module) {
 });
 
 //module2.js
-define('module2', ['module1','jQuery','window'], function (require, exports, module) {
+define('module2', ['module1','jQuery'], function (require, exports, module) {
 
-    var wnd = require('window'),$ = require('jQuery'),M1 = require('module1');
+    var wnd = window,$ = require('jQuery'),M1 = require('module1');
 
     //点击测试按钮的时候触发:
     $("#define_module_param").click(function(){

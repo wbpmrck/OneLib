@@ -150,11 +150,11 @@ OneLib.CMDSyntax = (function (my,global) {
             },
             //配置:别名
             alias:{
-                '_Log':'OneLib.Log',//OneLib 日志模块
-                '_log':'OneLib.Log',//OneLib 日志模块
-                '_scriptLoader':'OneLib.ScriptLoader',//脚本异步加载模块
-                '_loader':'OneLib.ScriptLoader',//脚本异步加载模块
-                'window':'global'//全局变量
+//                '_Log':'OneLib.Log',//OneLib 日志模块
+//                '_log':'OneLib.Log',//OneLib 日志模块
+//                '_scriptLoader':'OneLib.ScriptLoader',//脚本异步加载模块
+//                '_loader':'OneLib.ScriptLoader',//脚本异步加载模块
+//                'window':'global'//全局变量
             }
         },
         _transAlias = function(moduleNameOrArray){
@@ -356,6 +356,16 @@ OneLib.CMDSyntax = (function (my,global) {
         _logger.enable = false;
     };
     /**
+     * 移除所有已经注册的module
+     */
+    my.removeAll=function(){
+        _log('>>!!>>removeAll begin...');
+        for(var i in _modules){
+            my.removeModule(i);
+        }
+        _log('>>!!>>removeAll end(success)...');
+    };
+    /**
      * 移除所有的Module(慎用，多用于测试时)
      */
     my.removeAllModulesExcept = function(except){
@@ -371,7 +381,7 @@ OneLib.CMDSyntax = (function (my,global) {
         }
 
         _log('>>!!>>removeAllModules except:: [' + except + '] begin...');
-        for(i in _modules){
+        for(var i in _modules){
             if(!_exceptDic[i]){
                 my.removeModule(i);
             }

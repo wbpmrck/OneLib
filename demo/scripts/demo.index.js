@@ -1,8 +1,8 @@
 
-define('Demo.Index', ['jQuery','ko','MT','window'], function (require, exports, module) {
+define('Demo.Index', ['jQuery','ko','MT'], function (require, exports, module) {
 
     var $ = require('jQuery'),ko = require('ko'),_viewModel,mt = require('MT'),
-        wnd = require('window');
+        wnd = window;
 
     function Module(moduleName,desc,linkEnable,isCur){
         var self = this;//save the this ref

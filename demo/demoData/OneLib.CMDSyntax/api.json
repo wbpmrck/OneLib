@@ -179,7 +179,8 @@
                 "returned":"undefined",
                 "desc":"把一个已经存在的第三方组件包装为CMD模块",
                 "params":[
-                    {"name":"moduleObj","type":"Object","desc":"要包装的第三方模块的输出对象。如jQuery的$"}
+                    {"name":"moduleName","type":"String","desc":"要包装成的目标模块名"},
+                    {"name":"moduleObj","type":"Object","desc":"被包装的第三方模块的输出对象。如jQuery的$"}
                 ],
                 "demoCodeRefs":[
                     {
