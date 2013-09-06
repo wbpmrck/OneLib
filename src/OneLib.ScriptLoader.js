@@ -8,7 +8,8 @@
  --------------------------------------------
  */
 
-var OneLib = (function (my) {return my;} (OneLib || {}));
+var global = global||window;
+var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={})));
 
 OneLib.ScriptLoader = (function (my) {
     var _allQueue={

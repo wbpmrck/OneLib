@@ -10,7 +10,9 @@
 
 by kaicui 2013-8-17 13:48:31       版本创建
  //////////////////////////////////////////////////////////////////*/
-var OneLib = (function (my) {return my;} (OneLib || {}));
+
+var global = global||window;
+var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={})));
 
 OneLib.CMDSyntax = (function (my,global) {
     if(!OneLib.hasOwnProperty('Log')){
