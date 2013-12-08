@@ -5,6 +5,7 @@
             {
                 "name":"forEach",
                 "type":"Function",
+                "returned":"String",
                 "desc":"对数组的元素进行遍历，顺序为从0开始到leng-1。在遍历的过程中对每一项可以进行操作",
                 "params":[
                     {"name":"iterator","type":"Function(item,index,array)","desc":"对遍历的每一项数组元素进行操作的函数。3个参数分别为:<ul><li>item:当前遍历的数组元素</li><li>index:数组元素的下标(0开始)</li><li>array:数组对象</li></ul>"},

@@ -28,5 +28,10 @@
         "moduleName":"OneLib.BrowserDetect",
         "desc":"封装对浏览器版本进行检测的功能",
         "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.EventEmitter",
+        "desc":"让类具备事件的订阅、发布能力",
+        "linkEnable":true
     }
 ]

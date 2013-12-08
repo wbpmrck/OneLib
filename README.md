@@ -19,7 +19,7 @@
  <li>ok|实现css加载器,用于动态载入demo需要的样式,补充基于Qunit的测试用例</li>
  <li>ok|补充scriptLoader,实现按顺序加载、执行多个js文件,补充基于Qunit的测试用例.(可以新建下载队列，每个队列一个个挨着下。)</li>
  <li>ok|补充scriptLoader,对外部提供更加友好的API(loader.beginQueue("queue1").load(xxx.js).load(yyy.js).start();)来描述脚本的加载顺序。然后内部使用多个队列执行</li>
-<li>所有demo页面使用一个html,通过不同的queryString加载不同的demo.js,然后示例代码、html都通过静态html+ajax的方式载入</li>
+ <li>所有demo页面使用一个html,通过不同的queryString加载不同的demo.js,然后示例代码、html都通过静态html+ajax的方式载入</li>
  <li>页面执行的顺序:
     <ul>
         <li>分析queryString,得到demo.js,载入。</li>
@@ -39,10 +39,6 @@
  </li>
   <li>修改OneLib.CMDSyntax的bug,在模块require的时候，被需要的模块如果本身是一个函数，则需要复制一个函数供外部使用</li>
     <li>增加库：浏览器版本判断.并完善对手机浏览器的支持</li>
-</ul>
-
-###Doing
-<ul>
     <li>ES5的兼容性实现+demo,包括:
         <ul>
             <li>1、<undefined> Array.prototype.forEach(val,idx,array)</li>
@@ -51,6 +47,13 @@
             <li>1、Function.prototype.bind(thisArg [, arg1 [, arg2, …]])</li>
         </ul>
     </li>
+  <li>补充EventEmitter模块的testCase和demo.</li>
+</ul>
+
+###Doing
+<ul>
+  <li>新增Secure.MD5,Secure.SHA_1(1,256,512)模块，实现本地进行摘要加密(参考node3.0项目).</li>
+  <li>补充Location模块的testCase和demo.</li>
   <li>集成fis环境，发布的文件进行压缩.</li>
 </ul>
 
