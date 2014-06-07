@@ -21,13 +21,16 @@ OneLib.CMDSyntax = (function (my,global) {
     if(!OneLib.hasOwnProperty('ScriptLoader')){
         throw new Error('need OneLib.ScriptLoader Module!');
     }
-    var _copy=function(obj){
+   var _copy=function(obj){
         var _dump;
         //判断原对象是否是函数
         if(typeof(obj)==='function'){
             _dump = function(){
                 return obj.apply(this,arguments);
             };
+        }
+        else if(Object.prototype.toString.call(obj)==='[object Array]'){
+            _dump = obj.slice();
         }
         else{
             _dump ={};

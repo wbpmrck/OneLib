@@ -21,6 +21,19 @@ describe('Array ', function () {
         expect(sum).toBe(15);
     });
 
+    it('should can use map to iterate', function () {
+        //do some assert
+        expect(Array.prototype.map).toBeDefined();
+
+        var arr =[1,2,3,4,5],mapped;
+        expect(function(){
+            mapped=arr.map(function(item,idx,arr){
+                return item*10;
+            });
+        }).not.toThrow();
+
+        expect(mapped).toEqual([10,20,30,40,50]);
+    });
     it('should can use filter ', function () {
         //do some assert
         expect(Array.prototype.filter).toBeDefined();
