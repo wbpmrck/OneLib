@@ -53,6 +53,7 @@
 
 ###Doing
 <ul>
+  <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
   <li>补充Location模块的testCase</li>
   <li>补充Location模块的Demo</li>
@@ -62,6 +63,7 @@
 
 ###To be done
 <ul>
+  <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
   <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>
  <li>url、queryString的操作类.</li>

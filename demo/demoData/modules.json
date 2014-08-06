@@ -33,5 +33,15 @@
         "moduleName":"OneLib.EventEmitter",
         "desc":"让类具备事件的订阅、发布能力",
         "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.MD5",
+        "desc":"提供MD5摘要算法(又称散列、哈希算法)",
+        "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.SHA1",
+        "desc":"提供SHA1(Secure Hash Algorithm)摘要算法(又称安全哈希算法)",
+        "linkEnable":true
     }
 ]
