@@ -43,11 +43,12 @@ describe('EventEmitter ', function () {
 
             var called = false;
             var aDog = new Dog();
-            aDog.on('shouted',function(){
+            var slotID = aDog.on('shouted',function(){
                 called = true;
             })
             aDog.shout();
             expect(called).toEqual(true);
+            expect(typeof slotID).toEqual("number");
 
         });
     });
@@ -75,6 +76,70 @@ describe('EventEmitter ', function () {
             aDog.off('shouted',cb);
             aDog.shout();
             expect(called).toEqual(false);
+
+        });
+    });
+    it('should can use slotID to "off" callback', function () {
+        //do some assert
+        define('testEmitter4', ['OneLib.EventEmitter'], function (require, exports, module) {
+            var EventEmitter = require('OneLib.EventEmitter');
+
+            function Dog(){
+
+            }
+            Dog.prototype.shout = function(){
+                console.log('woof!woof!');
+                this.emit('shouted');
+            }
+
+            EventEmitter.mixin(Dog);
+
+            var called = false;
+            var aDog = new Dog();
+            function cb(){
+                called = true;
+            }
+            var slotID = aDog.on('shouted',cb);
+            aDog.off('shouted',slotID);
+            aDog.shout();
+            expect(called).toEqual(false);
+
+        });
+    });
+    it('should can "off" all callback at one time', function () {
+        //do some assert
+        define('testEmitter5', ['OneLib.EventEmitter'], function (require, exports, module) {
+            var EventEmitter = require('OneLib.EventEmitter');
+
+            function Dog(){
+
+            }
+            Dog.prototype.shout = function(){
+                console.log('woof!woof!');
+                this.emit('shouted');
+            }
+
+            EventEmitter.mixin(Dog);
+
+            var called1 = 0,called2 = 0;
+            var aDog = new Dog();
+            function cb1(){
+                called1 ++;
+            }
+            function cb2(){
+                called2 ++;
+            }
+            var slotID1 = aDog.on('shouted',cb1);
+            var slotID2 = aDog.on('shouted',cb2);
+            aDog.shout();
+            expect(called1).toEqual(1);
+            expect(called2).toEqual(1);
+
+//            aDog.off('shouted',"all");
+            aDog.off('shouted');
+            aDog.shout();
+            expect(called1).toEqual(1);
+            expect(called2).toEqual(1);
 
         });
     });

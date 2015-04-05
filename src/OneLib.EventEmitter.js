@@ -2,8 +2,8 @@
  * @Created by kaicui.
  * @Date:2013-12-01 21:25
  * @Desc: 提供类似node.js的eventEmitter的事件发布处理机制
- * 1、
- * 2、
+ * 1、可以直接继承eventEmitter来让自身具备事件发射功能
+ * 2、也可以使用mixin方法来让已有对象具备发射功能
  * @Change History:
  --------------------------------------------
  @created：|kaicui| 2013-12-01 21:25.
@@ -12,22 +12,46 @@
 
 define('OneLib.EventEmitter', [], function (require, exports, module) {
 
+    var cbId=1;
+
     function EventEmitter(){};
     EventEmitter.prototype	= {
         on	: function(event, fct){
             this._events = this._events || {};
             this._events[event] = this._events[event]	|| [];
             this._events[event].push(fct);
+
+            fct._eventSlotID=cbId;
+            return cbId++;
         },
         off	: function(event, fct){
             this._events = this._events || {};
             if( event in this._events === false  )	return;
-            for(var i=this._events[event].length-1;i>=0;i--){
-                var _item = this._events[event][i];
-                if(_item.toString() === fct.toString()){
-                    this._events[event].splice(i, 1);
+
+            var t = typeof fct;
+            if(t=="number"){
+                for(var i=this._events[event].length-1;i>=0;i--){
+                    var _item = this._events[event][i];
+                    if(_item._eventSlotID == fct){
+                        this._events[event].splice(i, 1);
+                        break;
+                    }
                 }
+            }else if( (t=="string" && fct.toLowerCase()=="all") ||(t=="undefined")){
+                delete this._events[event];
+            }else if(t=="function"){
+
+                for(var i=this._events[event].length-1;i>=0;i--){
+                    var _item = this._events[event][i];
+                    if(_item.toString() === fct.toString()){
+                        this._events[event].splice(i, 1);
+                        break;
+                    }
+                }
+            }else{
+                throw new Error("second param must be number/function/string")
             }
+
         },
         emit	: function(event /* , args... */){
             this._events = this._events || {};
