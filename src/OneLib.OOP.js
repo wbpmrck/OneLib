@@ -28,17 +28,19 @@ define('OneLib.OOP', [], function (require, exports, module) {
             //如果是继承，则添加中介对象
             if(_hasProp.call(metaData,"supper")){
                 var parentClass = metaData["supper"];
-                F.prototype = parentClass.prototype;
-                realCons = function(){
-                    parentClass.call(this);//call parent to initial instance properties
-                    cons.call(this);//then call sub
-                    return this;
-                }
+                if(parentClass !== undefined){
+                    F.prototype = parentClass.prototype;
+                    realCons = function(){
+                        parentClass.call(this);//call parent to initial instance properties
+                        cons.call(this);//then call sub
+                        return this;
+                    }
 
-                realCons.prototype = new F();
-                realCons.prototype.constructor = realCons;//设置constructor指向构造函数
-                //add by kaicui 2015-02-10(保留基类的prototype,方便调用基类方法)
-                realCons.__supperClassProto__ = parentClass.prototype;
+                    realCons.prototype = new F();
+                    realCons.prototype.constructor = realCons;//设置constructor指向构造函数
+                    //add by kaicui 2015-02-10(保留基类的prototype,方便调用基类方法)
+                    realCons.__supperClassProto__ = parentClass.prototype;
+                }
             }
 
             if(_hasProp.call(metaData,"prototype")){
@@ -54,7 +56,7 @@ define('OneLib.OOP', [], function (require, exports, module) {
     }
 
     return {
-      DefineClass:_defineClass,
+        defineClass:_defineClass,
         getSupper:function(classRef){
             return classRef.__supperClassProto__;
         }
