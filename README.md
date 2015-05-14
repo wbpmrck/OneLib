@@ -9,6 +9,7 @@
 
 ###Done
 <ul>
+   <li>新增Secure.MD5,Secure.SHA_1(1,256,512)模块，实现本地进行摘要加密(参考node3.0项目).</li>
  <li>新增Array.map方法到ES5模块.</li>
  <li>重写ModuleSyntax模块.</li>
  <li>使用karma+jasmine完成单元测试.</li>
@@ -53,11 +54,11 @@
 
 ###Doing
 <ul>
+    <li>将Min heap(小顶堆)的实现加入</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
   <li>补充Location模块的testCase</li>
   <li>补充Location模块的Demo</li>
-   <li>新增Secure.MD5,Secure.SHA_1(1,256,512)模块，实现本地进行摘要加密(参考node3.0项目).</li>
  <li>集成fis环境，发布的文件进行压缩.</li>
 </ul>
 

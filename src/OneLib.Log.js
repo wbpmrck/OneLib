@@ -1,14 +1,15 @@
 ﻿/*
-作者： kaicui
+ 作者： kaicui
 
-依赖： 无
-使用说明：
-1、自定义的日志输出类
------------
-版本历史：
+ 依赖： 无
+ 使用说明：
+ 1、自定义的日志输出类
+ -----------
+ 版本历史：
+ 2015-05-14：kaicui:修改默认日志输出方式，如果支持console,则使用console
 
-2012年3月25日10:18:02      版本创建
-//////////////////////////////////////////////////////////////////*/
+ 2012年3月25日10:18:02      版本创建
+ //////////////////////////////////////////////////////////////////*/
 
 var global = global||window;
 var OneLib = (function (my) {return my;} (global['OneLib'] || (global['OneLib']={})));
@@ -38,37 +39,37 @@ OneLib.Log = (function (my) {
         self.count=0;
         var _style="color:red;",
             _logMethod,
-        /**
-         * 根据传入类型，获取对应的log方法
-         * @param type:0代表console,1代表DOM
-         * @return {Function}
-         * @private
-         */
-        _getRewrittenLog =function (type){
-            if(type ===0 && (window.console&&window.console.log)){
-                var _l= function (msg){
-                    self.count++;//增加次数
-                    console.log(msg);
-                };
-                return _l;
-            }
-            else{
-                var _l2= function (msg){
-                    self.count++;//增加次数
-                    var h3 = document.createElement('h3');
-                    h3.style.cssText = _style;
-                    h3.className ='__log__';
-                    if(h3.hasOwnProperty('innerText')){
-                        h3.innerText = msg;
-                    }
-                    else{
-                        h3.textContent = msg;
-                    }
-                    document.body.appendChild(h3);
-                };
-                return _l2;
-            }
-        };
+            /**
+             * 根据传入类型，获取对应的log方法
+             * @param type:0代表console,1代表DOM
+             * @return {Function}
+             * @private
+             */
+                _getRewrittenLog =function (type){
+                if((type === undefined && global.console) || (type ===0 && (window.console&&window.console.log))){
+                    var _l= function (msg){
+                        self.count++;//增加次数
+                        console.log(msg);
+                    };
+                    return _l;
+                }
+                else{
+                    var _l2= function (msg){
+                        self.count++;//增加次数
+                        var h3 = document.createElement('h3');
+                        h3.style.cssText = _style;
+                        h3.className ='__log__';
+                        if(h3.hasOwnProperty('innerText')){
+                            h3.innerText = msg;
+                        }
+                        else{
+                            h3.textContent = msg;
+                        }
+                        document.body.appendChild(h3);
+                    };
+                    return _l2;
+                }
+            };
 
         /**
          * 写一行日志
@@ -101,7 +102,7 @@ OneLib.Log = (function (my) {
         self.setMode=function(mode){
             _logMethod = _getRewrittenLog(mode)
         };
-        self.setMode(1);
+        self.setMode();
     };
     return my;
 } (OneLib.Log || {}));
