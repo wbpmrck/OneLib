@@ -214,3 +214,43 @@ describe('defined Module:', function () {
         }).toThrow();
     });
 });
+
+describe('define with out dependency', function () {
+    beforeEach(function () {
+        //run before each test
+    });
+
+    afterEach(function () {
+        //run after each test
+        OneLib.CMDSyntax.removeAll();
+        OneLib.CMDSyntax.setSrcMap(null);
+    });
+
+    it('should success if has config srcMap first.', function () {
+        //首先初始化srcMap
+        OneLib.CMDSyntax.setSrcMap({
+            "a":{
+                uri:"http://static.local.com/a.js",
+                deps:[] //无依赖的情况
+            },
+            "b":{
+                uri:"http://static.local.com/b.js",
+                deps:[
+                    "a" //b依赖a
+                ]
+            }
+        });
+        define('a', function (require, exports, module) {
+            return {a:'this is module a without dependency on factory method'}
+        });
+        define('b', function (require, exports, module) {
+            var a = require("a");
+            expect(a.a).toEqual('this is module a without dependency on factory method');
+        });
+        expect(function () {
+            define('c', function (require, exports, module) {
+                var a = require("a");
+            });
+        }).toThrow();
+    });
+});

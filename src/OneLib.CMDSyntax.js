@@ -3,10 +3,44 @@
 
  依赖： OneLib.Log,OneLib.ScriptLoader
  使用说明：
- 1、与seajs的CMD规范完全兼容
+ 1、与seajs的CMD规范完全兼容(注意：带 id 和 deps 参数的 define 用法不属于 CMD 规范，而属于 Modules/Transport 规范。)
  2、其他所有的模块依赖本模块，使用CMD的格式来书写
+ 3、对global暴露的接口，只有define关键字，还有OneLib入口命名空间
+
+ todo:
+ 1、移除对alias别名功能的支持。
+    关于alias功能，我觉得既然有了构建工具，其实没必要把别名功能强加载前端模块加载器里，理由如下：
+        别名主要是为了方便书写、节省带宽。这些在开发和发布阶段完全可以通过构建工具来满足
+        没有理由在线上环境中，让前端loader意识到，可以用2种方式来引用同一个module,这没有任何意义。
+
  -----------
  版本历史：
+ by kaicui 2015-09-14
+ 1、添加srcMap，可以提前初始化资源id,、uri,和依赖等信息
+ 注意：通过构建工具，把当前页面可能要用到的所有脚本信息，都初始化在srcMap里，可以有助于ModuleLoader去加载脚本
+ 格式：key:moduleId,value:{uri:组件加载地址,deps:组件同步或异步"直接"依赖的其他组件(非递归)}
+ srcMap:{
+         "libs/jquery-1.8.1/jquery.min.js":{
+             uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
+             deps:[] //无依赖的情况
+         },
+         "testWeb/debug-1.0/bar/bar.js":{
+             uri:"http://static.local.com/static/c/testWeb/debug-1.0/bar/bar.js",
+             deps:[
+                 "libs/jquery-1.8.1/jquery.min.js",
+                 "testWeb/debug-1.0/foo/foo.js" //多个依赖的情况
+             ]
+         },
+         "testWeb/debug-1.0/foo/foo.js":{
+             uri:"http://static.local.com/static/c/testWeb/debug-1.0/foo/foo.js",
+             deps:[
+                 "libs/jquery-1.8.1/jquery.min.js"
+             ]
+         }
+ },
+
+ 2、优化define函数，支持不传入deps,这种情况下 loader通过srcMap查找依赖项
+
 
 by kaicui 2013-8-17 13:48:31       版本创建
  //////////////////////////////////////////////////////////////////*/
@@ -45,8 +79,32 @@ OneLib.CMDSyntax = (function (my,global) {
         return svalue ? svalue[1] : svalue;
     };
 
+    /**
+     * 代表一个模块
+     * @param name：模块名，也是模块的唯一标识
+     * @param dependency:声明的依赖(2015-09-14：增加逻辑，如不声明依赖，则从srcMap里获取，否则报错)
+     * @param factory:模块构建函数，define的第3(2)个阐述
+     * @param exports:初始化的exports
+     * @private
+     */
     function _Module(name,dependency,factory,/*optional*/exports){
         var self = this;//save the this ref
+
+        //处理定义模块方式是不显示声明依赖的情况
+        if(typeof dependency ==='function'){
+            //从srcMap里获取
+
+            var _deps;
+            if(_configs.srcMap[name]){
+                _deps = _configs.srcMap[name].deps;
+
+                //如果读取成果，则更新参数()
+                factory = dependency;
+                dependency = _deps;
+            }else{
+                throw new Error("module:["+name+'] should set into srcMap!')
+            }
+        }
 
         self.id=self.name = name;
         self.dependencies =_transAlias(dependency);
@@ -135,6 +193,28 @@ OneLib.CMDSyntax = (function (my,global) {
         _configs={
             // 基础路径（其他所有模块的路径都以它为基础）
             base: 'http://asada',
+
+            //add on 2015-09-14:添加资源映射表，方便根据模块id查询模块详细信息和依赖的其他模块概要信息
+            srcMap:{
+                //"libs/jquery-1.8.1/jquery.min.js":{
+                //    uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
+                //    deps:[] //无依赖的情况
+                //},
+                //"testWeb/debug-1.0/bar/bar.js":{
+                //    uri:"http://static.local.com/static/c/testWeb/debug-1.0/bar/bar.js",
+                //    deps:[
+                //        "libs/jquery-1.8.1/jquery.min.js",
+                //        "testWeb/debug-1.0/foo/foo.js" //多个依赖的情况
+                //    ]
+                //},
+                //"testWeb/debug-1.0/foo/foo.js":{
+                //    uri:"http://static.local.com/static/c/testWeb/debug-1.0/foo/foo.js",
+                //    deps:[
+                //        "libs/jquery-1.8.1/jquery.min.js"
+                //    ]
+                //}
+            },
+
             // 变量配置
             vars: {
 //                'home': '',
@@ -231,6 +311,13 @@ OneLib.CMDSyntax = (function (my,global) {
         return my;
     };
 
+    /**
+     * 给加载器设置源码字典
+     * @param srcMap
+     */
+    my.setSrcMap = function (srcMap) {
+        _configs.srcMap = srcMap||{}; //确保srcMap至少是个空字典
+    }
 
     /**
      * 设置变量
