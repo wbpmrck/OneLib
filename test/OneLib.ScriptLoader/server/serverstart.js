@@ -28,5 +28,5 @@ app.configure(function(){
 var httpServer=http.createServer(app);
 httpServer.listen(app.get('port'), function(){
     console.log('WebSiteServer:成功启动,监听端口:%s ,访问下面链接开始测试 <a href="%s"></a>',app.get('port'),
-    "http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/test.html");
+    "http://localhost:19527/test/OneLib.ScriptLoader/jasmineCase_html/test_scriptLoader.html");
 });

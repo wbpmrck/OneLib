@@ -8,16 +8,8 @@
  *
  *
  * kaicui 2015-09-15 10:05  增加功能
- *
- *  增加对queue的级联功能：
- *  1、场景：在下载脚本依赖的时候，a依赖b,c,d,对于b,c,d，创建3个队列，每个队列内部是串行下载的，但是，a需要知道a,b,c全部下载完，
- *  在这个时候，才可以执行a的初始化
- *
- *  2、需求：需要在队列之上，有多层级联功能：
- *      a)修改queue的api,不仅可以添加单个下载任务，还可以把queue作为任务添加进去
- *      b)queue里每个任务的下载控制，不仅仅针对任务，也针对queue自己添加进去
- *
- *  3、重构：
+
+ *  重构：
  *      a)重构事件触发器部分，使用最新的eventEmitter(支持once等API)
  *      b)把loadTask,Queue的事件触发机制进行修改
  *
@@ -46,10 +38,10 @@ OneLib.ScriptLoader = (function (my) {
     function LoadTask(url,charset){
         var self = this;//save the this ref
 
-        self.callbacks={
-            onload:[],
-            onerror:[]
-        }
+        //self.callbacks={
+        //    onload:[],
+        //    onerror:[]
+        //}
 
         self.charset = charset||"utf-8";
         self.status = 0; //0 未开始  1下载中 2 下载成功  3 下载失败
@@ -57,7 +49,7 @@ OneLib.ScriptLoader = (function (my) {
         self.head = undefined;
         self.script = undefined;
         self.beginAt = self.endAt = undefined;
-        self.notifyDownTimes = 0;//调试用，保存被成功反复下载过的次数
+        //self.notifyDownTimes = 0;//调试用，保存被成功反复下载过的次数
     }
 
     /**
@@ -115,15 +107,15 @@ OneLib.ScriptLoader = (function (my) {
         self.head.appendChild(self.script);
 
     }
-    /**
-     * 外部订阅加载成功事件
-     * @param callback
-     * @returns {LoadTask}
-     */
-    LoadTask.prototype.onload = function(callback){
-        callback&&this.callbacks.onload.push(callback);
-        return this;
-    };
+    ///**
+    // * 外部订阅加载成功事件
+    // * @param callback
+    // * @returns {LoadTask}
+    // */
+    //LoadTask.prototype.onload = function(callback){
+    //    callback&&this.callbacks.onload.push(callback);
+    //    return this;
+    //};
     /**
      * 触发向外通知加载成功(并修改状态)
      * 外部通知完一次之后，事件监听就被移除了
@@ -133,16 +125,16 @@ OneLib.ScriptLoader = (function (my) {
         console.log("LoadTask :"+this.url +" notifyLoaded begin:");
         var self = this;//save the this ref
 
-        self.notifyDownTimes ++;
-        console.log("LoadTask :"+this.url +"notifyDownTimes:"+self.notifyDownTimes);
-
         self.status =2;
         self.endAt = new Date();
-        for(var i=self.callbacks.onload.length-1;i>=0;i--){
-            console.log("LoadTask :"+this.url +" notifyLoaded :"+i);
-            var cb = self.callbacks.onload.splice(i,1)[0];
-            cb&& cb(self.url, self.beginAt,self.endAt)
-        }
+
+        self.emit("load",self.url, self.beginAt,self.endAt);
+
+        //for(var i=self.callbacks.onload.length-1;i>=0;i--){
+        //    console.log("LoadTask :"+this.url +" notifyLoaded :"+i);
+        //    var cb = self.callbacks.onload.splice(i,1)[0];
+        //    cb&& cb(self.url, self.beginAt,self.endAt)
+        //}
         return this;
     };
     /**
@@ -154,26 +146,29 @@ OneLib.ScriptLoader = (function (my) {
         var self = this;//save the this ref
         self.status =3;
         self.endAt = new Date();
-        for(var i=self.callbacks.onerror.length-1;i>=0;i--){
-            console.log("LoadTask :"+this.url +" notifyError :"+i);
-            var cb = self.callbacks.onerror.splice(i,1)[0];
-            cb&& cb(self.url, self.beginAt,self.endAt)
-        }
-        return this;
-    };
-    /**
-     * 外部订阅加载失败事件
-     * @param callback
-     * @returns {LoadTask}
-     */
-    LoadTask.prototype.onerror = function(callback){
-        callback&&this.callbacks.onerror.push(callback);
-        return this;
-    };
 
+        self.emit("error",self.url, self.beginAt,self.endAt);
+        //for(var i=self.callbacks.onerror.length-1;i>=0;i--){
+        //    console.log("LoadTask :"+this.url +" notifyError :"+i);
+        //    var cb = self.callbacks.onerror.splice(i,1)[0];
+        //    cb&& cb(self.url, self.beginAt,self.endAt)
+        //}
+        return this;
+    };
+    ///**
+    // * 外部订阅加载失败事件
+    // * @param callback
+    // * @returns {LoadTask}
+    // */
+    //LoadTask.prototype.onerror = function(callback){
+    //    callback&&this.callbacks.onerror.push(callback);
+    //    return this;
+    //};
+
+    OneLib.EventEmitter.mixin(LoadTask);
 
     //准备好一个下载任务（利用全局缓存池）
-    var _prepareTask = function(url,callback,charset){
+    var _prepareTask = function(url,charset){
         var self = this;//save the this ref
         var task = _taskPool[url];
         //首先看缓存里是否有
@@ -183,7 +178,6 @@ OneLib.ScriptLoader = (function (my) {
         }else{
             console.log("_prepareTask :"+url +" exist,return  cache");
         }
-        task.onload(callback);
         return task;
     }
 
@@ -194,7 +188,9 @@ OneLib.ScriptLoader = (function (my) {
      * @param callback:参数里会有当时下载的url带出（url,beginAt,endAt）
      */
     my.loadScript = function(url,callback,charset){
-        var task =_prepareTask(url,callback,charset);
+        var task =_prepareTask(url,charset);
+        task.once("load",callback)
+        task.once("error",callback)
         task.start();//调task的下载
         return task;
     };
@@ -214,16 +210,32 @@ OneLib.ScriptLoader = (function (my) {
         var urlArray = fileUrls||[];
         self.load(urlArray);
 
-        self.running = false;//当前是否在现在
-        self.runAt = -1;//当前下载到的节点下标
-        self.loaded =0; //已经成下载的文件个数
+        self.running = false;//当前是否在正在运行下载任务(异步模式下，只要所有文件都开始下载了，running就恢复false.而不是全部下载成功才为false)
 
-        self.callbacks={
-            onOne:[],
-            onFinish:[]
-        };
+        self.runAt = -1;//当前下载到的节点下标
+        //self.loaded =0; //已经成下载的文件个数
+
+        //self.callbacks={
+        //    onOne:[],
+        //    onFinish:[]
+        //};
     };
 
+    /**
+     * 队列任务是否下载结束
+     * @returns {boolean}
+     */
+    ScriptQueue.prototype.isAllLoaded = function(){
+        var self = this;//save the this ref
+
+        for(var i=0,j=self.downTasks.length;i<j;i++){
+            var task = self.downTasks[i];
+            if(task.status<2){//只要有任务<2,表示没有全部下载完
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * 添加一个项目到当前待下载队列尾部
      * @param url:可以是一个string,或者是一个array
@@ -234,13 +246,6 @@ OneLib.ScriptLoader = (function (my) {
         if(url.constructor === Array){
             for(var i=0,j=url.length;i<j;i++){
                 var _item = url[i];
-                //self.downTasks.push({
-                //    url:_item,
-                //    state:0,
-                //    desc:'初始化',
-                //    beginAt:undefined,//开始下载时间
-                //    endAt:undefined//下载完成时间
-                //});
                 self.downTasks.push(_prepareTask(_item));
             }
         }
@@ -249,34 +254,34 @@ OneLib.ScriptLoader = (function (my) {
         }
         return self;
     };
-    /**
-     * 注册加载完成事件，队列里每一个脚本加载完，都会回调
-     * 回调参数:cb(url,beginAt,endAt)
-     * 注意：要保证回调函数不出异常，否则其他的下载动作将不会执行。因为现在回调是同步调用的
-     * @param callback
-     */
-    ScriptQueue.prototype.onLoadedOne = function(callback){
-        callback&&this.callbacks.onOne.push(callback);
-        return this;
-    };
+    ///**
+    // * 注册加载完成事件，队列里每一个脚本加载完，都会回调
+    // * 回调参数:cb(url,beginAt,endAt)
+    // * 注意：要保证回调函数不出异常，否则其他的下载动作将不会执行。因为现在回调是同步调用的
+    // * @param callback
+    // */
+    //ScriptQueue.prototype.onLoadedOne = function(callback){
+    //    callback&&this.callbacks.onOne.push(callback);
+    //    return this;
+    //};
 
-    /**
-     * 注册全部完成事件，该队列已经加载到队尾的时候触发。
-     * 如果多次追加项目到队列，并调用队列的start,会在每次全部完成后触发该事件。
-     * 回调参数:cb(beginAt,endAt)
-     * @param callback
-     */
-    ScriptQueue.prototype.onFinish = function(callback){
-        callback&&this.callbacks.onFinish.push(callback);
-        return this;
-    };
+    ///**
+    // * 注册全部完成事件，该队列已经加载到队尾的时候触发。
+    // * 如果多次追加项目到队列，并调用队列的start,会在每次全部完成后触发该事件。
+    // * 回调参数:cb(beginAt,endAt)
+    // * @param callback
+    // */
+    //ScriptQueue.prototype.onFinish = function(callback){
+    //    callback&&this.callbacks.onFinish.push(callback);
+    //    return this;
+    //};
 
-    ScriptQueue.prototype.clearCallbacks = function(){
-        var self = this;//save the this ref
-        self.callbacks.onOne=[];
-        self.callbacks.onFinish=[];
-        return self;
-    };
+    //ScriptQueue.prototype.clearCallbacks = function(){
+    //    var self = this;//save the this ref
+    //    self.callbacks.onOne=[];
+    //    self.callbacks.onFinish=[];
+    //    return self;
+    //};
 
     /**
      * 开始队列的异步下载行为(如果已经在下载，则不处理)
@@ -293,6 +298,8 @@ OneLib.ScriptLoader = (function (my) {
         if(self.runAt<self.downTasks.length-1){
 //            _oldStart = self.runAt;
             _asyncDownloadOne();
+        }else{
+            self.emit("finish");
         }
 
         function _asyncDownloadOne(){
@@ -303,25 +310,31 @@ OneLib.ScriptLoader = (function (my) {
                 self.runAt+=1;
 
                 var _nowFile = self.downTasks[self.runAt];
-                _nowFile.onload(function(url,begin,end){
-                    //_nowFile.beginAt = begin;
-                    //_nowFile.endAt = end;
-                    self.loaded++;
+                _nowFile.once("load",function(url,begin,end){
+                    //self.loaded++;
 
                     //每个下载完成之后，触发对应的事件
-                    for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
-                        var _item = self.callbacks.onOne[m];
-                        _item(url,begin,end);
-                    }
+                    self.emit("load",url,begin,end);
+
+                    //for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
+                    //    var _item = self.callbacks.onOne[m];
+                    //    _item(url,begin,end);
+                    //}
 
                     //如果已经下载成功的个数等于所有文件个数
-                    if(self.loaded===self.downTasks.length){
-                        for(var m2=0,n2=self.callbacks.onFinish.length;m2<n2;m2++){
-                            var _item2 = self.callbacks.onFinish[m2];
-                            _item2(self.downTasks[self.runAt].beginAt,self.downTasks[self.runAt].endAt);
-                        }
+                    //if(self.loaded===self.downTasks.length){
+                    if(self.isAllLoaded()){
+                        //console.log("finish "+self.name);
+                        //发射 finish 事件
+                        self.emit("finish");
+
+                        //for(var m2=0,n2=self.callbacks.onFinish.length;m2<n2;m2++){
+                        //    var _item2 = self.callbacks.onFinish[m2];
+                        //    _item2(self.downTasks[self.runAt].beginAt,self.downTasks[self.runAt].endAt);
+                        //}
                     }
-                }).start();
+                });
+                _nowFile.start();
                 _asyncDownloadOne(); //继续触发下一次调用
             }
             //队列全部下载完，触发finish
@@ -347,6 +360,8 @@ OneLib.ScriptLoader = (function (my) {
         if(self.runAt<self.downTasks.length-1){
 //            _oldStart = self.runAt;
             _downloadOne();
+        }else{
+            self.emit("finish");
         }
 
         function _downloadOne(){
@@ -357,30 +372,37 @@ OneLib.ScriptLoader = (function (my) {
                 self.runAt+=1;
 
                 var _nowFile = self.downTasks[self.runAt];
-                _nowFile.onload(function(url,begin,end){
+                _nowFile.once("load",function(url,begin,end){
                     //_nowFile.beginAt = begin;
                     //_nowFile.endAt = end;
 
-                    self.loaded++;
+                    //self.loaded++;
 
                     //每个下载完成之后，触发对应的事件
-                    for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
-                        var _item = self.callbacks.onOne[m];
-                        _item(url,begin,end);
-                    }
+                    self.emit("load",url,begin,end);
+
+                    //for(var m=0,n=self.callbacks.onOne.length;m<n;m++){
+                    //    var _item = self.callbacks.onOne[m];
+                    //    _item(url,begin,end);
+                    //}
                     _downloadOne();
-                }).start();
+                });
+                _nowFile.start();
 
             }
             //队列全部下载完，触发finish
             else{
                 self.running = false;
 
-                for(var m=0,n=self.callbacks.onFinish.length;m<n;m++){
-                    var _item = self.callbacks.onFinish[m];
-//                    _item(self.downTasks[_oldStart+1].beginAt,self.downTasks[_oldStart+1].endAt);
-                    _item(self.downTasks[self.runAt].beginAt,self.downTasks[self.runAt].endAt);
-                }
+                //console.log("finish "+self.name);
+                //发射 finish 事件
+                self.emit("finish");
+
+//                for(var m=0,n=self.callbacks.onFinish.length;m<n;m++){
+//                    var _item = self.callbacks.onFinish[m];
+////                    _item(self.downTasks[_oldStart+1].beginAt,self.downTasks[_oldStart+1].endAt);
+//                    _item(self.downTasks[self.runAt].beginAt,self.downTasks[self.runAt].endAt);
+//                }
 
             }
         }
@@ -388,12 +410,20 @@ OneLib.ScriptLoader = (function (my) {
     };
 
 
+    OneLib.EventEmitter.mixin(ScriptQueue);
     /**
      * create a queue
-     * @param queueName
+     * @param queueName：指定队列名，如果不指定，则该队列不会缓存，以后无法通过loader再获取到这个队列
+     * @param initFiles:初始化要下载的脚本
      */
     my.beginQueue = function(queueName,initFiles){
-        var q = _allQueue[queueName] = new ScriptQueue(queueName,initFiles);
+        if(_allQueue.hasOwnProperty(queueName)){
+            throw new Error("queue name:"+ queueName +" is exist!");
+        }
+        var q = new ScriptQueue(queueName,initFiles);
+        if(queueName != undefined){
+            _allQueue[queueName] = q;
+        }
         return q;
     };
     /**
@@ -402,6 +432,10 @@ OneLib.ScriptLoader = (function (my) {
      */
     my.theQueue = function(queueName){
         return _allQueue[queueName];
+    };
+
+    my.getAllQueue = function(){
+        return _allQueue;
     };
 
     /**

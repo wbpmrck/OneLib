@@ -18,6 +18,7 @@ module.exports = function(config) {
         files: [
             '../../testLib/jquery*.js',
             '../../../src/OneLib.Log.js',
+            '../../../src/OneLib.EventEmitter.js',
             '../../../src/OneLib.ScriptLoader.js',
             '../../../src/OneLib.CMDSyntax.js',
             '../../../src/OneLib.Inherit.js',

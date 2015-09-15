@@ -15,10 +15,22 @@
 
  -----------
  版本历史：
+ *
+ *
+ by kaicui 2015-09-14
+ 1、添加对require.async的支持。该功能需要依赖scriptLoader
+
+ 场景：在下载脚本依赖的时候，a依赖b,c,d,对于b,c,d，创建3个队列，每个队列内部是串行下载的，但是，a需要知道a,b,c全部下载完，
+ 在这个时候，才可以执行a的初始化
+
  by kaicui 2015-09-14
  1、添加srcMap，可以提前初始化资源id,、uri,和依赖等信息
  注意：通过构建工具，把当前页面可能要用到的所有脚本信息，都初始化在srcMap里，可以有助于ModuleLoader去加载脚本
- 格式：key:moduleId,value:{uri:组件加载地址,deps:组件同步或异步"直接"依赖的其他组件(非递归)}
+ 格式：key:moduleId,value:{uri:组件加载地址,deps:组件同步"直接"依赖的其他组件(非递归)}
+
+ 注意：在构建工具进行分析的时候，会将所有“同步”或“异步”用到的组件，放在srcMap里，但是对于“依赖”的定义，是“同步”的。
+ 异步的require，本质上和一些语言的loadlibrary类似，属于动态加载，【对于这种情况，loader只需要知道东西在哪就行】
+
  srcMap:{
          "libs/jquery-1.8.1/jquery.min.js":{
              uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
@@ -55,6 +67,43 @@ OneLib.CMDSyntax = (function (my,global) {
     if(!OneLib.hasOwnProperty('ScriptLoader')){
         throw new Error('need OneLib.ScriptLoader Module!');
     }
+    /**
+     * 去除数组里重复项的helper
+     * @reverseOrder:遍历顺序，false为正序，true为逆序  默认正序：从0->length-1.
+     * @param identifier(可选):filter函数，其用于决定item中的什么字段来决定item的唯一性
+     * @private
+     */
+    function _removeArrayDump(arr,reverseOrder,/* optional */identifier){
+        var _dic={},cut=false;
+        if(!identifier){
+            identifier = function(item){return item};
+        }
+        if(reverseOrder){
+            for(var i=arr.length-1;i>=0;i--){
+                var _item = arr[i],_key = identifier(_item);
+                if(_dic[_key]){
+                    cut = true;
+                    arr.splice(i,1)
+                }else{
+                    cut=false;
+                    _dic[_key] = true
+                }
+            }
+
+        }else{
+            for(var i= 0,j=arr.length;i<j;(cut&&j--) || i++){
+                var _item = arr[i],_key = identifier(_item);
+                if(_dic[_key]){
+                    cut = true;
+                    arr.splice(i,1)
+                }else{
+                    cut=false;
+                    _dic[_key] = true
+                }
+            }
+        }
+    }
+    var _toStr=Object.prototype.toString;
    var _copy=function(obj){
         var _dump;
         //判断原对象是否是函数
@@ -63,7 +112,7 @@ OneLib.CMDSyntax = (function (my,global) {
                 return obj.apply(this,arguments);
             };
         }
-        else if(Object.prototype.toString.call(obj)==='[object Array]'){
+        else if(_toStr.call(obj)==='[object Array]'){
             _dump = obj.slice();
         }
         else{
@@ -94,24 +143,25 @@ OneLib.CMDSyntax = (function (my,global) {
         if(typeof dependency ==='function'){
             //从srcMap里获取
 
-            var _deps;
-            if(_configs.srcMap[name]){
-                _deps = _configs.srcMap[name].deps;
-
-                //如果读取成果，则更新参数()
+            //var _deps;
+            //if(_configs.srcMap[name]){
+            //    _deps = _configs.srcMap[name].deps;
+            //
+            //    //如果读取成功，则更新参数()
                 factory = dependency;
-                dependency = _deps;
-            }else{
-                throw new Error("module:["+name+'] should set into srcMap!')
-            }
+            //    dependency = _deps;
+            //}else{
+            //    throw new Error("module:["+name+'] should set into srcMap!')
+            //}
         }
 
         self.id=self.name = name;
-        self.dependencies =_transAlias(dependency);
-        self.dependenciesDic = {};
-        for(var i=0,j=self.dependencies.length;i<j;i++){
-            self.dependenciesDic[self.dependencies[i]]=undefined;
-        }
+
+        //self.dependencies =_transAlias(dependency);
+        //self.dependenciesDic = {};
+        //for(var i=0,j=self.dependencies.length;i<j;i++){
+        //    self.dependenciesDic[self.dependencies[i]]=undefined;
+        //}
 
         self.factory = factory;
 
@@ -138,36 +188,131 @@ OneLib.CMDSyntax = (function (my,global) {
         var _innerModule =  {
             id:self.id,
             name:self.name,
-            dependencies:self.dependencies.slice(),
+            //dependencies:self.dependencies.slice(),
             exports:{}
         };
 
-
-        //如果factory使用return返回了对象，则使用该返回值作为模块的返回
-        var _ret = self.factory.call(_innerModule,function _require(dependentName){
+        var _require = function (dependentName) {
             dependentName = _transAlias(dependentName);
             //如果在自己声明的依赖项中，则去获取
-            if(self.dependenciesDic.hasOwnProperty(dependentName)){
-                var _getted = self.dependenciesDic[dependentName];
-                if(!_getted){
+            //if(self.dependenciesDic.hasOwnProperty(dependentName)){
+            //    var _getted = self.dependenciesDic[dependentName];
+                var _getted;
+            //    if(!_getted){
                     var m = _getRealModule(dependentName);
                     if(m){
-                        _getted = self.dependenciesDic[dependentName] = m.getExportsCopy();
+                        //_getted = self.dependenciesDic[dependentName] = m.getExportsCopy();
+                        _getted = m.getExportsCopy();
                         _log('>>require:: [' + dependentName + '] required by ['+self.name+']...');
                     }
                     else{
                         _log('>>require:: [' + dependentName + '] required by ['+self.name+'](failed,not exist)...');
                     }
-                }
-                else{
-                    _log('>>require:: [' + dependentName + '] required by ['+self.name+'](from cache)...');
-                }
+                //}
+                //else{
+                //    _log('>>require:: [' + dependentName + '] required by ['+self.name+'](from cache)...');
+                //}
                 return _getted;
+            //}
+            //else{
+            //    throw new Error('Required Module:['+dependentName+'] must be declared in dependencies array!');
+            //}
+        };
+        //by kaicui 2015-09-14:添加对异步获取模块的支持
+        /**
+         *
+         * 异步依赖一个或多个模块
+         * @param asyncDependentName：异步依赖的模块名，或依赖的数组
+         * @param cb:下载成功的回调
+         */
+        _require.async = function (asyncDependentName,cb) {
+
+            (_toStr.call(asyncDependentName)!=="[object Array]")&&(asyncDependentName=[asyncDependentName]);
+
+            //计算要异步获取的模块数(注意这里指直接依赖的模块数，一个模块数是一个队列，用于控制何时回调)
+            var _totalCount =asyncDependentName.length,_loaded=0;
+
+            _log("_require.async,total count:%s",_totalCount);
+
+            //获取某个模块整个依赖链条(去除本地已有的,再去重)
+            function _getModuleDepends(moduleName){
+                var depends=[];//输出的依赖项，按照最远到最近的方式输出
+                if(_hasModule(moduleName)){
+                    return [];//如果本地有这个模块，直接返回
+                }else{
+                    //否则，查询srcMap,计算他的子依赖，加上自己返回
+                    var _src =_configs.srcMap[moduleName];
+                    if(_src){
+                        for(var i=0,j=_src.deps.length;i<j;i++){
+                            var d = _src.deps[i];
+                            depends = depends.concat(_getModuleDepends(d));
+                        }
+                        //自己加进去、去重
+                        depends.push(_src.uri);
+                        _removeArrayDump(depends,true);
+                        return depends;
+                    }else{
+                        throw new Error('module:['+moduleName+'] must config in srcMap!')
+                    }
+                }
             }
-            else{
-                throw new Error('Required Module:['+dependentName+'] must be declared in dependencies array!');
+
+
+            //对于没有的m个模块，为每个模块开启1个queue：
+            //1):分析每个模块的依赖项，哪些是本地没有的，加入待下载数组
+            //2):分析完之后，倒序遍历数组，把每一项加入queue
+
+            for(var m=0,n=asyncDependentName.length;m<n;m++){
+                var uri = asyncDependentName[m];
+
+                var needs = _getModuleDepends(uri);
+                var q =_scriptLoader.beginQueue();
+                q.load(needs).on("finish", function () {
+                        _loaded++;
+                        if(_loaded === _totalCount){
+                            var _modules = [];
+                            for(var s1=0,s2=asyncDependentName.length;s1<s2;s1++){
+                                var _name = asyncDependentName[s1];
+
+                                //call require to get module exports
+                                _modules.push(_require(_name));
+                            }
+                            cb && cb.apply(null,_modules)
+                        }
+                    });
+                q.start(); //调用queue.start顺序下载依赖
             }
-        },_innerModule.exports,_innerModule);
+
+
+
+
+
+            ////如果是多个文件
+            //if(Object.prototype.toString.apply(asyncDependentName) === '[object Array]'){
+            //    for(var i=0,j=asyncDependentName.length;i<j;i++){
+            //        var _dep = _configs.srcMap[asyncDependentName[i]];
+            //
+            //    }
+            //}
+            //
+            //
+            //var uri;
+            //if(uri=_configs.srcMap[asyncDependentName]){
+            //    //，开启一个队列加载，并在结束的时候销毁队列
+            //    if(Object.prototype.toString.apply(obj) === '[object Array]'){
+            //        OneLib.ScriptLoader.beginQueue(new Date().toString()+'|'+asyncDependentName)
+            //            .asy
+            //    }else{
+            //        //如果是单个文件，直接load
+            //    }
+            //
+            //}else{
+            //    throw new Error(asyncDependentName,'not found, must defined in srcMap!')
+            //}
+        };
+
+        //如果factory使用return返回了对象，则使用该返回值作为模块的返回
+        var _ret = self.factory.call(_innerModule,_require,_innerModule.exports,_innerModule);
         if(_ret!==undefined){
             self.exports = _ret;
         }
@@ -195,6 +340,7 @@ OneLib.CMDSyntax = (function (my,global) {
             base: 'http://asada',
 
             //add on 2015-09-14:添加资源映射表，方便根据模块id查询模块详细信息和依赖的其他模块概要信息
+            //srcMap里可以只包含需要异步加载的脚本信息即可，loader在加载模块的时候，会先从本地查找，没有的话才查询srcMap
             srcMap:{
                 //"libs/jquery-1.8.1/jquery.min.js":{
                 //    uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
@@ -278,6 +424,12 @@ OneLib.CMDSyntax = (function (my,global) {
             }
         },
 
+        //判断本地内存是否已经有该模块了
+        _hasModule = function(moduleName){
+            moduleName = _transAlias(moduleName);
+            return _modules.hasOwnProperty(moduleName);
+        },
+
         _getRealModule = function(moduleName){
             moduleName = _transAlias(moduleName);
             return _modules[moduleName];
@@ -295,10 +447,6 @@ OneLib.CMDSyntax = (function (my,global) {
         var _used = _getRealModule(moduleName);
         if(_used){
             callback&&callback(_used.getExportsCopy())
-        }
-        //没有的话获取其下载地址，然后异步加载
-        else{
-
         }
     };
 
@@ -482,13 +630,15 @@ OneLib.CMDSyntax = (function (my,global) {
     //使用console输出信息
     _logger.setMode(0);
 
-    //把内置模块封装进去
+    //把window封装进去
     _modules['global'] =  new _Module('global',[],function(){
         return window;
     },window);
 
+    //把核心前置模块也包裹进去，可以使用require调用了
     my.wrapToModule('OneLib.Log',OneLib.Log);
     my.wrapToModule('OneLib.ScriptLoader',OneLib.ScriptLoader);
+    my.wrapToModule('OneLib.EventEmitter',OneLib.EventEmitter);
     //根据浏览器queryString是否含有 CMDSyntaxDebug 选项，来决定是否开启日志
     if(_queryString('CMDSyntaxDebug')){
         _logger.logOn();

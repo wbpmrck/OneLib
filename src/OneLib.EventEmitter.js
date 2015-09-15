@@ -6,6 +6,7 @@
  * 2、也可以使用mixin方法来让已有对象具备发射功能
  *
  * PS:侵入说明：会给回调函数对象，增加_slotId和_ttl属性，分别表示事件槽号，和剩余可回调次数
+ * PPS:现在的emit都是同步的，以后会不会有异步的notify,也可以考虑添加(使用setTimeout)
  * @Change History:
  *
  * kaicui 2015-09-15 10:05  增加功能
@@ -73,8 +74,13 @@ OneLib.EventEmitter = (function (my) {
             }else{
                 throw new Error("second param must be number/function/string")
             }
-
+            return this;
         },
+        /**
+         * 主动发射事件+参数
+         * @param evtName：事件名
+         * @param args:可变的参数比如:emit("foo",1,2,3),那么on("foo",function(a,b,c){这里面a=1,b=2,c=3})
+         */
         emit	: function(evtName /* , args... */){
             this._events = this._events || {};
             var cb,
@@ -86,6 +92,7 @@ OneLib.EventEmitter = (function (my) {
                 //do with TTL
                 cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[evtName].splice(i, 1);
             }
+            return this;
         }
     };
 

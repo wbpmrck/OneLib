@@ -17,6 +17,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
         '../../testLib/jquery*.js',
+      '../../../src/OneLib.EventEmitter.js',
         '../../../src/OneLib.ScriptLoader.js',
         '*.js'
     ],
