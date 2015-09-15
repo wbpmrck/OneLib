@@ -9,6 +9,10 @@
 
 ###Done
 <ul>
+    <li>重构事件触发器部分，使用最新的eventEmitter(支持once等API)</li>
+    <li>eventEmitter:增加once功能，可以定义只触发一次的事件(使用ttl实现)</li>
+    <li>eventEmitter:去除CMD的包裹，event机制作为做基础的扩展，很可能被CMD模块本身所依赖</li>
+   <li>项目中新增静态服务server,使用express实现，方便测试脚本加载等功能.</li>
    <li>新增Secure.MD5,Secure.SHA_1(1,256,512)模块，实现本地进行摘要加密(参考node3.0项目).</li>
  <li>新增Array.map方法到ES5模块.</li>
  <li>重写ModuleSyntax模块.</li>
@@ -64,6 +68,7 @@
 
 ###To be done
 <ul>
+  <li>* eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
   <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
   <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>

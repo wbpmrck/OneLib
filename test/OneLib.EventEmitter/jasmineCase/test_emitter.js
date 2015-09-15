@@ -8,28 +8,22 @@ describe('EventEmitter ', function () {
     });
 
     it('should can use "mixin" to mix the prototype to other class', function () {
-        define('testEmitter1', ['OneLib.EventEmitter'], function (require, exports, module) {
-            var EventEmitter = require('OneLib.EventEmitter');
+        function Dog(){
 
-            function Dog(){
+        }
+        Dog.prototype.shout = function(){
+            console.log('woof!woof!');
+        }
 
-            }
-            Dog.prototype.shout = function(){
-                console.log('woof!woof!');
-            }
+        OneLib.EventEmitter.mixin(Dog);
 
-            EventEmitter.mixin(Dog);
+        expect(Dog.prototype.emit).toBeDefined();
+        expect(Dog.prototype.on).toBeDefined();
+        expect(Dog.prototype.off).toBeDefined();
 
-            expect(Dog.prototype.emit).toBeDefined();
-            expect(Dog.prototype.on).toBeDefined();
-            expect(Dog.prototype.off).toBeDefined();
-
-        });
     });
     it('should can use "emit" to fire events,and use "on" to set callback', function () {
         //do some assert
-        define('testEmitter2', ['OneLib.EventEmitter'], function (require, exports, module) {
-            var EventEmitter = require('OneLib.EventEmitter');
 
             function Dog(){
 
@@ -39,7 +33,7 @@ describe('EventEmitter ', function () {
                 this.emit('shouted');
             }
 
-            EventEmitter.mixin(Dog);
+            OneLib.EventEmitter.mixin(Dog);
 
             var called = false;
             var aDog = new Dog();
@@ -50,12 +44,9 @@ describe('EventEmitter ', function () {
             expect(called).toEqual(true);
             expect(typeof slotID).toEqual("number");
 
-        });
     });
     it('should can use "off" to delete callback', function () {
         //do some assert
-        define('testEmitter3', ['OneLib.EventEmitter'], function (require, exports, module) {
-            var EventEmitter = require('OneLib.EventEmitter');
 
             function Dog(){
 
@@ -65,7 +56,7 @@ describe('EventEmitter ', function () {
                 this.emit('shouted');
             }
 
-            EventEmitter.mixin(Dog);
+            OneLib.EventEmitter.mixin(Dog);
 
             var called = false;
             var aDog = new Dog();
@@ -77,12 +68,8 @@ describe('EventEmitter ', function () {
             aDog.shout();
             expect(called).toEqual(false);
 
-        });
     });
     it('should can use slotID to "off" callback', function () {
-        //do some assert
-        define('testEmitter4', ['OneLib.EventEmitter'], function (require, exports, module) {
-            var EventEmitter = require('OneLib.EventEmitter');
 
             function Dog(){
 
@@ -92,7 +79,7 @@ describe('EventEmitter ', function () {
                 this.emit('shouted');
             }
 
-            EventEmitter.mixin(Dog);
+            OneLib.EventEmitter.mixin(Dog);
 
             var called = false;
             var aDog = new Dog();
@@ -103,13 +90,8 @@ describe('EventEmitter ', function () {
             aDog.off('shouted',slotID);
             aDog.shout();
             expect(called).toEqual(false);
-
-        });
     });
     it('should can "off" all callback at one time', function () {
-        //do some assert
-        define('testEmitter5', ['OneLib.EventEmitter'], function (require, exports, module) {
-            var EventEmitter = require('OneLib.EventEmitter');
 
             function Dog(){
 
@@ -119,7 +101,7 @@ describe('EventEmitter ', function () {
                 this.emit('shouted');
             }
 
-            EventEmitter.mixin(Dog);
+            OneLib.EventEmitter.mixin(Dog);
 
             var called1 = 0,called2 = 0;
             var aDog = new Dog();
@@ -141,6 +123,117 @@ describe('EventEmitter ', function () {
             expect(called1).toEqual(1);
             expect(called2).toEqual(1);
 
-        });
+    });
+
+    it('should can use "once" to receive only one callback', function () {
+        function Dog(){
+        }
+        Dog.prototype.shout = function(){
+            console.log('woof!woof!');
+            this.emit('shouted');
+        }
+
+        OneLib.EventEmitter.mixin(Dog);
+
+        var calledTimes=0
+        var aDog = new Dog();
+        function cb(){
+            calledTimes ++;
+        }
+        aDog.once('shouted',cb);
+        aDog.shout();
+        aDog.shout();
+        aDog.shout();//shout 3 times
+        expect(calledTimes).toEqual(1);
+
+    });
+
+    it('should can use "on+ttl" to set callback times', function () {
+        function Dog(){
+        }
+        Dog.prototype.shout = function(){
+            console.log('woof!woof!');
+            this.emit('shouted');
+        }
+
+        OneLib.EventEmitter.mixin(Dog);
+
+        var calledTimes= 0,
+         calledTimes2=0;
+        var aDog = new Dog();
+        function cb(){
+            calledTimes ++; //this callback should be called by <TTL> times
+        }
+        function cb2(){
+            calledTimes2 ++;
+        }
+        aDog.on('shouted',cb,2);//set max callback times (TTL)
+        aDog.on('shouted',cb2);//default no (TTL) limit
+        aDog.shout();
+        aDog.shout();
+        aDog.shout();//shout 3 times
+        expect(calledTimes).toEqual(2);
+        expect(calledTimes2).toEqual(3);
+
+    });
+
+
+    it('should work with forloop+func scenario', function () {
+        function Dog(){
+        }
+        Dog.prototype.shout = function(){
+            this.emit('shouted');
+        }
+
+        OneLib.EventEmitter.mixin(Dog);
+
+        var count= {
+            calledTimes1: 0,
+            calledTimes2: 0
+        };
+        var aDog = new Dog();
+
+        for(var i=1;i<=2;i++){
+            aDog.on('shouted',(function(it){
+                return function(){
+                    console.log("i="+it);
+                    count["calledTimes"+ it.toString()]+=1;
+                }
+            })(i));
+        }
+        aDog.shout();
+        aDog.shout();
+        aDog.shout();//shout 3 times
+        expect(count.calledTimes1).toEqual(3);
+        expect(count.calledTimes2).toEqual(3);
+    });
+
+
+    it('should work with forloop+func scenario[2]', function () {
+        function Dog(){
+        }
+        Dog.prototype.shout = function(){
+            this.emit('shouted');
+        }
+
+        OneLib.EventEmitter.mixin(Dog);
+
+        var count=0;
+        var aDog = new Dog();
+
+        for(var i=1;i<=2;i++){
+            aDog.on('shouted',function(it){
+                count++;
+            },i*2);//use i as ttl. if success,the 1st callback._ttl should be 1*2,tne 2nd should be 2*2,so total limit 6 times
+        }
+        aDog.shout();
+        aDog.shout();
+        aDog.shout();//shout 3 times
+        aDog.shout();//shout 4 times
+        aDog.shout();//shout 5 times
+        aDog.shout();//shout 6 times
+        aDog.shout();//shout 7 times
+        aDog.shout();//shout 8 times
+        expect(count).toEqual(6);
     });
 });

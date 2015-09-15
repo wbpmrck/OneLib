@@ -22,9 +22,9 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
         //从博客园下载几个js
         var _loaded=[],
             _toLoad = [
-            'http://localhost:9527/src/old/MyCore.ImageLoader.js',
-            'http://localhost:9527/src/old/MyCore.Navigation.js',
-            'http://localhost:9527/src/old/MyCore.Url.js'
+            'http://localhost:19527/src/old/MyCore.ImageLoader.js',
+            'http://localhost:19527/src/old/MyCore.Navigation.js',
+            'http://localhost:19527/src/old/MyCore.Url.js'
         ];
         var loadOK = function(url){
             for(var i=0,j=_toLoad.length;i<j;i++){
@@ -79,9 +79,9 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
 
         var _loaded4=[],
             _toLoad4 = [
-                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a4.js',
-                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b4.js',
-                'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c4.js'
+                'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a4.js',
+                'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b4.js',
+                'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c4.js'
             ];
         var loadOK4 = function(url){
             for(var i=0,j=_toLoad4.length;i<j;i++){
@@ -112,18 +112,18 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
 
 
     asyncTest( "loader.beginQueue.start", function() {
-        expect(12);
+        expect(16);//kaicui 2015-09-14 增加同样文件重复下载的测试
         var _logger = new OneLib.Log.Logger(true);
         _logger.writeLine('begin load');
 
-        var oneFinish =false,twoFinish =false;
+        var oneFinish =false,twoFinish =false,threeFinish =false;
 
         //从博客园下载几个js
         var _loaded=[],
             _toLoad = [
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c.js'
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c.js'
         ];
         var loadOK = function(url){
             for(var i=0,j=_toLoad.length;i<j;i++){
@@ -136,9 +136,9 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
         };
         var _loaded2=[],
             _toLoad2 = [
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a2.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b2.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c2.js'
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a2.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b2.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c2.js'
         ];
         var loadOK2 = function(url){
             for(var i=0,j=_toLoad2.length;i<j;i++){
@@ -152,9 +152,9 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
 
         var _loaded3=[],
             _toLoad3 = [
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a3.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b3.js',
-            'http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c3.js'
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a3.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b3.js',
+            'http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c3.js'
         ];
         var loadOK3 = function(url){
             for(var i=0,j=_toLoad3.length;i<j;i++){
@@ -166,12 +166,16 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
             return false;
         };
 
+        //对于相同文件下载测试，其要加载的文件，和计算文件是否下载成功方法，都和2一样
+        var _loaded4=[],
+            _toLoad4 = _toLoad2;
+        var loadOK4 = loadOK2;
 
         //这个队列先完成一批下载，然后再添加3个任务下载
         loader.beginQueue('queueOne').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a.js').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b.js').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c.js').
             onLoadedOne(function(url,beginAt,endAt){
                 _loaded.push(url);
                 _logger.writeLine('queue1:file:'+url+' begin load at:'+beginAt+' end at:'+endAt);
@@ -199,15 +203,15 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
                             equal(loadOK3(_loadedJs),true,_loadedJs+' must right!');
                         }
                         oneFinish=true;
-                        oneFinish&&twoFinish&&start();
+                        oneFinish&&start();
                     }).
                     start();
             }).
             start();
         loader.beginQueue('queueTwo').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_a2.js').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_b2.js').
-            load('http://localhost:9527/test/OneLib.ScriptLoader/qunitCase/module_c2.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a2.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b2.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c2.js').
             onLoadedOne(function(url,beginAt,endAt){
                 _loaded2.push(url);
                 _logger.writeLine('queue2:file:'+url+' begin load at:'+beginAt+' end at:'+endAt);
@@ -221,6 +225,28 @@ define('test_jsLoad', ['OneLib.ScriptLoader', '_log'], function (require, export
                 }
                 twoFinish = true;
                 oneFinish&&twoFinish&&start();
+            }).
+            start();
+
+
+
+        loader.beginQueue('queueThree').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_a2.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_b2.js').
+            load('http://localhost:19527/test/OneLib.ScriptLoader/qunitCase/module_c2.js').
+            onLoadedOne(function(url,beginAt,endAt){
+                _loaded4.push(url);
+                _logger.writeLine('queue3:file:'+url+' begin load at:'+beginAt+' end at:'+endAt);
+            }).onFinish(function(beginAt,endAt){
+                _logger.writeLine('queue3:all file begin load at:'+beginAt+' end at:'+endAt);
+                equal(beginAt!=endAt,true,'beginAt must diff with endAt!');
+                //由于css加载顺序不一定严格，所以要查找在不在
+                for(var m=0,n=_loaded4.length;m<n;m++){
+                    var _loadedJs = _loaded4[m];
+                    equal(loadOK4(_loadedJs),true,_loadedJs+' must right!');
+                }
+                threeFinish = true;
+                oneFinish&&twoFinish&&threeFinish&&start();
             }).
             start();
     });
