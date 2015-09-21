@@ -375,7 +375,7 @@ OneLib.CMDSyntax = (function (my,global) {
             },
             //配置:处理冲突
             dealConflicts:{
-                moduleNameConflict:'throw' //当定义的模块名冲突的时候如何处理：'throw':抛出异常, 'return':忽略本次模块定义 , 'overwrite':使用本次定义的模块覆盖已有模块
+                moduleNameConflict:'return' //当定义的模块名冲突的时候如何处理：'throw':抛出异常, 'return':忽略本次模块定义 , 'overwrite':使用本次定义的模块覆盖已有模块
             },
             //配置:别名
             alias:{
@@ -526,6 +526,8 @@ OneLib.CMDSyntax = (function (my,global) {
         }
         _log('>>define:: [' + moduleName + '] end(success)...');
     };
+    //2015-09-17 增加对AMD的支持标记
+    global['define'].amd = true;
     /**
      * 通过此API可以直接从外部获取任意一个Module(通常是调试错误的时候使用)
      * @param moduleName
@@ -641,7 +643,7 @@ OneLib.CMDSyntax = (function (my,global) {
     my.wrapToModule('OneLib.EventEmitter',OneLib.EventEmitter);
     //根据浏览器queryString是否含有 CMDSyntaxDebug 选项，来决定是否开启日志
     if(_queryString('CMDSyntaxDebug')){
-        _logger.logOn();
+        my.logOn();
     }
 
     return my;
