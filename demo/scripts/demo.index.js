@@ -95,7 +95,7 @@ define('Demo.Index', ['jQuery','ko','MT'], function (require, exports, module) {
 
     //获取模块列表数据，并开始页面绑定
     $.ajax({
-        url: __subdomain__+"/demo/demoData/modules.json?_="+Math.floor(Math.random()*100000),
+        url: __subdomain__+"../demoData/modules.json?_="+Math.floor(Math.random()*100000),
         cache: false,
         dataType:'json',
         success: function(data){
