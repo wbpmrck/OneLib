@@ -16,7 +16,7 @@
                         "name":"1、getGUID基本用法",
                         "desc":"不使用任何参数，则默认输出标准的基于10进制的GUID",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.GUID/example.getGUID.js",
+                        "codeUrl":"../demoData/OneLib.GUID/example.getGUID.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -26,19 +26,19 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.GUID/example.getGUID.html",
+                        "codeUrl":"../demoData/OneLib.GUID/example.getGUID.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.GUID.js",
-                            "/demo/demoData/OneLib.GUID/example.getGUID.js"
+                            "../../src/OneLib.GUID.js",
+                            "../demoData/OneLib.GUID/example.getGUID.js"
                         ]
                     },
                     {
                         "name":"2、限制长度、进制",
                         "desc":"也可以限制生成的GUID的长度、进制",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.GUID/example.getGUID2.js",
+                        "codeUrl":"../demoData/OneLib.GUID/example.getGUID2.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -48,12 +48,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.GUID/example.getGUID2.html",
+                        "codeUrl":"../demoData/OneLib.GUID/example.getGUID2.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.GUID.js",
-                            "/demo/demoData/OneLib.GUID/example.getGUID2.js"
+                            "../../src/OneLib.GUID.js",
+                            "../demoData/OneLib.GUID/example.getGUID2.js"
                         ]
                     }
                 ]

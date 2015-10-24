@@ -15,7 +15,7 @@
                         "name":"script_a.js",
                         "desc":"这是即将被异步加载的文件",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/script_a.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/script_a.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -25,7 +25,7 @@
                         "name":"example.loadScript.js",
                         "desc":"这是触发下载的文件",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.loadScript.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.loadScript.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -35,11 +35,11 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.loadScript.html",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.loadScript.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.loadScript.js"
+                            "../demoData/OneLib.ScriptLoader/example.loadScript.js"
                         ]
                     }
                 ]
@@ -63,7 +63,7 @@
                         "name":"module_b.js",
                         "desc":"这是要异步加载的第1个js",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/module_b.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/module_b.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -73,7 +73,7 @@
                         "name":"module_b2.js",
                         "desc":"这是要异步加载的第2个js",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/module_b2.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/module_b2.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -83,7 +83,7 @@
                         "name":"module_b3.js",
                         "desc":"这是要异步加载的第3个js",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/module_b3.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/module_b3.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -93,7 +93,7 @@
                         "name":"example.beginQueue.js",
                         "desc":"这是触发下载的代码示例，在我们的例子中，3个模块必须按照顺序加载，否则会抛出异常(后面的模块依赖前面的模块)",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.beginQueue.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.beginQueue.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -103,11 +103,11 @@
                         "name":"点击下面按钮运行示例,并观察控制台看js的下载顺序情况",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.beginQueue.html",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.beginQueue.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.beginQueue.js"
+                            "../demoData/OneLib.ScriptLoader/example.beginQueue.js"
                         ]
                     }
                 ]
@@ -125,7 +125,7 @@
                         "name":"写法示例",
                         "desc":"具体demo可参考 beginQueue 中的代码",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.load.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.ScriptQueue.load.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -146,7 +146,7 @@
                         "name":"开始下载",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.beginQueue.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.beginQueue.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -166,7 +166,7 @@
                         "name":"演示队列并发下载文件",
                         "desc":"队列使用异步下载模式的时候,队列内部的所有文件都是并行下载的(依赖浏览器实现).可以观察timeline看文件的下载是否并行",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.asyncStart.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.asyncStart.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -176,11 +176,11 @@
                         "name":"点击下面按钮运行示例,并观察控制台看js的下载顺序情况",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.asyncStart.html",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.asyncStart.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.asyncStart.js"
+                            "../demoData/OneLib.ScriptLoader/example.asyncStart.js"
                         ]
                     }
                 ]
@@ -204,7 +204,7 @@
                         "name":"获取所有文件下载成功消息",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -214,11 +214,11 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.html",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js"
+                            "../demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js"
                         ]
                     }
                 ]
@@ -241,7 +241,7 @@
                         "name":"example.theQueue.js",
                         "desc":"查找一个已经存在的queue",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.theQueue.js",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.theQueue.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -251,11 +251,11 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.theQueue.html",
+                        "codeUrl":"../demoData/OneLib.ScriptLoader/example.theQueue.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.theQueue.js"
+                            "../demoData/OneLib.ScriptLoader/example.theQueue.js"
                         ]
                     }
                 ]

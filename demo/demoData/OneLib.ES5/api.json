@@ -16,7 +16,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.forEach.js",
+                        "codeUrl":"../demoData/OneLib.ES5/example.forEach.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -26,12 +26,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.forEach.html",
+                        "codeUrl":"../demoData/OneLib.ES5/example.forEach.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.ES5.js",
-                            "/demo/demoData/OneLib.ES5/example.forEach.js"
+                            "../../src/OneLib.ES5.js",
+                            "../demoData/OneLib.ES5/example.forEach.js"
                         ]
                     }
                 ]
@@ -50,7 +50,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.filter.js",
+                        "codeUrl":"../demoData/OneLib.ES5/example.filter.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -60,12 +60,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.filter.html",
+                        "codeUrl":"../demoData/OneLib.ES5/example.filter.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.ES5.js",
-                            "/demo/demoData/OneLib.ES5/example.filter.js"
+                            "../../src/OneLib.ES5.js",
+                            "../demoData/OneLib.ES5/example.filter.js"
                         ]
                     }
                 ]
@@ -83,7 +83,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.isArray.js",
+                        "codeUrl":"../demoData/OneLib.ES5/example.isArray.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -93,12 +93,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.isArray.html",
+                        "codeUrl":"../demoData/OneLib.ES5/example.isArray.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.ES5.js",
-                            "/demo/demoData/OneLib.ES5/example.isArray.js"
+                            "../../src/OneLib.ES5.js",
+                            "../demoData/OneLib.ES5/example.isArray.js"
                         ]
                     }
                 ]
@@ -122,7 +122,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.bind.js",
+                        "codeUrl":"../demoData/OneLib.ES5/example.bind.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -132,12 +132,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ES5/example.bind.html",
+                        "codeUrl":"../demoData/OneLib.ES5/example.bind.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.ES5.js",
-                            "/demo/demoData/OneLib.ES5/example.bind.js"
+                            "../../src/OneLib.ES5.js",
+                            "../demoData/OneLib.ES5/example.bind.js"
                         ]
                     }
                 ]

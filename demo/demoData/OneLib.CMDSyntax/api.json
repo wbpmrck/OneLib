@@ -17,7 +17,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_1.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_1.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -38,7 +38,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_require_1.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_require_1.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -60,7 +60,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_require_async.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_require_async.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -80,7 +80,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_exports.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_exports.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -104,7 +104,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_module_param.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_module_param.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -114,11 +114,11 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_module_param.html",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_module_param.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.CMDSyntax/example.define_module_param.js"
+                            "../demoData/OneLib.CMDSyntax/example.define_module_param.js"
                         ]
                     }
                 ]
@@ -135,7 +135,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_return.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_return.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -161,7 +161,7 @@
                         "name":"",
                         "desc":"下面的例子演示了如何设置srcMap，以及SrcMap的结构",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.srcMap.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.srcMap.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -181,11 +181,11 @@
                         "name":"",
                         "desc":"下面的例子演示了在定义2个模块之前打开日志，然后关闭了日志。可以使用console查看日志输出.<br/><span class='warn-notice'>在本例中,由于这2个模块名在之前的demo中已经定义过了,所以应可以看到控制台的对应输出</span>",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.logOn.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.logOn.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.CMDSyntax/example.logOn.js"
+                            "../demoData/OneLib.CMDSyntax/example.logOn.js"
                         ]
                     }
                 ]
@@ -203,7 +203,7 @@
                         "name":"",
                         "desc":"在本demo中，由于一些模块需要重复加载到本地，所以设置为了return模式：",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.configDealConflicts.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.configDealConflicts.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -230,7 +230,7 @@
                         "name":"",
                         "desc":"在本demo中,也使用了jQuery,使用下面的方法把jQuery包装到框架中去",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.wrapModule.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.wrapModule.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -240,7 +240,7 @@
                         "name":"",
                         "desc":"有了上面的包装，在模块里就可以这么引入jQuery了",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_require_1.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.define_require_1.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -266,7 +266,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.addAlias.js",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.addAlias.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -276,11 +276,11 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.addAlias.html",
+                        "codeUrl":"../demoData/OneLib.CMDSyntax/example.addAlias.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/demo/demoData/OneLib.CMDSyntax/example.addAlias.js"
+                            "../demoData/OneLib.CMDSyntax/example.addAlias.js"
                         ]
                     }
                 ]

@@ -16,7 +16,7 @@
                             "name":"1、使用mixin让类具备事件发布能力",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.mixin.real.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.mixin.real.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -26,12 +26,12 @@
                             "name":"点击下面按钮运行示例",
                             "desc":"",
                             "type":"real",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.mixin.html",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.mixin.html",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
-                                "/src/OneLib.EventEmitter.js",
-                                "/demo/demoData/OneLib.EventEmitter/example.mixin.real.js"
+                                "../../src/OneLib.EventEmitter.js",
+                                "../demoData/OneLib.EventEmitter/example.mixin.real.js"
                             ]
                         }
                     ]
@@ -50,7 +50,7 @@
                             "name":"emit语法示例",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.emit.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -73,7 +73,7 @@
                             "name":"on语法示例",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.on.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.on.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -83,12 +83,12 @@
                             "name":"点击下面按钮运行示例",
                             "desc":"",
                             "type":"real",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.emit.real.html",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.real.html",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
-                                "/src/OneLib.EventEmitter.js",
-                                "/demo/demoData/OneLib.EventEmitter/example.on.js"
+                                "../../src/OneLib.EventEmitter.js",
+                                "../demoData/OneLib.EventEmitter/example.on.js"
                             ]
                         }
                     ]
@@ -107,7 +107,7 @@
                             "name":"once语法示例",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.emit.realonce.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.realonce.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -117,12 +117,12 @@
                             "name":"点击下面按钮运行示例",
                             "desc":"",
                             "type":"real",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.emit.realonce.html",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.realonce.html",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
-                                "/src/OneLib.EventEmitter.js",
-                                "/demo/demoData/OneLib.EventEmitter/example.emit.realonce.js"
+                                "../../src/OneLib.EventEmitter.js",
+                                "../demoData/OneLib.EventEmitter/example.emit.realonce.js"
                             ]
                         }
                     ]
@@ -141,7 +141,7 @@
                             "name":"off语法示例",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.off.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.off.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -169,7 +169,7 @@
                             "name":"on('*')语法示例",
                             "desc":"",
                             "type":"example",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.onall.js",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.onall.js",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
@@ -179,12 +179,12 @@
                             "name":"点击下面按钮运行示例",
                             "desc":"",
                             "type":"real",
-                            "codeUrl":"/demo/demoData/OneLib.EventEmitter/example.emit.onall.html",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.onall.html",
                             "cssUrls":[
                             ],
                             "javascriptUrls":[
-                                "/src/OneLib.EventEmitter.js",
-                                "/demo/demoData/OneLib.EventEmitter/example.onall.js"
+                                "../../src/OneLib.EventEmitter.js",
+                                "../demoData/OneLib.EventEmitter/example.onall.js"
                             ]
                         }
                     ]

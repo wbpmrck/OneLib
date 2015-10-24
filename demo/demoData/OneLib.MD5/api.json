@@ -15,7 +15,7 @@
                         "name":"1、encode基本用法",
                         "desc":"传入要加密的文本即可",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.MD5/example.encode.js",
+                        "codeUrl":"../demoData/OneLib.MD5/example.encode.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -25,12 +25,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.MD5/example.encode.html",
+                        "codeUrl":"../demoData/OneLib.MD5/example.encode.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.MD5.js",
-                            "/demo/demoData/OneLib.MD5/example.encode.js"
+                            "../../src/OneLib.MD5.js",
+                            "../demoData/OneLib.MD5/example.encode.js"
                         ]
                     }
                 ]

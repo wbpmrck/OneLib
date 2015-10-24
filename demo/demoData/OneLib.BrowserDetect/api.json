@@ -13,7 +13,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.browser.js",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.browser.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -23,12 +23,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.browser.html",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.browser.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.BrowserDetect.js",
-                            "/demo/demoData/OneLib.BrowserDetect/example.browser.js"
+                            "../../src/OneLib.BrowserDetect.js",
+                            "../demoData/OneLib.BrowserDetect/example.browser.js"
                         ]
                     }
                 ]
@@ -44,7 +44,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.version.js",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.version.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -54,12 +54,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.version.html",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.version.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.BrowserDetect.js",
-                            "/demo/demoData/OneLib.BrowserDetect/example.version.js"
+                            "../../src/OneLib.BrowserDetect.js",
+                            "../demoData/OneLib.BrowserDetect/example.version.js"
                         ]
                     }
                 ]
@@ -75,7 +75,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.OS.js",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.OS.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -85,12 +85,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.BrowserDetect/example.OS.html",
+                        "codeUrl":"../demoData/OneLib.BrowserDetect/example.OS.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.BrowserDetect.js",
-                            "/demo/demoData/OneLib.BrowserDetect/example.OS.js"
+                            "../../src/OneLib.BrowserDetect.js",
+                            "../demoData/OneLib.BrowserDetect/example.OS.js"
                         ]
                     }
                 ]
