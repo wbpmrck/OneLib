@@ -28,7 +28,7 @@
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.Log.js",
+                            "../src/OneLib.Log.js",
                             "../demoData/OneLib.Log/example.Logger.writeLine.js"
                         ]
                     }
@@ -62,7 +62,7 @@
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
-                            "/src/OneLib.Log.js",
+                            "../src/OneLib.Log.js",
                             "../demoData/OneLib.Log/example.Logger.enable.js"
                         ]
                     }
