@@ -26,7 +26,7 @@
                 ]
             },
             {
-                "name":"factory.require参数",
+                "name":"factory.require",
                 "type":"Function",
                 "returned":"Module.exports",
                 "desc":"在factory方法中，需要用到依赖的外部模块时，使用require参数来获取外部模块.<ul><li>1、该方法同步的返回指定模块的public部分，也就是在定义该模块的文件中exports部分的内容</li><li>2、require关键字与node.js的后台语法一致，这样可以方便的将原本使用在前台代码移植到后端，反之亦然</li></ul>",
@@ -47,7 +47,29 @@
                 ]
             },
             {
-                "name":"factory.exports参数",
+                "name":"factory.require.async",
+                "type":"Function",
+                "returned":"Module.exports",
+                "desc":"需要异步加载依赖的时候，使用require.async方法来获取外部模块.<ul><li>1、该方法会从一个模块信息表(通过setSrcMap指定)中查找模块url,并返回指定模块的public部分，也就是在定义该模块的文件中exports部分的内容</li><li>2、框架内部会自动分析异步加载的模块是否有其他依赖模块，如果有，会自动先加载那些模块</li></ul>",
+                "params":[
+                    {"name":"moduleNames","type":"String/Array<String>","desc":"模块名，可以是真实名称，也可以是简短的'别名'。\r\n注意，如果一次加载多个异步依赖，可以用模块名数组来作为参数"},
+                    {"name":"callback","type":"Function(module1,module2)","desc":"模块加载成功的回调。\r\n注意：回调参数返回加载的模块，顺序和调用时的参数顺序一致"}
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"",
+                        "desc":"",
+                        "type":"example",
+                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.define_require_async.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"factory.exports",
                 "type":"Object",
                 "returned":"",
                 "desc":"对外部导出public方法、属性的容器对象:<ul><li>注意：不要直接给exports赋值，这样无法导出.如:exports={ a:1 } 应该写为: exports.a =1</li></ul>",
@@ -67,7 +89,7 @@
                 ]
             },
             {
-                "name":"factory.module参数",
+                "name":"factory.module",
                 "type":"Object",
                 "returned":"",
                 "desc":"提供对本次定义的模块的信息的访问,主要有以下属性:<ul><li>id：模块id</li><li>name：模块名称</li><li>dependencies：依赖的模块</li><li>exports：对外公开的API</li></ul>",
@@ -102,7 +124,7 @@
                 ]
             },
             {
-                "name":"factory直接返回对象",
+                "name":"factory的return对象",
                 "type":"Object",
                 "returned":"",
                 "desc":"默认情况下，工厂方法是不需要return任何值的。如果有return非空对象，则框架会把return的对象作为exports来处理.<br/><span class='warn-notice'>支持该语法主要为了与一些其他库兼容，方便互相迁移，如seajs</span>",
@@ -126,6 +148,27 @@
     {
         "name":"配置",
         "apis":[
+            {
+                "name":"setSrcMap",
+                "type":"Function",
+                "returned":"undefined",
+                "desc":"设置模块元数据信息。\r\n如果你的场景中需要使用require.async，那么请提前调用该方法。\r\n目前我们团队使用FIS来生成srcMap",
+                "params":[
+                    {"name":"srcMap","type":"Object","desc":"一个结构，用于表示模块的信息，见下面样例"}
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"",
+                        "desc":"下面的例子演示了如何设置srcMap，以及SrcMap的结构",
+                        "type":"example",
+                        "codeUrl":"/demo/demoData/OneLib.CMDSyntax/example.srcMap.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    }
+                ]
+            },
             {
                 "name":"logOn/logOff",
                 "type":"Function",

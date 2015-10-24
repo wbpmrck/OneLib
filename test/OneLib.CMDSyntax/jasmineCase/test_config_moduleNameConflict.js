@@ -15,6 +15,9 @@ describe('configDealConflicts function:', function () {
 
     it('should can modify the behavior when moduleName conflict', function () {
 
+        OneLib.CMDSyntax.configDealConflicts({
+            moduleNameConflict:'throw'
+        });
         //没修改配置的时候，默认应该是抛出异常
         expect(function(){
             //do some assert

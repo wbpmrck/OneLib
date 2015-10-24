@@ -190,7 +190,7 @@ describe('defined Module:', function () {
     it('should have id,name,dependencies and other properties,alias must be transformed', function () {
         define('_log', [], function (require, exports, module) {
 
-        });
+        });  
         //do some assert
         define('testModule', ['_log'], function (require, exports, module) {
         });

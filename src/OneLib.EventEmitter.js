@@ -23,6 +23,7 @@ var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={
 
 OneLib.EventEmitter = (function (my) {
     var slotSeed=1;
+    var ALL_TOKEN='*';
 
     function EventEmitter(){};
     EventEmitter.prototype	= {
@@ -45,6 +46,13 @@ OneLib.EventEmitter = (function (my) {
             cb&&(cb._slotId=slotSeed)&&ttl&&ttl>0&&(cb._ttl=ttl);
             return slotSeed++;
         },
+
+        /**
+         * 取消事件订阅
+         * @param evtName:要取消订阅的事件
+         * @param cb：要取消订阅的SubscribeId或回调函数
+         * @returns {EventEmitter}
+         */
         off	: function(evtName, cb){
             this._events = this._events || {};
             if( evtName in this._events === false  )	return;
@@ -85,13 +93,31 @@ OneLib.EventEmitter = (function (my) {
             this._events = this._events || {};
             var cb,
                 cut=false;//由于是正向遍历，且遍历过程中可能删除回调数组元素，所以需要标记是否删除，来控制for循环
-            if( evtName in this._events === false  )	return;
-            for(var i = 0, j=this._events[evtName].length; i<j;(cut&&j--) || i++){
-                cut = false;
-                (cb=this._events[evtName][i])&&(cb.apply(this, Array.prototype.slice.call(arguments, 1)));
-                //do with TTL
-                cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[evtName].splice(i, 1);
+
+            function _dispatch(subEvtName){
+                for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
+                    cut = false;
+                    (cb=this._events[subEvtName][i])&&(cb.apply(this, Array.prototype.slice.call(arguments, 1)));
+                    //do with TTL
+                    cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
+                }
             }
+
+            //如果 要发射的事件名称被订阅过，并且该事件并非“*”事件，则开始发射（避免 on("*")触发2次）
+            if( evtName in this._events && evtName !==ALL_TOKEN){
+                _dispatch.apply(this,Array.prototype.slice.call(arguments));
+            }
+            //无论什么事件都触发 on("*")
+            if( ALL_TOKEN in this._events ){
+                _dispatch.apply(this,[ALL_TOKEN].concat(Array.prototype.slice.call(arguments)));
+            }
+
+            //for(var i = 0, j=this._events[evtName].length; i<j;(cut&&j--) || i++){
+            //    cut = false;
+            //    (cb=this._events[evtName][i])&&(cb.apply(this, Array.prototype.slice.call(arguments, 1)));
+            //    //do with TTL
+            //    cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[evtName].splice(i, 1);
+            //}
             return this;
         }
     };

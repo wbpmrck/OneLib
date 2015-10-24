@@ -45,6 +45,27 @@ describe('EventEmitter ', function () {
             expect(typeof slotID).toEqual("number");
 
     });
+    it('should can use "mixin" in the constructor', function () {
+
+        var called = false,slotID;
+        function Dog(){
+            OneLib.EventEmitter.mixin(Dog);
+            slotID=this.on('shouted',function(){
+                called = true;
+            })
+        }
+        Dog.prototype.shout = function(){
+            console.log('woof!woof!');
+            this.emit('shouted');
+        }
+
+
+        var aDog = new Dog();
+        aDog.shout();
+        expect(called).toEqual(true);
+        expect(typeof slotID).toEqual("number");
+
+    });
     it('should can use "off" to delete callback', function () {
         //do some assert
 
@@ -235,5 +256,38 @@ describe('EventEmitter ', function () {
         aDog.shout();//shout 7 times
         aDog.shout();//shout 8 times
         expect(count).toEqual(6);
+    });
+
+    it('should can use * to subscribe all events', function () {
+        function Dog(){
+            OneLib.EventEmitter.mixin(Dog);
+        }
+        Dog.prototype.shout = function(){
+            this.emit('shouted',1,2);
+        };
+        Dog.prototype.cry = function(){
+            this.emit('cry',3,4);
+        };
+        Dog.prototype.happy = function(){
+            this.emit('happy',5,6);
+        };
+
+        var call={};//记录事件调用
+        var aDog = new Dog();
+        //use * to receive all event notification
+        aDog.on("*",function(evtName,val1,val2){
+            call[evtName]=(call[evtName]?call[evtName]:0)+(val1+val2);
+        });
+        aDog.shout();
+        aDog.cry();
+        aDog.happy();
+        aDog.emit("*",7,8);//尝试发射 * 事件，这时，外部应该也只收到一次通知
+
+        expect(call.shouted).toEqual(3);
+        expect(call.cry).toEqual(7);
+        expect(call.happy).toEqual(11);
+        expect(call["*"]).toEqual(15);
+
+
     });
 });

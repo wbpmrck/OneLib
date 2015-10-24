@@ -82,10 +82,11 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
                         self.javascriptUrls[i] = __subdomain__+ self.javascriptUrls[i]+'?_='+Math.floor(Math.random()*100000)
                     }
 
-                    jsLoader.beginQueue('demoScripts',self.javascriptUrls).
-                        onFinish(function(st,end){
+                    //jsLoader.beginQueue('demoScripts',self.javascriptUrls).
+                    jsLoader.beginQueue(undefined,self.javascriptUrls).
+                        //onFinish(function(st,end){
 
-                        }).
+                        //}).
                         start();
                 }
             }

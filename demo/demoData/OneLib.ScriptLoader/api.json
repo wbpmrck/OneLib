@@ -133,70 +133,7 @@
                     }
                 ]
             },
-            {
-                "name":"ScriptQueue.onLoadedOne",
-                "type":"Function",
-                "returned":"ScriptQueue",
-                "desc":"注册一个事件监听器，当一个脚本下载完成时触发。返回对象是一个 ScriptQueue,可以通过它进行链式调用",
-                "params":[
-                    {"name":"callback","type":"Function(url,begin,end)","desc":"事件发生时的回调函数，3个回调传入参数分别为:下载的url,开始下载时间、结束下载时间"}
-                ],
-                "demoCodeRefs":[
-                    {
-                        "name":"获取单个文件下载成功消息",
-                        "desc":"",
-                        "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onLoadedOne.js",
-                        "cssUrls":[
-                        ],
-                        "javascriptUrls":[
-                        ]
-                    },
-                    {
-                        "name":"点击下面按钮运行示例",
-                        "desc":"观察弹出框的顺序，一定是按照队列的声明顺序下载",
-                        "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onLoadedOne.html",
-                        "cssUrls":[
-                        ],
-                        "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onLoadedOne.js"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name":"ScriptQueue.onFinish",
-                "type":"Function",
-                "returned":"ScriptQueue",
-                "desc":"注册一个事件监听器，当当前队列的所有脚本下载完成时触发。返回对象是一个 ScriptQueue,可以通过它进行链式调用",
-                "params":[
-                    {"name":"callback","type":"Function(begin,end)","desc":"事件发生时的回调函数，2个回调传入参数分别为:开始下载时间、结束下载时间"}
-                ],
-                "demoCodeRefs":[
-                    {
-                        "name":"获取所有文件下载成功消息",
-                        "desc":"",
-                        "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js",
-                        "cssUrls":[
-                        ],
-                        "javascriptUrls":[
-                        ]
-                    },
-                    {
-                        "name":"点击下面按钮运行示例",
-                        "desc":"",
-                        "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.html",
-                        "cssUrls":[
-                        ],
-                        "javascriptUrls":[
-                            "/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js"
-                        ]
-                    }
-                ]
-            },
+
             {
                 "name":"ScriptQueue.start",
                 "type":"Function",
@@ -251,6 +188,44 @@
         ]
     },
     {
+        "name":"队列下载事件监听",
+        "apis":[
+            {
+                "name":"ScriptQueue.on",
+                "type":"Function",
+                "returned":null,
+                "desc":"ScriptLoader内置了OneLib.EventEmitter，可以在脚本加载过程中触发一些事件来通知外部",
+                "params":[
+                    {"name":"eventName","type":"String","desc":"事件'load':表示单个脚本下载完成;\r\n事件'finish':表示所有都下载完成"},
+                    {"name":"callback","type":"Function(url,begin,end)","desc":"事件处理函数。\r\n当event为'load'时，得到3个参数：脚本地址、开始时间、结束时间。 \r\n当event为'finish'时，没有参数"}
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"获取所有文件下载成功消息",
+                        "desc":"",
+                        "type":"example",
+                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "/demo/demoData/OneLib.ScriptLoader/example.ScriptQueue.onFinish.js"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "name":"其他",
         "apis":[
             {
@@ -284,6 +259,18 @@
                         ]
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "name":"要点说明",
+        "apis":[
+            {
+                "name":"脚本的重复加载",
+                "type":"Description",
+                "returned":"String",
+                "desc":"ScriptLoader会在内部维护一个全局的脚本加载字典，外部如果通过loadScript、Queue.load动作产生下载任务中有重复的脚本，loader会智能识别，不会发生多次下载的情况"
+
             }
         ]
     }

@@ -9,6 +9,7 @@
 
 ###Done
 <ul>
+    <li>给eventEmitter添加on("*",function(){evtName,...})功能，可以监听所有事件，并且得到事件名，该函数可以用于事件转发场景</li>
     <li>重构事件触发器部分，使用最新的eventEmitter(支持once等API)</li>
     <li>eventEmitter:增加once功能，可以定义只触发一次的事件(使用ttl实现)</li>
     <li>eventEmitter:去除CMD的包裹，event机制作为做基础的扩展，很可能被CMD模块本身所依赖</li>
@@ -69,6 +70,7 @@
 ###To be done
 <ul>
   <li>* eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
+  <li>* eventEmitter:增加模式匹配功能，比如on(*)可以订阅所有事件，on(*ok*)可以订阅满足表达式的所有事件(使用blob)</li>
   <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
   <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>

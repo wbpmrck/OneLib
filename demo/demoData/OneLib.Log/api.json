@@ -5,7 +5,7 @@
             {
                 "name":"Logger.writeLine",
                 "type":"Function",
-                "desc":"记录日志. 使用Logger类实实例化日志记录对象后，就可以调用",
+                "desc":"记录日志. 使用Logger类实实例化日志记录对象后，就可以调用.(如果浏览器支持console.会使用console输出，否则会在body最后输出日志)",
                 "params":[
                     {"name":"msg","type":"String","desc":"日志内容"}
                 ],
@@ -22,7 +22,7 @@
                     },
                     {
                         "name":"点击下面按钮运行示例",
-                        "desc":"点击后在页面body最后应该会显示红色的日志文本",
+                        "desc":"点击后，查看console,或页面body的最后，应该会显示红色的日志文本",
                         "type":"real",
                         "codeUrl":"/demo/demoData/OneLib.Log/example.Logger.writeLine.html",
                         "cssUrls":[
