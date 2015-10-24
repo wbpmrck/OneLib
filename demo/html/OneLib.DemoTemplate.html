@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OneLib库演示页面</title>
+    <meta charset='utf-8'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--布局-->
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap-responsive.min.css" media="all">
+    <!--基础样式调整-->
+    <link rel="stylesheet" type="text/css" href="../css/demoBase.css" media="all">
+    <!--代码高亮-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/rainbow/themes/blackboard.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCore.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDefault.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreEmacs.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreDjango.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreFadeToGrey.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMDUltra.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreMidnight.css" media="all">-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/syntaxhighlighter/styles/shCoreRDark.css" media="all">-->
+
+</head>
+<body id="root">
+
+<div id="demo_header" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="index.html" class="goHome">
+                <svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; ">
+                    <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc>
+                    <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+                    <path fill="none" stroke="#ffffff" d="M16,30.534C24.027,30.534,30.534,24.027,30.534,15.999999999999998C30.534,7.972999999999999,24.027,1.4659999999999975,15.999999999999998,1.4659999999999975C7.973,1.466,1.466,7.973,1.466,16C1.466,24.027,7.973,30.534,16,30.534ZM18.335,6.276L21.871000000000002,9.814L15.684000000000001,16.001L21.871000000000002,22.188000000000002L18.335,25.725L8.612,16.001L18.335,6.276Z" stroke-width="3" stroke-linejoin="round" opacity="0" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: round; opacity: 0;"></path>
+                    <path fill="#aaaacc" stroke="none" d="M16,30.534C24.027,30.534,30.534,24.027,30.534,15.999999999999998C30.534,7.972999999999999,24.027,1.4659999999999975,15.999999999999998,1.4659999999999975C7.973,1.466,1.466,7.973,1.466,16C1.466,24.027,7.973,30.534,16,30.534ZM18.335,6.276L21.871000000000002,9.814L15.684000000000001,16.001L21.871000000000002,22.188000000000002L18.335,25.725L8.612,16.001L18.335,6.276Z" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                    <rect x="0" y="0" width="32" height="32" r="0" rx="0" ry="0" fill="#000000" stroke="#000" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></rect></svg>
+            </a>
+            <a class="brand" href="javascript:void(0);" data-bind="text:'演示：'+projectName+'相关功能'"></a>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="justTakePosition" class="span3">
+        </div>
+        <!--左侧导航-->
+        <div id="demo_leftSlider"  class="span3 leftSlideContainer">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list" data-bind="style:{maxHeight:leftSliderStyle.maxHeight},foreach:{data:groups,as:'group'}">
+
+                    <li class="nav-header" data-bind="text:group.name">
+                        <!-- ko foreach: {data:group.apis,as:'api'} -->
+                        <li class="apiSlider"  data-bind="css:{ active:api.selected}">
+                            <a data-bind="attr:{href:'#demo_'+api.name},text:api.name,click:api.apiClick"></a>
+                        </li>
+                        <!-- /ko -->
+                    </li>
+
+                </ul>
+            </div><!--/.well -->
+        </div><!--/span-->
+        <!--右侧demo区域-->
+        <div  id="demo_rightDemos" class="span9">
+            <div class="hero-unit" data-bind="foreach:{data:groups,as:'group'},style:{minHeight:rightDemoStyle.minHeight}">
+
+                <hr class="groupSpliter"/>
+                <div class="groupRegion">
+                    <h2 class="groupHeader" data-bind="text:group.name+'('+group.apis.length+')'"></h2>
+                    <hr  class="groupSpliter"/>
+                    <!-- ko foreach: {data:group.apis,as:'api'} -->
+                    <div class="apiregion">
+                        <a class="anchor" data-bind="attr:{name:'demo_'+api.name}"></a>
+                        <a data-bind="attr:{href:'#demo_'+api.name},text:api.apiNameAndParams()+typeAndReturnDesc()">$parent.name</a>
+                        <pre class="apiDesc" data-bind="html:api.desc"></pre>
+                        <!-- ko if: api.params().length>0 -->
+                        <span class="itemDesc">参数说明：</span><br/>
+                        <ul class="apiParams" data-bind="foreach:api.params">
+                            <li class="apiParam" data-bind="text:name+':('+type+')'">122</li>
+                            <!-- ko if: desc.length>0 -->
+                            <pre data-bind="html:desc">参数描述</pre>
+                            <!-- /ko -->
+                        </ul>
+                        <!-- /ko -->
+                        <!--代码示例区域-->
+                        <span class="itemDesc">代码示例：</span><br/>
+                        <!-- ko foreach: {data:api.demoCodes,as:'demo'} -->
+                        <div class="codeDemo">
+                            <!-- ko if: demo.name -->
+                            <span data-bind="text:name">示例名称:</span><br/>
+                            <!-- /ko -->
+                            <!-- ko if: demo.desc -->
+                            <pre class="demoDesc" data-bind="html:demo.desc"></pre>
+                            <!-- /ko -->
+
+                            <!--代码样例的处理-->
+                            <span data-bind="if:showSample">
+                                <pre class="brush: js;toolbar: false;" data-bind="text:codeContent">
+
+                                </pre>
+                            </span>
+
+                            <!--真实demo的处理-->
+                            <!-- ko if: showRealDemo -->
+                            <div class="realDemoContainer" data-bind="html:codeContent">
+
+                            </div>
+                            <!-- /ko -->
+
+                            <!--没有数据的处理-->
+                            <span data-bind="ifnot:codeContent">
+                                <pre  class="brush: js;">
+                                    alert('demo内容没有加载成功 ^_^||');
+                                </pre>
+                            </span>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+
+
+                
+            </div>
+        </div><!--/span-->
+    </div><!--/row-->
+
+    <hr>
+
+    <footer>
+        <p>&copy; wbpmrck 2013</p>
+    </footer>
+
+</div><!--/.fluid-container-->
+
+<!--<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushJScript.js"></script>-->
+<!--通用脚本-->
+<script type="text/javascript" src="../scripts/config.js"></script>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../scripts/knockout-2.3.0.js"></script>
+<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../src/OneLib.Log.js"></script>
+<script type="text/javascript" src="../../src/OneLib.EventEmitter.js"></script>
+<script type="text/javascript" src="../../src/OneLib.ScriptLoader.js"></script>
+<script type="text/javascript" src="../../src/OneLib.CMDSyntax.js"></script>
+<script type="text/javascript" src="../../src/OneLib.CSSLoader.js"></script>
+<script type="text/javascript" src="../../src/OneLib.Scroll.js"></script>
+<script type="text/javascript" src="../scripts/jquery.wrap.CMD.js"></script>
+<script type="text/javascript" src="../scripts/knockout.wrap.CMD.js"></script>
+
+<!--语法高亮-->
+<!--<script type="text/javascript" src="../css/rainbow/rainbow.min.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/generic.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/javascript.js"></script>-->
+<!--<script type="text/javascript" src="../css/rainbow/language/html.js"></script>-->
+
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="../css/syntaxhighlighter/scripts/sh.wrap.CMD.js"></script>
+
+<!--业务代码-->
+<script type="text/javascript" src="../scripts/demo.common.js"></script>
+
+<script type="text/javascript">
+
+    //统一配置：为了加载不同demo依赖的js的时候不会报模块重复定义的错误，将模块名冲突的处理方式定为“忽略”
+    OneLib.CMDSyntax.configDealConflicts({
+        moduleNameConflict:'return'
+    });
+</script>
+<!--demo脚本-->
+<!--<script type="text/javascript" src="../scripts/demo.OneLib.GUID.js"></script>-->
+
+
+</body>
+</html>
