@@ -1,1 +1,0 @@
-var _scriptA ='i am content from script_a.js!';
