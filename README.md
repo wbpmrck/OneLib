@@ -9,6 +9,9 @@
 
 ###Done
 <ul>
+  <li>新增Min heap(小顶堆)的实现</li>
+    <li>CMDSyntax:增加require.async功能，补充demo文档</li>
+    <li>eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
     <li>给eventEmitter添加on("*",function(){evtName,...})功能，可以监听所有事件，并且得到事件名，该函数可以用于事件转发场景</li>
     <li>重构事件触发器部分，使用最新的eventEmitter(支持once等API)</li>
     <li>eventEmitter:增加once功能，可以定义只触发一次的事件(使用ttl实现)</li>
@@ -59,7 +62,8 @@
 
 ###Doing
 <ul>
-    <li>将Min heap(小顶堆)的实现加入</li>
+  <li>将demo页面从SAE迁移到gitPage</li>
+  <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
   <li>补充Location模块的testCase</li>
@@ -69,8 +73,7 @@
 
 ###To be done
 <ul>
-  <li>* eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
-  <li>* eventEmitter:增加模式匹配功能，比如on(*)可以订阅所有事件，on(*ok*)可以订阅满足表达式的所有事件(使用blob)</li>
+  
   <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
   <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>
