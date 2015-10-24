@@ -9,7 +9,7 @@
 
 ###Done
 <ul>
-  <li>新增Min heap(小顶堆)的实现</li>
+    <li>新增Min heap(小顶堆)的实现</li>
     <li>CMDSyntax:增加require.async功能，补充demo文档</li>
     <li>eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
     <li>给eventEmitter添加on("*",function(){evtName,...})功能，可以监听所有事件，并且得到事件名，该函数可以用于事件转发场景</li>
@@ -61,7 +61,7 @@
 </ul>
 
 ###Doing
-<ul>
+<ul>  
   <li>将demo页面从SAE迁移到gitPage</li>
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
