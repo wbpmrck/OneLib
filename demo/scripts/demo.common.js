@@ -65,12 +65,14 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
         if(self.cssUrls&&self.cssUrls.length>0){
             for(var i=0,j=self.cssUrls.length;i<j;i++){
                 var _cssUrl = self.cssUrls[i];
-                cssLoader.loadCSS(__subdomain__+_cssUrl+'?_='+Math.floor(Math.random()*100000),undefined,'utf-8');
+                //cssLoader.loadCSS(__subdomain__+_cssUrl+'?_='+Math.floor(Math.random()*100000),undefined,'utf-8');
+                cssLoader.loadCSS(_cssUrl+'?_='+Math.floor(Math.random()*100000),undefined,'utf-8');
             }
         }
         //再看有没有要下载的文件内容，下载后，设置到codeContent
         $.ajax({
-            url:  __subdomain__+self.codeUrl+'?_="'+Math.floor(Math.random()*100000),
+            //url:  __subdomain__+self.codeUrl+'?_="'+Math.floor(Math.random()*100000),
+            url:  self.codeUrl+'?_="'+Math.floor(Math.random()*100000),
             cache: false,
             dataType:'html',
             success: function(codeContent){
@@ -79,7 +81,8 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
                 //设置完content后，最后看有没有要下载的js列表，有的话按顺序下载
                 if(self.javascriptUrls&&self.javascriptUrls.length>0){
                     for(var i in self.javascriptUrls){
-                        self.javascriptUrls[i] = __subdomain__+ self.javascriptUrls[i]+'?_='+Math.floor(Math.random()*100000)
+                        //self.javascriptUrls[i] = __subdomain__+ self.javascriptUrls[i]+'?_='+Math.floor(Math.random()*100000)
+                        self.javascriptUrls[i] =  self.javascriptUrls[i]+'?_='+Math.floor(Math.random()*100000)
                     }
 
                     //jsLoader.beginQueue('demoScripts',self.javascriptUrls).

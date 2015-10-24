@@ -14,7 +14,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.Log/example.Logger.writeLine.js",
+                        "codeUrl":"../demoData/OneLib.Log/example.Logger.writeLine.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -24,12 +24,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"点击后，查看console,或页面body的最后，应该会显示红色的日志文本",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.Log/example.Logger.writeLine.html",
+                        "codeUrl":"../demoData/OneLib.Log/example.Logger.writeLine.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
                             "/src/OneLib.Log.js",
-                            "/demo/demoData/OneLib.Log/example.Logger.writeLine.js"
+                            "../demoData/OneLib.Log/example.Logger.writeLine.js"
                         ]
                     }
                 ]
@@ -48,7 +48,7 @@
                         "name":"",
                         "desc":"",
                         "type":"example",
-                        "codeUrl":"/demo/demoData/OneLib.Log/example.Logger.enable.js",
+                        "codeUrl":"../demoData/OneLib.Log/example.Logger.enable.js",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -58,12 +58,12 @@
                         "name":"点击下面按钮运行示例",
                         "desc":"由于禁用了日志，所以点击后应不会有任何日志产生",
                         "type":"real",
-                        "codeUrl":"/demo/demoData/OneLib.Log/example.Logger.enable.html",
+                        "codeUrl":"../demoData/OneLib.Log/example.Logger.enable.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
                             "/src/OneLib.Log.js",
-                            "/demo/demoData/OneLib.Log/example.Logger.enable.js"
+                            "../demoData/OneLib.Log/example.Logger.enable.js"
                         ]
                     }
                 ]
