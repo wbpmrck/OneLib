@@ -223,7 +223,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
 
     //获取模块列表数据，并开始页面绑定
     $.ajax({
-        url:  __subdomain__+"/demo/demoData/"+moduleName+"/api.json"+'?_="'+Math.floor(Math.random()*100000),
+        url:  "../demoData/"+moduleName+"/api.json"+'?_="'+Math.floor(Math.random()*100000),
         cache: false,
         dataType:'json',
         success: function(_groups){
