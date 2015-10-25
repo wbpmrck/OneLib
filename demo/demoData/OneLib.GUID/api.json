@@ -14,7 +14,7 @@
                 "demoCodeRefs":[
                     {
                         "name":"1、getGUID基本用法",
-                        "desc":"不使用任何参数，则默认输出标准的基于10进制的GUID",
+                        "desc":"不使用任何参数，则默认输出32位十六进制数的GUID",
                         "type":"example",
                         "codeUrl":"../demoData/OneLib.GUID/example.getGUID.js",
                         "cssUrls":[
