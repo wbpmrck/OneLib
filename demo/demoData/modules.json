@@ -10,6 +10,11 @@
         "linkEnable":true
     },
     {
+        "moduleName":"OneLib.EventEmitter",
+        "desc":"让类具备事件的订阅、发布能力",
+        "linkEnable":true
+    },
+    {
         "moduleName":"OneLib.ScriptLoader",
         "desc":"一个异步加载脚本的库，支持分队列并行下载，队列内部串行下载功能。支持事件通知",
         "linkEnable":true
@@ -29,11 +34,7 @@
         "desc":"封装对浏览器版本进行检测的功能",
         "linkEnable":true
     },
-    {
-        "moduleName":"OneLib.EventEmitter",
-        "desc":"让类具备事件的订阅、发布能力",
-        "linkEnable":true
-    },
+
     {
         "moduleName":"OneLib.MD5",
         "desc":"提供MD5摘要算法(又称散列、哈希算法)",
