@@ -65,6 +65,134 @@
                         ]
                     }
                 ]
+            },
+            {
+                "name":"getViewportWidth",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回浏览器可视窗口（viewPort）宽度大小.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getViewportWidth 获得浏览器窗口可视区域宽度",
+                        "desc":"调整窗口可视区域大小，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getViewportWidth.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getViewportWidth.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getViewportWidth.js"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"getViewportHeight",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回浏览器可视窗口（viewPort）高度大小.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getViewportHeight 获得浏览器窗口可视区域高度",
+                        "desc":"调整窗口可视区域大小，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getViewportHeight.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getViewportHeight.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getViewportHeight.js"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"getHorizontalScroll",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回浏览器水平方向上的滚动位置.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getHorizontalScroll 获得浏览器水平方向上的滚动位置",
+                        "desc":"开发者工具修改窗口body.width大小，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getHorizontalScroll.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getHorizontalScroll.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getHorizontalScroll.js"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"getVerticalScroll",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回浏览器垂直方向上的滚动位置.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getVerticalScroll 获得浏览器垂直方向上的滚动位置",
+                        "desc":"滚动窗口，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getVerticalScroll.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getVerticalScroll.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getVerticalScroll.js"
+                        ]
+                    }
+                ]
             }
         ]
     },
