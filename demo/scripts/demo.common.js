@@ -1,9 +1,9 @@
 /**
  * 定义所有示例页面公用的js对象、类
  */
-define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','OneLib.Scroll','sh'], function (require, exports, module) {
+define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','OneLib.DOM','sh'], function (require, exports, module) {
     var $ = require('jQuery'),ko = require('ko'),jsLoader = require('OneLib.ScriptLoader'),
-        cssLoader = require('OneLib.CSSLoader'),scroll = require('OneLib.Scroll'),highlighter = require('sh');
+        cssLoader = require('OneLib.CSSLoader'),scroll = require('OneLib.DOM').getScrollManager(window),highlighter = require('sh');
     var viewModel,factory,moduleName;
 
     var _getQueryString = function(item){

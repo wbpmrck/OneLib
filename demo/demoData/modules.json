@@ -43,5 +43,10 @@
         "moduleName":"OneLib.SHA1",
         "desc":"提供SHA1(Secure Hash Algorithm)摘要算法(又称安全哈希算法)",
         "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.DOM",
+        "desc":"提供经常使用的DOM对象的属性获取、大小调整、滚动等操作的统一封装和兼容性处理",
+        "linkEnable":true
     }
 ]
