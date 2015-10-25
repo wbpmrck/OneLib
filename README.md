@@ -9,6 +9,7 @@
 
 ###Done
 <ul>
+  <li>将demo页面从SAE迁移到gitPage</li>
     <li>新增Min heap(小顶堆)的实现</li>
     <li>CMDSyntax:增加require.async功能，补充demo文档</li>
     <li>eventEmitter:修改API和增加once之后，需要补充demo和文档</li>
@@ -62,7 +63,7 @@
 
 ###Doing
 <ul>  
-  <li>将demo页面从SAE迁移到gitPage</li>
+  <li>将scroll和windowsSize功能进行重构。scroll依赖windowSize</li>
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
