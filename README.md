@@ -9,6 +9,7 @@
 
 ###Done
 <ul>
+  <li>将scroll和windowsSize功能合并为OneLib.DOM</li>
   <li>将demo页面从SAE迁移到gitPage</li>
     <li>新增Min heap(小顶堆)的实现</li>
     <li>CMDSyntax:增加require.async功能，补充demo文档</li>
@@ -63,7 +64,19 @@
 
 ###Doing
 <ul>  
-  <li>将scroll和windowsSize功能进行重构。scroll依赖windowSize</li>
+  <li>编写OneLib.DOM的API示例
+    <ul>
+        <li>完成 getDocumentWidth 方法demo编写</li>
+        <li>完成 getDocumentHeight 方法demo编写</li>
+        <li>完成 getScrollManager 方法demo编写</li>
+        <li>完成 ScrollManager.scrollToTop 方法demo编写</li>
+        <li>完成 ScrollManager.scrollToBottom 方法demo编写</li>
+        <li>完成 ScrollManager.scrollUp 方法demo编写</li>
+        <li>完成 ScrollManager.scrollDown 方法demo编写</li>
+        <li>完成 ScrollManager.getScrollTop 方法demo编写</li>
+        <li>完成 ScrollManager.setScrollTop 方法demo编写</li>
+    </ul>
+  </li>
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>

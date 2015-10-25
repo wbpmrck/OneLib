@@ -113,7 +113,7 @@ define('OneLib.DOM', [], function (require, exports, module) {
      * 根据传入的DOM节点，来生成滚动条控制器
      * @param containerDOM
      */
-    exports.getManager = function (containerDOM) {
+    exports.getScrollManager = function (containerDOM) {
         return new ScrollManager(containerDOM);
     }
 
