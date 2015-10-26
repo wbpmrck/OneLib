@@ -97,7 +97,7 @@
                         </ul>
                         <!-- /ko -->
                         <!--代码示例区域-->
-                        <span class="itemDesc">代码示例：</span><br/>
+                        <span class="itemDesc" data-bind="visible:api.demoCodes.length>0">代码示例：</span><br/>
                         <!-- ko foreach: {data:api.demoCodes,as:'demo'} -->
                         <div class="codeDemo">
                             <!-- ko if: demo.name -->

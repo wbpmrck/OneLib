@@ -198,7 +198,7 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
         self.projectName=projectName;
 
         self.leftSliderStyle={
-            maxHeight:'400px'
+            maxHeight:'580px'
         };
 
         self.rightDemoStyle={
