@@ -193,12 +193,97 @@
                         ]
                     }
                 ]
+            },
+            {
+                "name":"getDocumentWidth",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回文档的实际宽度.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getDocumentWidth 获得文档的实际宽度",
+                        "desc":"修改Body宽度撑开页面，再拉伸窗口，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getDocumentWidth.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getDocumentWidth.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getDocumentWidth.js"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"getDocumentHeight",
+                "type":"Function",
+                "returned":"int",
+                "desc":"该方法返回文档的实际高度.<br/> <p class='warn-notice'>注意在移动浏览器可能有兼容性问题</p>",
+                "params":[
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getDocumentHeight 获得文档的实际高度",
+                        "desc":"直接运行，观察结果是否正确",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getDocumentHeight.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
+                        "name":"点击下面按钮运行示例",
+                        "desc":"",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getDocumentHeight.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                            "../../src/OneLib.DOM.js",
+                            "../demoData/OneLib.DOM/example.getDocumentHeight.js"
+                        ]
+                    }
+                ]
             }
         ]
     },
     {
         "name":"滚动处理",
         "apis":[
+            {
+                "name":"getScrollManager",
+                "type":"Function",
+                "returned":"ScrollManager",
+                "desc":"该方法根据传入的DOM对象，返回1个控制该DOM对象进行滚动的Manager,可以调用Manager的方法实现滚动",
+                "params":[
+                    {"name":"containerDOM","type":"DOMObject","desc":"滚动容器的DOM节点对象"}
+                ],
+                "demoCodeRefs":[
+                    {
+                        "name":"使用 getScrollManager 获得控制该DOM对象进行滚动的Manager",
+                        "desc":"",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.DOM/example.getScrollManager.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    }
+                ]
+            }
         ]
     }
 ]

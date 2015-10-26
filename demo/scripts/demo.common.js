@@ -115,7 +115,8 @@ define('Demo.Common', ['jQuery', 'ko','OneLib.ScriptLoader','OneLib.CSSLoader','
 
         self.typeAndReturnDesc = ko.computed(function(){
             if(this.type.toLowerCase()==='function'){
-                return ':  ('+this.returned+'<<'+this.type+')';
+                //return ':  ('+this.returned+'<<'+this.type+')';
+                return ':  ( => '+this.returned+' )';
             }
             else{
                 return ':  ('+this.type+')';

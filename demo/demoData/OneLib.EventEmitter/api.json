@@ -65,7 +65,7 @@
                     "returned":"SubscribeId[int]",
                     "params":[
                         {"name":"eventName","type":"String","desc":"要订阅的事件名称"},
-                        {"name":"handler","type":"Function","desc":"事件处理函数"},
+                        {"name":"handler","type":"Function(arg1,arg2,...)","desc":"事件处理函数"},
                         {"name":"[TTL]","type":"int","desc":"(可选)回调函数TTL,默认为无限大\r\n,如果设置了TTL,则该处理函数会被调用TTL次，之后就自动取消订阅"}
                     ],
                     "demoCodeRefs":[
@@ -100,7 +100,7 @@
                     "returned":"SubscribeId[int]",
                     "params":[
                         {"name":"eventName","type":"String","desc":"要订阅的事件名称"},
-                        {"name":"handler","type":"Function","desc":"事件处理函数\r\n注意：该回调只会执行一次哦，这在很多场景下非常方便"}
+                        {"name":"handler","type":"Function(arg1,arg2,...)","desc":"事件处理函数\r\n注意：该回调只会执行一次哦，这在很多场景下非常方便"}
                     ],
                     "demoCodeRefs":[
                         {
