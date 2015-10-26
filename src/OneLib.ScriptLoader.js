@@ -35,6 +35,7 @@ OneLib.ScriptLoader = (function (my) {
     var _allQueue={},
         _taskPool={};//缓存曾经下载过的脚本
 
+
     function LoadTask(url,charset){
         var self = this;//save the this ref
 

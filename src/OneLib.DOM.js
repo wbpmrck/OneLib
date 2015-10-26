@@ -16,6 +16,9 @@
 
 define('OneLib.DOM', [], function (require, exports, module) {
 
+    var _addListener = window.addEventListener || window.attachEvent,
+        _removeListener = window.removeEventListener || window.detachEvent;
+
     //查询浏览器窗口在电脑桌面的坐标（但经测试发现，在IE和Opera下为可视化窗口在电脑桌面坐标）
     //IE,safari,opera
     if (window.screenLeft != undefined) {
@@ -109,6 +112,7 @@ define('OneLib.DOM', [], function (require, exports, module) {
         self.container.scrollTop = top;
         return self;
     };
+
 
     /**
      * 根据传入的DOM节点，来生成滚动条控制器

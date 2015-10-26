@@ -65,7 +65,8 @@
 
 ###Doing
 <ul>  
-  <li>添加easing函数和动画调用机制模块</li>
+  <li>添加easing函数和动画调用机制模块,参考：[javascript.info-animation](http://javascript.info/tutorial/animation)</li>
+  <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
 </ul>
 
 ###To be done
