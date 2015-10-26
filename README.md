@@ -9,6 +9,7 @@
 
 ###Done
 <ul>
+  <li>编写OneLib.DOM的API示例</li>
   <li>将scroll和windowsSize功能合并为OneLib.DOM</li>
   <li>将demo页面从SAE迁移到gitPage</li>
     <li>新增Min heap(小顶堆)的实现</li>
@@ -64,30 +65,18 @@
 
 ###Doing
 <ul>  
-  <li>编写OneLib.DOM的API示例
-    <ul>
-        <li>完成 getDocumentWidth 方法demo编写</li>
-        <li>完成 getDocumentHeight 方法demo编写</li>
-        <li>完成 getScrollManager 方法demo编写</li>
-        <li>完成 ScrollManager.scrollToTop 方法demo编写</li>
-        <li>完成 ScrollManager.scrollToBottom 方法demo编写</li>
-        <li>完成 ScrollManager.scrollUp 方法demo编写</li>
-        <li>完成 ScrollManager.scrollDown 方法demo编写</li>
-        <li>完成 ScrollManager.getScrollTop 方法demo编写</li>
-        <li>完成 ScrollManager.setScrollTop 方法demo编写</li>
-    </ul>
-  </li>
+  <li>添加easing函数和动画调用机制模块</li>
+</ul>
+
+###To be done
+<ul>
+  
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
   <li>补充Location模块的testCase</li>
   <li>补充Location模块的Demo</li>
  <li>集成fis环境，发布的文件进行压缩.</li>
-</ul>
-
-###To be done
-<ul>
-  
   <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
   <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>

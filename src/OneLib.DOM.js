@@ -67,7 +67,8 @@ define('OneLib.DOM', [], function (require, exports, module) {
 
         //最外层可操作滚动的对象为body
         if(container === window||container === document || container === document.body){
-            self.container = document.documentElement?document.documentElement:document.body;
+            //self.container = document.documentElement?document.documentElement:document.body;
+            self.container = document.body;
         }else{
             self.container = container;
         }
