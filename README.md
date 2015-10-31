@@ -4,12 +4,22 @@
 这是一个通用代码库，里面包含了日常web开发过程中基类下来的一些类库、使用CMD语法规范进行重新定义、整合.项目demo地址：<a href="http://wbpmrck.github.io/OneLib/demo/html/index.html" target="_blank">点击打开</a>
 <hr/>
 
-##Todos
-<hr/>
+
+###Doing
+<ul>  
+  <li>在Animation的Demo里，添加一个板块，是一个 delta 函数编辑和预览器，可以实时编辑和预览函数产生的增长曲线</li>
+  <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
+  <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>
+</ul>
 
 ###Done
 <ul>
-  <li>编写OneLib.DOM的API示例</li>
+  <li>给Animation添加curFrame,totalFrame属性，表示当前动画运行到第几帧，并且给delta函数传递progress的时候，优先以duration计算，其次以totalFrame计算</li>
+    <li>添加 Animation 支持事件抛出：start->pause->resume->finish->stop</li>
+  <li>添加 Animation 支持帧率计算</li>
+  <li>添加easing函数和动画调用机制模块Animation</li>
+    <li>添加Animation用户自定义 delta 函数的功能。添加函数后，就可以利用Animation.builtInDelta()方法，加上easeOut等参数来获取step函数的转换版本</li>
+    <li>编写OneLib.DOM的API示例</li>
   <li>将scroll和windowsSize功能合并为OneLib.DOM</li>
   <li>将demo页面从SAE迁移到gitPage</li>
     <li>新增Min heap(小顶堆)的实现</li>
@@ -63,13 +73,8 @@
   <li>补充EventEmitter模块的testCase和demo.</li>
 </ul>
 
-###Doing
-<ul>  
-  <li>添加easing函数和动画调用机制模块,参考：[javascript.info-animation](http://javascript.info/tutorial/animation)</li>
-  <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
-</ul>
 
-###To be done
+###Todos
 <ul>
   
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
