@@ -7,6 +7,7 @@
 
 ###Doing
 <ul>  
+  <li>给Animation添加测试用例</li>
   <li>在Animation的Demo里，添加一个板块，是一个 delta 函数编辑和预览器，可以实时编辑和预览函数产生的增长曲线</li>
   <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
   <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>

@@ -58,7 +58,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
     }
 
     function Animation(opts) {
-        event.minxin(Animation);
+        event.mixin(Animation);
 
         var self = this;//save the this ref
 
@@ -111,7 +111,10 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
         if (progress > 1) progress = 1
 
-        var delta = self.delta(progress)//根据delta函数，得到步进数值
+        var delta;
+        if(self.delta){
+            delta = self.delta(progress)//根据delta函数，得到步进数值
+        }
         self.step(delta) //调用处理函数进行动画属性修改
 
         //动画执行完毕
@@ -272,15 +275,26 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
     /**
      * 获取内置的 Delta 函数
      * @param deltaName
+     * @param paramArr:可选：表示给delta函数输入的额外的参数
      * @param mode:可选：easeIn,easeOut,easeInOut
      */
-    exports.builtInDelta = function (deltaName,mode) {
+    exports.builtInDelta = function (deltaName,paramArr,mode) {
         var _d = _builtInDeltas[deltaName];
+
         if(_d){
             if(mode=='easeOut'){
                 _d = _makeEaseOut(_d);
             }else if(mode=='easeInOut'){
                 _d = _makeEaseInOut(_d);
+            }
+            //如果外部对delta函数有额外的参数，则对函数进行代理
+            if(paramArr&&paramArr.length>0){
+                var _old = _d;
+                _d = function (progress) {
+                    var copyParam = paramArr.slice();
+                    copyParam.unshift(progress);
+                    _old.apply(this,copyParam);
+                }
             }
             return _d;
         }
