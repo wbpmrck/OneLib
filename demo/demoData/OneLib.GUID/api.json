@@ -1,5 +1,35 @@
 ﻿[
     {
+        "name":"使用说明",
+        "apis":[
+            {
+                "name":"依赖项",
+                "type":"Description",
+                "returned":"String",
+                "desc":"该模块无任何外部依赖"
+
+            },
+            {
+                "name":"模块引入方式",
+                "type":"Description",
+                "returned":"String",
+                "desc":"直接在页面上引入模块的js文件即可",
+                "demoCodeRefs":[
+                    {
+                        "name":"",
+                        "desc":"",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.GUID/useExample.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "name":"创建GUID",
         "apis":[
             {
