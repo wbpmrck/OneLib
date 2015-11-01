@@ -49,5 +49,10 @@
         "moduleName":"OneLib.DOM",
         "desc":"提供经常使用的DOM对象的属性获取、大小调整、滚动等操作的统一封装和兼容性处理。(移动浏览器下使用如发现问题请提Issue)",
         "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.Animation",
+        "desc":"提供基于timer实现的，支持固定时长和固定帧2种渲染方式的动画框架。并且内置了常用的delta函数(增量计算)可以实现大部分简单的动画效果。支持动画暂停、继续等操作。支持事件订阅",
+        "linkEnable":true
     }
 ]
