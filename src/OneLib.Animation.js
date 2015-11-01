@@ -12,26 +12,28 @@
  *  opts.delay:     Time between frames (in ms, 1/1000 of second). For example, 10ms
  *  opts.duration:  The full time the animation should take, in ms. For example, 1000ms
  *  opts.step:      The function, which actually does the job.
-                    It takes the result of delta and applies it.
+ It takes the result of delta and applies it.
 
-                     For the height example, there would be:
-                     function step(delta) {
+ For the height example, there would be:
+ function step(delta) {
                       elem.style.height = 100*delta + '%'
                     }
 
  *  opts.delta:     A function, which returns the current animation progress.
-                    For example, we are animating the height property from 0% to 100%.
-                    We could do it uniformly, so the progress maps to height linearly
+ For example, we are animating the height property from 0% to 100%.
+ We could do it uniformly, so the progress maps to height linearly
  */
 
 define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, module) {
 
     var event = require("OneLib.EventEmitter");
     var STATUS={
-        STOP:0,
-        RUNNING:1,
-        PAUSED:2
-    }
+            STOP:0,
+            RUNNING:1,
+            PAUSED:2
+        },
+        DEFAULT_FRAME_SPAN=20;
+
 //add bind to Function
     if (!Function.prototype.bind) {
         Function.prototype.bind = function (oThis) {
@@ -160,7 +162,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         self.totalPaused += new Date() - self.lastPausedTime;
 
         self.status = STATUS.RUNNING;
-        self.id = setInterval(self._activateframe.bind(self), self.delay || 10)
+        self.id = setInterval(self._activateframe.bind(self), self.delay || DEFAULT_FRAME_SPAN)
         self.emit("resume");
         return self;
     }
@@ -197,7 +199,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         self.startTime = new Date();
         self.curFrame = 0;
         self.status = STATUS.RUNNING;
-        self.id = setInterval(self._activateframe.bind(self), self.delay || 10)
+        self.id = setInterval(self._activateframe.bind(self), self.delay || DEFAULT_FRAME_SPAN)
         self.emit("start");
         return self;
     }
@@ -277,7 +279,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
      *  返回1个0~1的新progress
      */
     exports.regDelta = function (name,fn) {
-            _builtInDeltas[name] = fn
+        _builtInDeltas[name] = fn
         return this;
     }
     /**
@@ -313,10 +315,10 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
      * @param duration:如果duration是object,那么当作用户传入了一个opts对象
      * @param delta
      * @param step
-     * @param delayPerFrame
+     * @param delay
      * @param totalFrame:动画总共多少帧
      */
-    exports.createAnimation = function (duration/* opts*/, delta, step, delayPerFrame,totalFrame) {
+    exports.createAnimation = function (duration/* opts*/, delta, step, delay,totalFrame) {
         if(typeof duration =='object'){
             return new Animation(duration)
         }else{
@@ -324,7 +326,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
                 duration:duration,
                 delta:delta,
                 step:step,
-                delay:delayPerFrame,
+                delay:delay,
                 totalFrame:totalFrame
             })
         }
