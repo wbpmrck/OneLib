@@ -8,20 +8,26 @@ describe('loadScript :', function () {
     });
 
     //todo:do not know how to test script loader,the script does not loading in the karma env
-    it('should can load an external script async', function () {
+    it('should can load an external script async', function (done) {
         var flag,value =0;
-        runs(function() {
             OneLib.ScriptLoader.loadScript('http://knockoutjs.com/downloads/knockout-2.3.0.js',function(){
-                flag = true;
+                expect(window['ko']).toBeDefined();
+                done()
             });
-        });
-        waitsFor(function() {
-            return flag;
-        }, "The scriptLoader must have callback!", 4000);
 
-        runs(function() {
-            expect(window['ko']).toBeDefined();
-        });
+        //var flag,value =0;
+        //runs(function() {
+        //    OneLib.ScriptLoader.loadScript('http://knockoutjs.com/downloads/knockout-2.3.0.js',function(){
+        //        flag = true;
+        //    });
+        //});
+        //waitsFor(function() {
+        //    return flag;
+        //}, "The scriptLoader must have callback!", 4000);
+        //
+        //runs(function() {
+        //    expect(window['ko']).toBeDefined();
+        //});
 
-    });
+    },9000);
 });

@@ -7,7 +7,6 @@
 
 ###Doing
 <ul>  
-  <li>给Animation添加测试用例</li>
   <li>在Animation的Demo里，添加一个板块，是一个 delta 函数编辑和预览器，可以实时编辑和预览函数产生的增长曲线</li>
   <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
   <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>
@@ -15,7 +14,8 @@
 
 ###Done
 <ul>
-  <li>给Animation添加curFrame,totalFrame属性，表示当前动画运行到第几帧，并且给delta函数传递progress的时候，优先以duration计算，其次以totalFrame计算</li>
+  <li>给Animation添加测试用例</li>
+    <li>给Animation添加curFrame,totalFrame属性，表示当前动画运行到第几帧，并且给delta函数传递progress的时候，优先以duration计算，其次以totalFrame计算</li>
     <li>添加 Animation 支持事件抛出：start->pause->resume->finish->stop</li>
   <li>添加 Animation 支持帧率计算</li>
   <li>添加easing函数和动画调用机制模块Animation</li>

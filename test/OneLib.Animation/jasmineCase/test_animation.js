@@ -33,6 +33,7 @@ describe('Animation', function () {
 
 
 
+            //use option object to create animation
             var a2 = Animation.createAnimation(   {
                 duration:1000,
                 delta:function (progress) {
@@ -76,4 +77,127 @@ describe('Animation', function () {
 
         });
     });
+
+    it('should can use api:regDelta to regist your delta functions', function () {
+        //do some assert
+        define('t3', [], function (require, exports, module) {
+
+            var Animation = require("OneLib.Animation");
+            Animation.regDelta("line", function (progress) {
+                return progress;
+            });
+            var line = Animation.builtInDelta("line");
+            expect(line).not.toBeUndefined();
+        });
+    });
+
+    it('should can use apis to control the animation play or stop', function (done) {
+        define('t4', [], function (require, exports, module) {
+
+            var Animation = require("OneLib.Animation");
+
+            var linear = Animation.createAnimation(10000,Animation.builtInDelta("linear"),function(delta){
+            });
+
+            expect(linear.status).toEqual(0);
+
+            //use play to start
+            linear.play();
+            expect(linear.status).toEqual(1);
+
+            //use pause
+            setTimeout(function () {
+                linear.pause();
+                expect(linear.status).toEqual(2);
+                expect(linear.curFrame).toBeGreaterThan(5);//1s 内动画应该执行不止5帧
+
+                //use resume
+                setTimeout(function () {
+                    linear.resume();
+                    expect(linear.status).toEqual(1);
+                    expect(linear.totalPaused).toBeGreaterThan(500);//停止了 1s 的动画
+
+                    //use restart
+                    setTimeout(function () {
+                        linear.restart();
+                        expect(linear.status).toEqual(1);
+                        //use stop
+                        setTimeout(function () {
+                            linear.stop();
+                            expect(linear.status).toEqual(0);
+                            done();
+                        },1000);
+                    },1000);
+
+                },1000);
+            },1000);
+        });
+    },10000);
+
+    it('should can use event api to subscribe and handler every useful events', function (done) {
+        define('t5', [], function (require, exports, module) {
+
+            var Animation = require("OneLib.Animation");
+            var linear = Animation.createAnimation(10000,Animation.builtInDelta("linear"),function(delta){
+            });
+
+            var eventListen ={
+                "start":0,
+                "fpsChange":0,
+                "finish":0,
+                "pause":0,
+                "resume":0,
+                "stop":0
+            }
+
+            function hasEvent(name){
+                console.log("event:"+name +" has received!")
+                eventListen[name]++;
+                var c = 0;
+                for(var e in eventListen){
+                    if(eventListen[e]==0){
+                        c++;
+                    }
+                }
+                if(c==0){
+                    done();
+                }
+            }
+
+            linear.on("*", function (evtName) {
+                hasEvent(evtName);
+            });
+            //use play to start
+            linear.play();
+            expect(linear.status).toEqual(1);
+
+            //use pause
+            setTimeout(function () {
+                linear.pause();
+                expect(linear.status).toEqual(2);
+                expect(linear.curFrame).toBeGreaterThan(5);//1s 内动画应该执行不止5帧
+
+                //use resume
+                setTimeout(function () {
+                    linear.resume();
+                    expect(linear.status).toEqual(1);
+                    expect(linear.totalPaused).toBeGreaterThan(500);//停止了 1s 的动画
+
+                    //use restart
+                    setTimeout(function () {
+                        linear.restart();
+                        expect(linear.status).toEqual(1);
+                        //use stop
+                        setTimeout(function () {
+                            linear.stop();
+                            expect(linear.status).toEqual(0);
+                            done();
+                        },1000);
+                    },1000);
+
+                },1000);
+            },1000);
+
+        });
+    },10000);
 });
