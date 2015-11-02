@@ -7,9 +7,16 @@
 
 ###Doing
 <ul>  
+  <li>添加动画的快近、快退、设置倍速（1/2X,2X,4X）功能
+      <ul>  
+        <li>多倍速：在不改变帧速的情况下，通过多次调用delta函数来实现“加速”变化效果</li>
+        <li>慢速：放慢通过降低interval频率实现</li>
+        <li>快进、快退：通过直接修改已播放时间/帧数来实现</li>
+        <li>以上实现都要考虑duration模式和frame模式</li>
+      </ul>
+  </li>
   <li>在Animation的Demo里，添加一个板块，是一个 delta 函数编辑和预览器，可以实时编辑和预览函数产生的增长曲线</li>
   <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
-  <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>
 </ul>
 
 ###Done
@@ -78,6 +85,7 @@
 ###Todos
 <ul>
   
+  <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>
   <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
   <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
   <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>

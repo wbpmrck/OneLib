@@ -1,6 +1,7 @@
 describe('Animation', function () {
     beforeEach(function () {
         //run before each test
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
     });
 
     afterEach(function () {
@@ -15,7 +16,7 @@ describe('Animation', function () {
             var a = Animation.createAnimation(1000, function (progress) {
                 return progress;
             }, function (progress) {
-                console.log(progress);
+                //console.log(progress);
             },50,200);
 
             expect(a).not.toBeUndefined();
@@ -40,7 +41,7 @@ describe('Animation', function () {
                     return progress;
                 },
                 step:function (progress) {
-                    console.log(progress);
+                    //console.log(progress);
                 },
                 delay:50,
                 totalFrame:200
@@ -90,6 +91,32 @@ describe('Animation', function () {
             expect(line).not.toBeUndefined();
         });
     });
+    it('should can add additional param to your delta functions', function (done) {
+        //do some assert
+        define('t3.2', [], function (require, exports, module) {
+
+            var Animation = require("OneLib.Animation");
+            Animation.regDelta("line2", function (progress,p1,p2) {
+                expect(p1).toEqual('param1');
+                expect(p2).toEqual(2);
+                done();
+                return progress;
+            });
+            var line = Animation.builtInDelta("line2",["param1",2]);
+
+            var a2 = Animation.createAnimation(   {
+                duration:1000,
+                delta:line,
+                step:function (progress) {
+                    //console.log(progress);
+                },
+                delay:50
+            });
+
+            a2.play();
+
+        });
+    });
 
     it('should can use apis to control the animation play or stop', function (done) {
         define('t4', [], function (require, exports, module) {
@@ -97,7 +124,7 @@ describe('Animation', function () {
             var Animation = require("OneLib.Animation");
 
             var linear = Animation.createAnimation(10000,Animation.builtInDelta("linear"),function(delta){
-            });
+            },250);
 
             expect(linear.status).toEqual(0);
 
@@ -109,7 +136,7 @@ describe('Animation', function () {
             setTimeout(function () {
                 linear.pause();
                 expect(linear.status).toEqual(2);
-                expect(linear.curFrame).toBeGreaterThan(5);//1s 内动画应该执行不止5帧
+                expect(linear.curFrame).toBeGreaterThan(2);//1s 内动画应该执行不止5帧
 
                 //use resume
                 setTimeout(function () {
@@ -132,14 +159,14 @@ describe('Animation', function () {
                 },1000);
             },1000);
         });
-    },10000);
-
+    });
+    //
     it('should can use event api to subscribe and handler every useful events', function (done) {
         define('t5', [], function (require, exports, module) {
 
             var Animation = require("OneLib.Animation");
             var linear = Animation.createAnimation(10000,Animation.builtInDelta("linear"),function(delta){
-            });
+            }, 250);
 
             var eventListen ={
                 "start":0,
@@ -151,7 +178,7 @@ describe('Animation', function () {
             }
 
             function hasEvent(name){
-                console.log("event:"+name +" has received!")
+                //console.log("event:"+name +" has received!")
                 eventListen[name]++;
                 var c = 0;
                 for(var e in eventListen){
@@ -159,6 +186,7 @@ describe('Animation', function () {
                         c++;
                     }
                 }
+                //console.log("c="+c)
                 if(c==0){
                     done();
                 }
@@ -175,7 +203,8 @@ describe('Animation', function () {
             setTimeout(function () {
                 linear.pause();
                 expect(linear.status).toEqual(2);
-                expect(linear.curFrame).toBeGreaterThan(5);//1s 内动画应该执行不止5帧
+                console.log("linear.curFrame="+linear.curFrame);
+                expect(linear.curFrame).toBeGreaterThan(2);//1s 内动画应该执行不止2帧
 
                 //use resume
                 setTimeout(function () {
@@ -191,7 +220,7 @@ describe('Animation', function () {
                         setTimeout(function () {
                             linear.stop();
                             expect(linear.status).toEqual(0);
-                            done();
+                            linear.restart();
                         },1000);
                     },1000);
 
@@ -199,5 +228,5 @@ describe('Animation', function () {
             },1000);
 
         });
-    },10000);
+    });
 });
