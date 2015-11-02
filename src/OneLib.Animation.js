@@ -93,8 +93,12 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
     Animation.prototype.setFPS = function(fps){
         var self = this;//save the this ref
 
+        //保留2位小数
+        fps = fps.toFixed(2);
+
         if(fps != self.fps){
             self.emit("fpsChange",self.fps,fps);//emit old and new fps
+            self.fps = fps;
         }
         return this
     }
@@ -110,7 +114,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         self.curFrame++;//累加一帧
         var timePassed = new Date - self.startTime - self.totalPaused
 
-        self.setFPS(self.curFrame / (timePassed*1000));
+        self.setFPS(self.curFrame / (timePassed/1000));
 
         var progress ;
         if(self.duration){
@@ -176,7 +180,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
         self.startTime= self.endTime = self.lastPausedTime=undefined;
         self.totalPaused = 0;
-        self.curFrame = self.totalFrame = 0;
+        self.curFrame =  0;
         self.status = STATUS.STOP;
         if(self.id){
             clearInterval(self.id);

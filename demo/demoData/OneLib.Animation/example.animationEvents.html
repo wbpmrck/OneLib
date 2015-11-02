@@ -1,0 +1,13 @@
+
+    <div class="example_path">
+        <div id="block2" class="example_block" style="left: 500px;"></div>
+    </div>
+    <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.play();">play</button>
+    <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.pause();">pause</button>
+    <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.resume();">resume</button>
+    <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.stop();">stop</button>
+    <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.restart();">restart</button>
+
+    <ul id="c_animationEvents" data-bind="foreach:events">
+        <li data-bind="text:name+':'+param"></li>
+    </ul>
