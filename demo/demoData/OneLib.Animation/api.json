@@ -91,7 +91,7 @@
                 ]
             },
             {
-                "name":"(ing)builtInDelta",
+                "name":"(*)builtInDelta",
                 "type":"Function",
                 "desc":"获取内置的delta函数",
                 "returned":"function(progress) => int ",
@@ -114,11 +114,16 @@
                     {
                         "name":"下面是各个内置函数以及其easeOut,easeInOut模式的曲线图，你可以自己选取需要的函数",
                         "desc":"",
-                        "type":"example",
-                        "codeUrl":"../demoData/OneLib.Animation/example.createAnimation_1.js",
+                        "type":"real",
+                        "codeUrl":"../demoData/OneLib.Animation/example.builtInDeltaAll.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
+                            "../../src/OneLib.EventEmitter.js",
+                            "../../src/OneLib.Animation.js",
+                            "../scripts/raphael-2.1.2-min.js",
+                            "../scripts/raphael.wrap.CMD.js",
+                            "../demoData/OneLib.Animation/example.builtInDeltaAll.js"
                         ]
                     }
                 ]

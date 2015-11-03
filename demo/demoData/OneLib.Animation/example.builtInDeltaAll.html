@@ -1,0 +1,13 @@
+<div id="builtInDeltaAll">
+    <!--绘图区域-->
+    <div id="canvas">
+
+    </div>
+    <!--操作区域-->
+    delta 函数名:<select data-bind="options: builtInDeltas,
+                       optionsText: 'name',
+                       value: selectedDelta"></select><br/>
+    mode:<select data-bind="options: modes,value: selectedMode"></select><br/>
+    额外的参数:<input type="text" data-bind="value:params" style="width: 200px;"/> <br/>
+    函数体:<div data-bind="text:finalFnString"></div>
+</div>

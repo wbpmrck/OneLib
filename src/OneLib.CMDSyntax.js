@@ -9,9 +9,9 @@
 
  todo:
  1、移除对alias别名功能的支持。
-    关于alias功能，我觉得既然有了构建工具，其实没必要把别名功能强加载前端模块加载器里，理由如下：
-        别名主要是为了方便书写、节省带宽。这些在开发和发布阶段完全可以通过构建工具来满足
-        没有理由在线上环境中，让前端loader意识到，可以用2种方式来引用同一个module,这没有任何意义。
+ 关于alias功能，我觉得既然有了构建工具，其实没必要把别名功能强加载前端模块加载器里，理由如下：
+ 别名主要是为了方便书写、节省带宽。这些在开发和发布阶段完全可以通过构建工具来满足
+ 没有理由在线上环境中，让前端loader意识到，可以用2种方式来引用同一个module,这没有任何意义。
 
  -----------
  版本历史：
@@ -32,29 +32,29 @@
  异步的require，本质上和一些语言的loadlibrary类似，属于动态加载，【对于这种情况，loader只需要知道东西在哪就行】
 
  srcMap:{
-         "libs/jquery-1.8.1/jquery.min.js":{
-             uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
-             deps:[] //无依赖的情况
-         },
-         "testWeb/debug-1.0/bar/bar.js":{
-             uri:"http://static.local.com/static/c/testWeb/debug-1.0/bar/bar.js",
-             deps:[
-                 "libs/jquery-1.8.1/jquery.min.js",
-                 "testWeb/debug-1.0/foo/foo.js" //多个依赖的情况
-             ]
-         },
-         "testWeb/debug-1.0/foo/foo.js":{
-             uri:"http://static.local.com/static/c/testWeb/debug-1.0/foo/foo.js",
-             deps:[
-                 "libs/jquery-1.8.1/jquery.min.js"
-             ]
-         }
+ "libs/jquery-1.8.1/jquery.min.js":{
+ uri:"http://static.local.com/static/libs/jquery-1.8.1/jquery.min.js",
+ deps:[] //无依赖的情况
+ },
+ "testWeb/debug-1.0/bar/bar.js":{
+ uri:"http://static.local.com/static/c/testWeb/debug-1.0/bar/bar.js",
+ deps:[
+ "libs/jquery-1.8.1/jquery.min.js",
+ "testWeb/debug-1.0/foo/foo.js" //多个依赖的情况
+ ]
+ },
+ "testWeb/debug-1.0/foo/foo.js":{
+ uri:"http://static.local.com/static/c/testWeb/debug-1.0/foo/foo.js",
+ deps:[
+ "libs/jquery-1.8.1/jquery.min.js"
+ ]
+ }
  },
 
  2、优化define函数，支持不传入deps,这种情况下 loader通过srcMap查找依赖项
 
 
-by kaicui 2013-8-17 13:48:31       版本创建
+ by kaicui 2013-8-17 13:48:31       版本创建
  //////////////////////////////////////////////////////////////////*/
 
 var global = global||window;
@@ -104,7 +104,7 @@ OneLib.CMDSyntax = (function (my,global) {
         }
     }
     var _toStr=Object.prototype.toString;
-   var _copy=function(obj){
+    var _copy=function(obj){
         var _dump;
         //判断原对象是否是函数
         if(typeof(obj)==='function'){
@@ -148,7 +148,7 @@ OneLib.CMDSyntax = (function (my,global) {
             //    _deps = _configs.srcMap[name].deps;
             //
             //    //如果读取成功，则更新参数()
-                factory = dependency;
+            factory = dependency;
             //    dependency = _deps;
             //}else{
             //    throw new Error("module:["+name+'] should set into srcMap!')
@@ -197,22 +197,22 @@ OneLib.CMDSyntax = (function (my,global) {
             //如果在自己声明的依赖项中，则去获取
             //if(self.dependenciesDic.hasOwnProperty(dependentName)){
             //    var _getted = self.dependenciesDic[dependentName];
-                var _getted;
+            var _getted;
             //    if(!_getted){
-                    var m = _getRealModule(dependentName);
-                    if(m){
-                        //_getted = self.dependenciesDic[dependentName] = m.getExportsCopy();
-                        _getted = m.getExportsCopy();
-                        _log('>>require:: [' + dependentName + '] required by ['+self.name+']...');
-                    }
-                    else{
-                        _log('>>require:: [' + dependentName + '] required by ['+self.name+'](failed,not exist)...');
-                    }
-                //}
-                //else{
-                //    _log('>>require:: [' + dependentName + '] required by ['+self.name+'](from cache)...');
-                //}
-                return _getted;
+            var m = _getRealModule(dependentName);
+            if(m){
+                //_getted = self.dependenciesDic[dependentName] = m.getExportsCopy();
+                _getted = m.getExportsCopy();
+                _log('>>require:: [' + dependentName + '] required by ['+self.name+']...');
+            }
+            else{
+                _log('>>require:: [' + dependentName + '] required by ['+self.name+'](failed,not exist)...');
+            }
+            //}
+            //else{
+            //    _log('>>require:: [' + dependentName + '] required by ['+self.name+'](from cache)...');
+            //}
+            return _getted;
             //}
             //else{
             //    throw new Error('Required Module:['+dependentName+'] must be declared in dependencies array!');
@@ -268,18 +268,18 @@ OneLib.CMDSyntax = (function (my,global) {
                 var needs = _getModuleDepends(uri);
                 var q =_scriptLoader.beginQueue();
                 q.load(needs).on("finish", function () {
-                        _loaded++;
-                        if(_loaded === _totalCount){
-                            var _modules = [];
-                            for(var s1=0,s2=asyncDependentName.length;s1<s2;s1++){
-                                var _name = asyncDependentName[s1];
+                    _loaded++;
+                    if(_loaded === _totalCount){
+                        var _modules = [];
+                        for(var s1=0,s2=asyncDependentName.length;s1<s2;s1++){
+                            var _name = asyncDependentName[s1];
 
-                                //call require to get module exports
-                                _modules.push(_require(_name));
-                            }
-                            cb && cb.apply(null,_modules)
+                            //call require to get module exports
+                            _modules.push(_require(_name));
                         }
-                    });
+                        cb && cb.apply(null,_modules)
+                    }
+                });
                 q.start(); //调用queue.start顺序下载依赖
             }
 
@@ -329,12 +329,12 @@ OneLib.CMDSyntax = (function (my,global) {
         _log=function(msg){
             _logger.writeLine(msg);
         },
-        //保留名字
+    //保留名字
         _reserved={'global':1,'window':1},
-        //已经加载的模块
+    //已经加载的模块
         _modules={
         },
-        //配置项
+    //配置项
         _configs={
             // 基础路径（其他所有模块的路径都以它为基础）
             base: 'http://asada',
@@ -424,7 +424,7 @@ OneLib.CMDSyntax = (function (my,global) {
             }
         },
 
-        //判断本地内存是否已经有该模块了
+    //判断本地内存是否已经有该模块了
         _hasModule = function(moduleName){
             moduleName = _transAlias(moduleName);
             return _modules.hasOwnProperty(moduleName);
@@ -526,8 +526,9 @@ OneLib.CMDSyntax = (function (my,global) {
         }
         _log('>>define:: [' + moduleName + '] end(success)...');
     };
+    //2015-11-03 取消对AMD的支持标记
     //2015-09-17 增加对AMD的支持标记
-    global['define'].amd = true;
+    global['define'].amd = false;
     /**
      * 通过此API可以直接从外部获取任意一个Module(通常是调试错误的时候使用)
      * @param moduleName
