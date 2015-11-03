@@ -526,8 +526,9 @@ OneLib.CMDSyntax = (function (my,global) {
         }
         _log('>>define:: [' + moduleName + '] end(success)...');
     };
+    //2015-11-03 取消对AMD的支持标记
     //2015-09-17 增加对AMD的支持标记
-    global['define'].amd = true;
+    global['define'].amd = false;
     /**
      * 通过此API可以直接从外部获取任意一个Module(通常是调试错误的时候使用)
      * @param moduleName
