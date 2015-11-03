@@ -77,10 +77,35 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
         self.totalFrame = opts.totalFrame; //当前动画总帧数(可选)
         self.curFrame =0; //当前动画进行到第几帧
+        self._frameCount = 0;//记录总共渲染了多少帧。这个字段主要用于统计技术指标：fps,而curFrame可能会被修改(跳帧)
         self.fps = 0;//帧率 frame per second
 
         self.status =STATUS.STOP
 
+        self.speedMultiple = 1;//默认是1倍速进行 (暂时没用到,mileStone 1.1中使用)
+
+    }
+
+    /**
+     * todo：mileStone 1.1
+     * 修改速度。
+     * 大于0相当于提速，小于0相当于减速
+     * @param multiple：相对于原速度的倍数，值在0~无穷之间。比如0.5代表速度减为原来的50%
+     * @returns {Animation}
+     */
+    Animation.prototype.changeSpeed = function(multiple){
+        this.speedMultiple = multiple || 1;
+        return this;
+    }
+    /**
+     * todo：mileStone 1.1
+     * 修改动画当前位置(实现直接跳至：“过去/未来”的“某一帧/某一动画时刻”)
+     * @param durationOrCurFrame:该值根据动画的模式，代表不同含义。如果动画设置了duration,则这里应该传动画时间的ms.否则传帧数
+     * @returns {Animation}
+     */
+    Animation.prototype.changeProgress = function(durationOrCurFrame){
+
+        return this;
     }
 
     /**
@@ -94,7 +119,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         var self = this;//save the this ref
 
         //保留2位小数
-        fps = fps.toFixed(2);
+        fps = fps.toFixed(1);
 
         if(fps != self.fps){
             self.emit("fpsChange",self.fps,fps);//emit old and new fps
@@ -112,16 +137,20 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         var self = this;//save the this ref
 
         self.curFrame++;//累加一帧
+        self._frameCount++;//累加一帧
         var timePassed = new Date - self.startTime - self.totalPaused
 
-        self.setFPS(self.curFrame / (timePassed/1000));
+        self.setFPS(self._frameCount / (timePassed/1000));
 
         var progress ;
         if(self.duration){
             progress = timePassed / self.duration
         }else if(self.totalFrame){
             progress = self.curFrame/ self.totalFrame
+        }else{
+            throw new Error("duration or totalFrame must be set!")
         }
+
 
         if (progress > 1) progress = 1
 
@@ -180,7 +209,8 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
         self.startTime= self.endTime = self.lastPausedTime=undefined;
         self.totalPaused = 0;
-        self.curFrame =  0;
+        self.curFrame =self._frameCount =  0;
+        self.setFPS(0);
         self.status = STATUS.STOP;
         if(self.id){
             clearInterval(self.id);
@@ -201,7 +231,8 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
         //开始新的动画周期
         self.startTime = new Date();
-        self.curFrame = 0;
+        self.curFrame =self._frameCount = 0;
+        self.setFPS(0);
         self.status = STATUS.RUNNING;
         self.id = setInterval(self._activateframe.bind(self), self.delay || DEFAULT_FRAME_SPAN)
         self.emit("start");

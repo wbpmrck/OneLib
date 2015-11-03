@@ -8,6 +8,9 @@
     <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.stop();">stop</button>
     <button onclick="javascript:OneLib.CMDSyntax.require('animationEvents').exports.restart();">restart</button>
 
-    <ul id="c_animationEvents" data-bind="foreach:events">
-        <li data-bind="text:name+':'+param"></li>
-    </ul>
+    <div id="c_animationEvents">
+        Current FPS is:<span id="fps" data-bind="text:fps"></span>
+        <ul data-bind="foreach:events">
+            <li data-bind="text:name+':'+param"></li>
+        </ul>
+    </div>
