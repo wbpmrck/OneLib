@@ -53,6 +53,7 @@ define('example.builtInDeltaAll', function (require, exports, module) {
             getDelta("linear"),
             getDelta("quad2"),
             getDelta("quad5"),
+            getDelta("sin"),
             getDelta("circle"),
             getDelta("bow"),
             getDelta("bounce"),

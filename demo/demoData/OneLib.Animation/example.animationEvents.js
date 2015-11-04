@@ -28,8 +28,8 @@ define('animationEvents', function (require, exports, module) {
             var to = 500;
             $("#block2").css("left",to*delta + "px")
         },
-        delay:50,//20 fps to see event clearly
-        totalFrame:100
+        delay:20,//50 fps
+        totalFrame:300
     });
 
     //订阅所有事件，并打印出来

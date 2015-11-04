@@ -10,7 +10,7 @@ define('controlAnimation', function (require, exports, module) {
             var to = 500;
             $("#block").css("left",to*delta + "px")
         },
-        delay:40//25 fps
+        delay:20//50 fps
     })
 
     exports.play = function () {

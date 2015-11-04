@@ -314,6 +314,10 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         quad5:function (progress) {
             return Math.pow(progress, 5)
         },
+        sin:function(progress) {
+            return -Math.cos(progress * (Math.PI/2)) + 1;
+        },
+
         circle:function (progress) {
             return 1 - Math.sin(Math.acos(progress))
         },
