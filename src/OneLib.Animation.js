@@ -259,17 +259,46 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
 
 //这个函数负责根据delta函数,生成对应于delta的easOut函数
     function _makeEaseOut(delta) {
-        return function(progress) {
-            return 1 - delta(1 - progress)
+        //如果函数只接收一个参数(只能是progress)
+        if(delta&&delta.length<=1){
+            return function(progress) {
+                return 1 - delta(1 - progress)
+            }
+        }else{
+            //如果接受多个参数，需要对额外参数进行代理
+            return function(){
+                var args = Array.prototype.slice.call(arguments);
+                //修改progress(默认最后一个参数是progress参数)
+                args[args.length-1] = 1-args[args.length-1];
+                return 1-delta.apply(this,args);
+            }
         }
     }
 //这个函数负责根据delta函数,生成对应于delta的easInOut函数
     function _makeEaseInOut(delta) {
-        return function(progress) {
-            if (progress < .5)
-                return delta(2*progress) / 2
-            else
-                return (2 - delta(2*(1-progress))) / 2
+        //如果函数只接收一个参数(只能是progress)
+        if(delta&&delta.length<=1) {
+            return function (progress) {
+                if (progress < .5)
+                    return delta(2 * progress) / 2
+                else
+                    return (2 - delta(2 * (1 - progress))) / 2
+            }
+        }else{
+            //如果接受多个参数，需要对额外参数进行代理
+            return function(){
+                var args = Array.prototype.slice.call(arguments);
+                //progress(默认最后一个参数是progress参数)
+                var progress = args[args.length-1];
+
+                if (progress < .5){
+                    args[args.length-1] = progress*2;
+                    return delta.apply(this,args) / 2;
+                }else{
+                    args[args.length-1] = 2 * (1 -progress);
+                    return (2 - delta.apply(this,args)) / 2
+                }
+            }
         }
     }
 
@@ -288,7 +317,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
         circle:function (progress) {
             return 1 - Math.sin(Math.acos(progress))
         },
-        bow:function (progress, x) {
+        bow:function (x,progress) {
             return Math.pow(progress, 2) * ((x + 1) * progress - x)
         },
         bounce:function(progress) {
@@ -298,7 +327,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
                 }
             }
         },
-        elastic:function(progress, x) {
+        elastic:function(x,progress) {
             return Math.pow(2, 10 * (progress-1)) * Math.cos(20*Math.PI*x/3*progress)
         }
     }
@@ -325,6 +354,7 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
      */
     exports.builtInDelta = function (deltaName,paramArr,mode) {
         var _d = _builtInDeltas[deltaName];
+        var _rawD=_d;
 
         if(_d){
             if(mode=='easeOut'){
@@ -333,13 +363,26 @@ define('OneLib.Animation', ["OneLib.EventEmitter"], function (require, exports, 
                 _d = _makeEaseInOut(_d);
             }
             //如果外部对delta函数有额外的参数，则对函数进行代理
-            if(paramArr&&paramArr.length>0){
-                var _old = _d;
-                _d = function (progress) {
-                    var copyParam = paramArr.slice();
-                    copyParam.unshift(progress);
-                    _old.apply(this,copyParam);
+            //2015-11-04：增加判断，如果delta函数本身定义了超过1个的参数，才允许注入参数，并且最多只能注入length-1个
+            if(paramArr&&paramArr.length>0&&_rawD.length>1)
+            {
+
+                //2015-11-04：判断注入个数不能超过length-1(因为要给progress留一个位置)
+                if (paramArr.length > _rawD.length - 1) {
+                    paramArr.splice(paramArr.length - (paramArr.length - _rawD.length + 1))
                 }
+
+                //如果截取过后还有参数要传的话，则封装
+                if (paramArr.length > 0) {
+                    paramArr.unshift(this);
+                    _d = _d.bind.apply(_d, paramArr);
+                }
+                //var _old = _d;
+                //_d = function (progress) {
+                //    var copyParam = paramArr.slice();
+                //    copyParam.unshift(progress);
+                //    _old.apply(this,copyParam);
+                //}
             }
             return _d;
         }

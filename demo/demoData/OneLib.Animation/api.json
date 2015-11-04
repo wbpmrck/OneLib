@@ -39,7 +39,7 @@
                 "desc":"创建一个动画对象.\r\n该函数返回核心的<bold>动画对象</bold>，后续对动画的操作都要使用该对象的api",
                 "params":[
                     {"name":"duration","type":"int","desc":"动画持续的时长(单位ms)。\r\n注意，如果设置此参数，则动画的progress会按照持续时长计算(也即如果cpu耗尽导致下一帧来的很晚，则progress可能会跳帧)"},
-                    {"name":"delta","type":"Function(progress) => int","desc":"delta 函数，该函数接受progress(0～1的float,表示当前动画进度),返回一个计算后的progress(delta).\r\n这个delta会被传递给step函数做具体的动画操作.\r\n后面有专门章节介绍delta函数曲线和内置函数，请仔细查阅"},
+                    {"name":"delta","type":"Function(progress) => int","desc":"delta 函数，该函数接受progress(0～1的float,表示当前动画进度),返回一个计算后的progress(delta).\r\n这个delta会被传递给step函数做具体的动画操作.\r\n<span class='warn-notice'>后面有专门章节:<a href='#demo_builtInDelta'>builtInDelta</a>介绍delta函数曲线和内置函数，请仔细查阅</span>"},
                     {"name":"step","type":"Function(deltaProgress)","desc":"在每一个动画帧来到时，进行具体动画操作的函数.\r\n本框架并不对动画对象进行操作，只是提供动画的基本控制框架和常用动画函数，外部可以自己定义动画的行为"},
                     {"name":"delay","type":"int","desc":"(可选)\r\n动画2帧之间的间隔时间(单位ms).\r\n默认20ms"},
                     {"name":"totalFrame","type":"int","desc":"(可选)\r\n动画总共持续的帧数.\r\n如果没有设置duration，则必须设置此值。框架会按照“已绘制帧/总帧”的算法来得到progress.\r\n使用duration还是totalFrame来控制动画，取决于你希望得到一个时长可控(会跳帧)的动画，还是一个规规矩矩走完n帧的动画"}
@@ -91,13 +91,13 @@
                 ]
             },
             {
-                "name":"(*)builtInDelta",
+                "name":"builtInDelta",
                 "type":"Function",
                 "desc":"获取内置的delta函数",
                 "returned":"function(progress) => int ",
                 "params":[
                     {"name":"deltaName","type":"String","desc":"内置的delta函数名,具体每种函数，以及取值曲线参见下面的图例"},
-                    {"name":"paramArr","type":"Array","desc":"要传递给delta函数的额外的参数"},
+                    {"name":"paramArr","type":"Array","desc":"要传递给delta函数的额外的参数\r\n<span class='warn-notice'>注意，额外参数会依次从左到右传递给delta函数。所以务必确保delta函数的额外参数声明在最前面</span>"},
                     {"name":"[mode]","type":"String","desc":"(可选)\r\n选择函数的模式：\r\n<ul><li>easeIn(default):表示渐入效果，也即delta(progress)=>delta中，delta与progress的取值关系为正向变化</li><li>easeOut:渐出效果，也即反向变化</li><li>easeInOut:本框架内置的渐入+渐出效果算法，在progress<0.5之前使用easeIn,之后使用easeOut</li></ul>"}
                 ],
                 "demoCodeRefs":[
@@ -112,7 +112,7 @@
                         ]
                     },
                     {
-                        "name":"下面是各个内置函数以及其easeOut,easeInOut模式的曲线图，你可以自己选取需要的函数",
+                        "name":"下面是各个内置函数以及其easeIn(default),easeOut,easeInOut模式的曲线图，你可以自己选取需要的函数",
                         "desc":"",
                         "type":"real",
                         "codeUrl":"../demoData/OneLib.Animation/example.builtInDeltaAll.html",

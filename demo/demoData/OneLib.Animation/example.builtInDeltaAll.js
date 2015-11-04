@@ -63,7 +63,7 @@ define('example.builtInDeltaAll', function (require, exports, module) {
         self.modes = ko.observableArray(["easeIn","easeOut","easeInOut"]);
         self.selectedMode = ko.observable("easeIn");//选择的mode
 
-        self.params = ko.observable("");//额外的参数(用,隔开多个参数。比如1,2,3)
+        self.params = ko.observable(1.5);//额外的参数(用,隔开多个参数。比如1,2,3)
 
         self.finalFnString = ko.observable('');//最终正在绘制的图形函数的toString
 
@@ -105,7 +105,7 @@ define('example.builtInDeltaAll', function (require, exports, module) {
         // zero point is 20px from left, middle vertically
         // max is distance to 1 from zero.
         var zeroX = 20, zeroY = self.canvasHeight/2
-        var max = self.canvasWidth-zeroX-7
+        var max = self.canvasWidth/2-zeroX
 
         ctx.lineWidth   = 1
 
@@ -135,10 +135,11 @@ define('example.builtInDeltaAll', function (require, exports, module) {
 
         // arrow up
         pathArrow.moveTo(zeroX, zeroY)
-        pathArrow.lineTo(zeroX, zeroY-max)
-        pathArrow.lineTo(zeroX+5, zeroY-max+5)
-        pathArrow.moveTo(zeroX, zeroY-max)
-        pathArrow.lineTo(zeroX-5, zeroY-max+5)
+        //pathArrow.lineTo(zeroX, zeroY-max)
+        pathArrow.lineTo(zeroX, zeroX)
+        pathArrow.lineTo(zeroX+5, zeroX+5)
+        pathArrow.moveTo(zeroX, zeroX)
+        pathArrow.lineTo(zeroX-5, zeroX+5)
 
         // arrow down
         pathArrow.moveTo(zeroX, zeroY)
@@ -164,17 +165,21 @@ define('example.builtInDeltaAll', function (require, exports, module) {
         var ctx = self.paper;
 
         var zeroX = 20, zeroY = self.canvasHeight/2
-        var max = self.canvasWidth-zeroX-7
+        var max = self.canvasWidth/2-zeroX
+        //
+        //var zeroX = 20, zeroY = self.canvasHeight/2
+        //var max = self.canvasWidth-zeroX-7
 
 
         var style={
-            'stroke-width' :2
+            'stroke-width' :2,
+            'stroke' :'red'
         };
 
         var pth = new Path();
         pth.moveTo(zeroX,zeroY);
-        var  f= Animation.builtInDelta(self.selectedDelta().name,self.params(),self.selectedMode());
-        self.finalFnString(f.toString());
+        var  f= Animation.builtInDelta(self.selectedDelta().name,[parseFloat(self.params())],self.selectedMode());
+        self.finalFnString(self.selectedDelta().fn.toString());
         //console.log("height=%d, width=%d", height, width)
         for(var x=0; x<=max; x++) {
             var y = f(x/max)*max
