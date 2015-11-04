@@ -7,14 +7,17 @@
 
 ###Doing
 <ul>  
-  <li>解决builtInDelta传递额外参数不正确的问题:elastic</li>
-  <li>在Animation的Demo里，添加一个板块，是一个 delta 函数编辑和预览器，可以实时编辑和预览函数产生的增长曲线</li>
+  <li>在Animation的Demo里，添加一个板块，允许用户自己进行函数编辑，和预览函数产生的增长曲线</li>
   <li>添加一个模块叫做SVG,并且新增对Path的构造util:能够方便的构造类似：M10,3L9,3这样的pathString</li>
+  <li>新增一个OneLib.JsAnalyze模块，专门提供对js语法本身的分析功能，比如，获得函数定义的参数列表，参数个数等</li>
   <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
 </ul>
 
 ###Done
 <ul>
+  <li>解决easeOut和easeInOut模式下，对多参数函数代理错误的情况c</li>
+  <li>解决builtInDelta传递额外参数不正确的问题:elastic</li>
+  <li>在Animation的Demo里，添加一个板块，是一个 delta 函数预览器，可以选择和预览内置函数产生的增长曲线</li>
   <li>给Animation添加测试用例</li>
     <li>给Animation添加curFrame,totalFrame属性，表示当前动画运行到第几帧，并且给delta函数传递progress的时候，优先以duration计算，其次以totalFrame计算</li>
     <li>添加 Animation 支持事件抛出：start->pause->resume->finish->stop</li>
