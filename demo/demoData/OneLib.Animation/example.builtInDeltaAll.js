@@ -4,49 +4,51 @@ define('example.builtInDeltaAll', function (require, exports, module) {
         Animation = require("OneLib.Animation"),
         raphael = require("raphael");
 
-    function getDelta(name,params,mode){
+    function getDelta(name, params, mode) {
         return {
-            name:name,
-            fn:Animation.builtInDelta(name,params,mode)
+            name: name,
+            fn: Animation.builtInDelta(name, params, mode)
         }
     }
 
-    function Point(t,x,y){
+    function Point(t, x, y) {
         this.t = t;
         this.x = x;
         this.y = y;
     }
+
     Point.prototype.toString = function () {
-        return [this.t,this.x+','+this.y].join('');
+        return [this.t, this.x + ',' + this.y].join('');
     }
     //一个简易的SVG path string生成类
-    function Path(){
+    function Path() {
         var self = this;//save the this ref
 
-        self.points =[];
+        self.points = [];
     }
+
     Path.prototype.moveTo = function (x, y) {
         var self = this;//save the this ref
-        self.points.push(new Point('M',x,y));
+        self.points.push(new Point('M', x, y));
         return self;
     }
     Path.prototype.lineTo = function (x, y) {
         var self = this;//save the this ref
-        self.points.push(new Point('L',x,y));
+        self.points.push(new Point('L', x, y));
         return self;
     }
     Path.prototype.resolve = function () {
         var self = this;//save the this ref
 
-        var str =[];
-        for(var i=0,j=self.points.length;i<j;i++){
+        var str = [];
+        for (var i = 0, j = self.points.length; i < j; i++) {
             var p = self.points[i];
             str.push(p.toString());
         }
         return str.join('');
     }
 
-    function ViewModel(){
+    function ViewModel() {
         var self = this;
 
         self.builtInDeltas = ko.observableArray([
@@ -61,31 +63,55 @@ define('example.builtInDeltaAll', function (require, exports, module) {
         ]);
         self.selectedDelta = ko.observable();//选择的delta函数
 
-        self.modes = ko.observableArray(["easeIn","easeOut","easeInOut"]);
+        self.modes = ko.observableArray(["easeIn", "easeOut", "easeInOut"]);
         self.selectedMode = ko.observable("easeIn");//选择的mode
 
         self.params = ko.observable(1.5);//额外的参数(用,隔开多个参数。比如1,2,3)
 
-        self.finalFnString = ko.observable('');//最终正在绘制的图形函数的toString
+        self.finalFn = ko.observable();//最终正在绘制的图形函数
+        self.customFnText = ko.observable('function (progress){ \r\n' +
+                '//progress 0~1,return y\r\n'+
+            'return progress \r\n' +
+            '}');//自定义的函数文本
+        self.deltaString = ko.observable('');//最终正在绘制的图形函数的toString
 
         self.paper = undefined;
         self.canvasWidth = 320;
         self.canvasHeight = 320;
 
         self.selectedDelta.subscribe(function (newVal) {
-           self.startPaint();
+            self.deltaString(newVal.fn.toString());
+            self.getFinalFn();
+            self.startPaint();
         });
         self.selectedMode.subscribe(function (newVal) {
-           self.startPaint();
+            self.getFinalFn();
+            self.startPaint();
         });
         self.params.subscribe(function (newVal) {
-           self.startPaint();
+            self.getFinalFn();
+            self.startPaint();
         });
     }
 
-    /**
-     * 让viewModel回到初始化状态
-     */
+    ViewModel.prototype.getFinalFn = function (){
+        var self = this;//save the this ref
+        self.finalFn(Animation.builtInDelta(self.selectedDelta().name,[parseFloat(self.params())],self.selectedMode()));
+    }
+    ViewModel.prototype.viewCustomFn = function (){
+        var self = this;//save the this ref
+        //把自定函数文本转化为fn
+        var fnText = self.customFnText();
+        fnText = fnText.replace("function",'function _custom_');
+        eval(fnText);
+        if(_custom_.length>1){
+            alert('自定义函数只能接受一个参数:progress!')
+        }else{
+            self.finalFn(_custom_);
+            self.startPaint();
+        }
+    }
+
     ViewModel.prototype.init = function(){
         var self = this;//save the this ref
         if(self.paper){
@@ -94,6 +120,8 @@ define('example.builtInDeltaAll', function (require, exports, module) {
             self.paper = raphael(document.getElementById("canvas"), self.canvasWidth, self.canvasHeight);
         }
     };
+
+
     /**
      * 准备好坐标系
      */
@@ -179,8 +207,9 @@ define('example.builtInDeltaAll', function (require, exports, module) {
 
         var pth = new Path();
         pth.moveTo(zeroX,zeroY);
-        var  f= Animation.builtInDelta(self.selectedDelta().name,[parseFloat(self.params())],self.selectedMode());
-        self.finalFnString(self.selectedDelta().fn.toString());
+        //var  f= Animation.builtInDelta(self.selectedDelta().name,[parseFloat(self.params())],self.selectedMode());
+        var  f= self.finalFn();
+        //self.deltaString(self.selectedDelta().fn.toString());
         //console.log("height=%d, width=%d", height, width)
         for(var x=0; x<=max; x++) {
             var y = f(x/max)*max

@@ -108,3 +108,6 @@ a:focus {
     font-size: 10px;
     white-space: nowrap;
 }
+.clear{
+    clear: both;
+}

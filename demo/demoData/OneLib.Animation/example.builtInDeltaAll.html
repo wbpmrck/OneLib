@@ -1,13 +1,23 @@
 <div id="builtInDeltaAll">
     <!--绘图区域-->
-    <div id="canvas">
+    <div id="canvas" style="float: left;">
 
     </div>
     <!--操作区域-->
-    delta 函数名:<select data-bind="options: builtInDeltas,
+    delta 函数名:<select style="width: 120px;" data-bind="options: builtInDeltas,
                        optionsText: 'name',
-                       value: selectedDelta"></select><br/>
-    mode:<select data-bind="options: modes,value: selectedMode"></select><br/>
-    额外的参数:<input type="text" data-bind="value:params" style="width: 200px;"/> <br/>
-    函数体:<div data-bind="text:finalFnString"></div>
+                       value: selectedDelta"></select>
+    mode:<select data-bind="options: modes,value: selectedMode" style="width: 100px;"></select>
+    附加参数:<input type="text" data-bind="value:params" style="width: 30px;"/> <br/>
+    函数体:<div data-bind="text:deltaString"></div><br/>
+    <hr class="groupSpliter"/>
+    自定义函数:
+    <textarea name="" id="customFn" cols="30" rows="10" data-bind="value:customFnText">
+        function(progress){
+            return progress
+        }
+    </textarea>
+    <button id="viewCustom" data-bind="click:viewCustomFn">查看</button>
+    <div class="clear">
+    </div>
 </div>
