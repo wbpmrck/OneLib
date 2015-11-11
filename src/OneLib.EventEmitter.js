@@ -154,6 +154,7 @@ OneLib.EventEmitter = (function (my) {
                             _iteratorArgs = _slice.call(_args);
                         } //if not modify params,use the origin params
 
+
                         //add next arg for pipe to next
                         _iteratorArgs.push(_next);
 
@@ -185,6 +186,10 @@ OneLib.EventEmitter = (function (my) {
                     //获取最后一个处理函数的返回,如果没有，还用原始的参数
                     if(_iteratorArgs.length===0){
                         _iteratorArgs =_originArgs
+                    }
+                    else{
+                        //如果内部返回的参数，那么要补上evtName
+                        _iteratorArgs.unshift(evtName);
                     }
                     _iteratorArgs.push(null);//对于*事件处理，over回调不需要了
                     //无论什么事件都触发 on("*")

@@ -7,7 +7,7 @@ describe('EventEmitter ', function () {
         //run after each test
     });
 
-    xit('should can use "mixin" to mix the prototype to other class', function () {
+    it('should can use "mixin" to mix the prototype to other class', function () {
         function Dog(){
 
         }
@@ -23,7 +23,7 @@ describe('EventEmitter ', function () {
         expect(Dog.prototype.pipe).toBeDefined();
 
     });
-    xit('should can use "emit" to fire events,and use "on" to set callback', function () {
+    it('should can use "emit" to fire events,and use "on" to set callback', function () {
         //do some assert
 
             function Dog(){
@@ -46,7 +46,7 @@ describe('EventEmitter ', function () {
             expect(typeof slotID).toEqual("number");
 
     });
-    xit('should can use "mixin" in the constructor', function () {
+    it('should can use "mixin" in the constructor', function () {
 
         var called = false,slotID;
         function Dog(){
@@ -67,7 +67,7 @@ describe('EventEmitter ', function () {
         expect(typeof slotID).toEqual("number");
 
     });
-    xit('should can use "off" to delete callback', function () {
+    it('should can use "off" to delete callback', function () {
         //do some assert
 
             function Dog(){
@@ -91,7 +91,7 @@ describe('EventEmitter ', function () {
             expect(called).toEqual(false);
 
     });
-    xit('should can use slotID to "off" callback', function () {
+    it('should can use slotID to "off" callback', function () {
 
             function Dog(){
 
@@ -113,7 +113,7 @@ describe('EventEmitter ', function () {
             aDog.shout();
             expect(called).toEqual(false);
     });
-    xit('should can "off" all callback at one time', function () {
+    it('should can "off" all callback at one time', function () {
 
             function Dog(){
 
@@ -147,7 +147,7 @@ describe('EventEmitter ', function () {
 
     });
 
-    xit('should can use "once" to receive only one callback', function () {
+    it('should can use "once" to receive only one callback', function () {
         function Dog(){
         }
         Dog.prototype.shout = function(){
@@ -170,7 +170,7 @@ describe('EventEmitter ', function () {
 
     });
 
-    xit('should can use "on+ttl" to set callback times', function () {
+    it('should can use "on+ttl" to set callback times', function () {
         function Dog(){
         }
         Dog.prototype.shout = function(){
@@ -200,7 +200,7 @@ describe('EventEmitter ', function () {
     });
 
 
-    xit('should work with forloop+func scenario', function () {
+    it('should work with forloop+func scenario', function () {
         function Dog(){
         }
         Dog.prototype.shout = function(){
@@ -231,7 +231,7 @@ describe('EventEmitter ', function () {
     });
 
 
-    xit('should work with forloop+func scenario[2]', function () {
+    it('should work with forloop+func scenario[2]', function () {
         function Dog(){
         }
         Dog.prototype.shout = function(){
@@ -259,7 +259,7 @@ describe('EventEmitter ', function () {
         expect(count).toEqual(6);
     });
 
-    xit('should can use * to subscribe all events', function () {
+    it('should can use * to subscribe all events', function () {
         function Dog(){
             OneLib.EventEmitter.mixin(Dog);
         }
