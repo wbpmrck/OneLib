@@ -7,14 +7,13 @@
 
 ###Doing
 <ul>  
-  <li>在Animation的Demo里，添加一个板块，允许用户自己进行函数编辑，和预览函数产生的增长曲线</li>
+  <li>增强EventEmitter,在emit事件的时候，提供一种方法，让事件的处理函数可以用类似管道的方式进行，并且先执行的处理函数有办法控制事件是否继续传递</li>
   <li>添加一个模块叫做SVG,并且新增对Path的构造util:能够方便的构造类似：M10,3L9,3这样的pathString</li>
-  <li>新增一个OneLib.JsAnalyze模块，专门提供对js语法本身的分析功能，比如，获得函数定义的参数列表，参数个数等</li>
-  <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
 </ul>
 
 ###Done
 <ul>
+  <li>在Animation的Demo里，添加一个板块，允许用户自己进行函数编辑，和预览函数产生的增长曲线</li>
   <li>解决easeOut和easeInOut模式下，对多参数函数代理错误的情况c</li>
   <li>解决builtInDelta传递额外参数不正确的问题:elastic</li>
   <li>在Animation的Demo里，添加一个板块，是一个 delta 函数预览器，可以选择和预览内置函数产生的增长曲线</li>
@@ -82,6 +81,8 @@
 ###Todos
 <ul>
   
+  <li>新增一个OneLib.JsAnalyze模块，专门提供对js语法本身的分析功能，比如，获得函数定义的参数列表，参数个数等</li>
+  <li>考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义</li>
   <li>添加动画的快近、快退、设置倍速（1/2X,2X,4X）功能
       <ul>  
         <li>多倍速：在不改变帧速的情况下，通过多次调用delta函数来实现“加速”变化效果</li>
@@ -98,7 +99,6 @@
   <li>补充Location模块的Demo</li>
  <li>集成fis环境，发布的文件进行压缩.</li>
   <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
-  <li>集成jquery.coffee.</li>
   <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>
  <li>url、queryString的操作类.</li>
  <li>常用设计模式模块封装.</li>
