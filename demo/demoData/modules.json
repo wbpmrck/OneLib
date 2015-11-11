@@ -11,7 +11,7 @@
     },
     {
         "moduleName":"OneLib.EventEmitter",
-        "desc":"让类具备事件的订阅、发布能力",
+        "desc":"让类具备事件的订阅、发布能力。除了普通的事件处理模式，还支持管道模式的事件处理方式。",
         "linkEnable":true
     },
     {

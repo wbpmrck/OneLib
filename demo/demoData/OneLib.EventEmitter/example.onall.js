@@ -6,7 +6,7 @@ define('testEmitterOnall', ['OneLib.EventEmitter'], function (require, exports, 
         this.name = name;
     }
     Dog.prototype.shout = function(text){
-        this.emit('shouted','said:'+text)
+        this.emit('shouted',' said:'+text)
     }
     Dog.prototype.walk = function(distance){
         this.emit('walk',' has walked:'+distance +' km!')
@@ -20,7 +20,7 @@ define('testEmitterOnall', ['OneLib.EventEmitter'], function (require, exports, 
     aDog.on('*',function(evtName,param){
         //处理事件
         alert('event:'+evtName+' Captured!')
-        alert('dog:'+name+param)
+        alert('dog:'+this.name+param)
     })
 
     exports.runTest = function(){

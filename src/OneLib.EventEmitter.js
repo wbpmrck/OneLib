@@ -9,6 +9,7 @@
  * PPS:现在的emit都是同步的，以后会不会有异步的notify,也可以考虑添加(使用setTimeout)
  * @Change History:
  *
+ * kaicui 2015-11-11 增加pipe特性
  * kaicui 2015-09-15 10:05  增加功能
  *  1、增加once功能，可以定义只触发一次的事件(使用ttl实现)
  *  2、去除CMD的包裹，event机制作为做基础的扩展，很可能被CMD模块本身所依赖
@@ -22,8 +23,10 @@ var global = global||window;
 var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={})));
 
 OneLib.EventEmitter = (function (my) {
-    var slotSeed=1;
-    var ALL_TOKEN='*';
+    var slotSeed= 1,
+        _slice = Array.prototype.slice,
+        ALL_TOKEN='*';
+
 
     function EventEmitter(){};
     EventEmitter.prototype	= {
@@ -74,7 +77,7 @@ OneLib.EventEmitter = (function (my) {
                     var _item = this._events[evtName][i];
                     if(_item.toString() === cb.toString()){
                         //本来想用函数上保存的slotId来标识，但是很可能函数是反复创建的函数对象
-                    //if(_item._slotId === cb._slotId){
+                        //if(_item._slotId === cb._slotId){
                         this._events[evtName].splice(i, 1);
                         break;
                     }
@@ -95,9 +98,10 @@ OneLib.EventEmitter = (function (my) {
                 cut=false;//由于是正向遍历，且遍历过程中可能删除回调数组元素，所以需要标记是否删除，来控制for循环
 
             function _dispatch(subEvtName){
+                var _args = _slice.call(arguments, 1);
                 for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
                     cut = false;
-                    (cb=this._events[subEvtName][i])&&(cb.apply(this, Array.prototype.slice.call(arguments, 1)));
+                    (cb=this._events[subEvtName][i])&&(cb.apply(this, _args));
                     //do with TTL
                     cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
                 }
@@ -105,27 +109,101 @@ OneLib.EventEmitter = (function (my) {
 
             //如果 要发射的事件名称被订阅过，并且该事件并非“*”事件，则开始发射（避免 on("*")触发2次）
             if( evtName in this._events && evtName !==ALL_TOKEN){
-                _dispatch.apply(this,Array.prototype.slice.call(arguments));
+                _dispatch.apply(this,_slice.call(arguments));
             }
             //无论什么事件都触发 on("*")
             if( ALL_TOKEN in this._events ){
-                _dispatch.apply(this,[ALL_TOKEN].concat(Array.prototype.slice.call(arguments)));
+                _dispatch.apply(this,[ALL_TOKEN].concat(_slice.call(arguments)));
+            }
+            return this;
+        },
+        /**
+         * 以管道的方式派发事件+参数
+         * 这种模式下，事件处理函数会多一个末位参数 next,可以通过调用next通知下一个注册的处理函数开始执行
+         * next函数如果带参数，则下一个处理函数收到的是修改后的参数。
+         * next函数如果不带参数，则下一个处理函数收到的是pipe发出的初始参数
+         * pipe模式也支持ttl功能，中间某一个处理函数一旦达到ttl，就会被从调用链条里移除
+         * @param evtName：事件名
+         * @param args:可变的参数比如:emit("foo",1,2,3),那么on("foo",function(a,b,c){这里面a=1,b=2,c=3})
+         */
+        pipe	: function(evtName /* , args... */){
+            var self = this;//save the this ref
+
+            self._events = self._events || {};
+            var cur,
+                cut=false;//由于是正向遍历，且遍历过程中可能删除回调数组元素，所以需要标记是否删除，来控制for循环
+
+            function _dispatch(subEvtName){
+                var _args = _slice.call(arguments, 1,arguments.length-1),
+                    over = arguments[arguments.length-1],
+                    _iteratorArgs;
+                var i= 0,j=self._events.hasOwnProperty(subEvtName)?self._events[subEvtName].length:0;
+
+                function _next(){
+                    cur && Object.prototype.hasOwnProperty.call(cur,"_ttl") && (--cur._ttl<=0) && (cut = true) &&  self._events[subEvtName].splice(i, 1);
+                    (cut&&j--) || i++
+                    _iterator.apply(self,_slice.call(arguments));
+                }
+                function _iterator(){
+                    _iteratorArgs = _slice.call(arguments);
+                    cut = false;
+                    if(i < j){
+                        //todo:pipe消息
+                        _cur = self._events[subEvtName][i];
+                        if(_iteratorArgs.length===0){
+                            _iteratorArgs = _slice.call(_args);
+                        } //if not modify params,use the origin params
+
+
+                        //add next arg for pipe to next
+                        _iteratorArgs.push(_next);
+
+                        //add evtName param to * handler
+                        //subEvtName === ALL_TOKEN && _iteratorArgs.unshift(ALL_TOKEN)
+                        _cur.apply(self,_iteratorArgs);
+                    }else{
+                        //对evt的调用结束
+                        over && over(_iteratorArgs);
+                    }
+                }
+                _iterator();//start the iterator calling.
+
+                //for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
+                //    cut = false;
+                //    (cb=this._events[subEvtName][i])&&(cb.apply(this, _args));
+                //    //do with TTL
+                //    cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
+                //}
             }
 
-            //for(var i = 0, j=this._events[evtName].length; i<j;(cut&&j--) || i++){
-            //    cut = false;
-            //    (cb=this._events[evtName][i])&&(cb.apply(this, Array.prototype.slice.call(arguments, 1)));
-            //    //do with TTL
-            //    cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[evtName].splice(i, 1);
-            //}
-            return this;
+            var _originArgs=  evtName === ALL_TOKEN?[ALL_TOKEN].concat(_slice.call(arguments)):_slice.call(arguments);
+
+            //如果 要发射的事件名称被订阅过，并且该事件并非“*”事件，则开始发射（避免 on("*")触发2次）
+            //if( evtName in self._events && evtName !==ALL_TOKEN){
+            _dispatch.apply(self,_originArgs.concat([function (_iteratorArgs) {
+                //如果pipe("*"),则前面已经处理过了
+                if(evtName !==ALL_TOKEN){
+                    //获取最后一个处理函数的返回,如果没有，还用原始的参数
+                    if(_iteratorArgs.length===0){
+                        _iteratorArgs =_originArgs
+                    }
+                    else{
+                        //如果内部返回的参数，那么要补上evtName
+                        _iteratorArgs.unshift(evtName);
+                    }
+                    _iteratorArgs.push(null);//对于*事件处理，over回调不需要了
+                    //无论什么事件都触发 on("*")
+                    if( ALL_TOKEN in self._events ){
+                        _dispatch.apply(self,[ALL_TOKEN].concat(_iteratorArgs));
+                    }
+                }
+            }]));
+            return self;
         }
     };
-
-
     my.EventEmitter	= EventEmitter;
     my.mixin	= function(destObject){
-        var props	= ['on','once', 'off', 'emit'];
+        var props	= ['on','once', 'off', 'emit','pipe'];
         for(var i = 0; i < props.length; i ++){
             if( typeof destObject === 'function' ){
                 destObject.prototype[props[i]]	= EventEmitter.prototype[props[i]];
@@ -136,8 +214,3 @@ OneLib.EventEmitter = (function (my) {
     }
     return my;
 }(OneLib.EventEmitter || {}));
-//define('OneLib.EventEmitter', [], function (require, exports, module) {
-
-
-
-//});

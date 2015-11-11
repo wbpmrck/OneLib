@@ -31,7 +31,7 @@
             ]
         },
         {
-            "name":"事件的pub/sub",
+            "name":"注入event能力",
             "apis":[
                 {
                     "name":"mixin",
@@ -65,29 +65,12 @@
                             ]
                         }
                     ]
-                },
-                {
-                    "name":"emit",
-                    "type":"Function",
-                    "desc":"触发事件.当需要向外部抛出一个事件的时候，使用该方法。该方法返回调用对象自身。",
-                    "returned":"this",
-                    "params":[
-                        {"name":"eventName","type":"String","desc":"要触发的事件名称"},
-                        {"name":"[arg1,arg2...]","type":"args","desc":"传递给事件处理函数的参数"}
-                    ],
-                    "demoCodeRefs":[
-                        {
-                            "name":"emit语法示例",
-                            "desc":"",
-                            "type":"example",
-                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.js",
-                            "cssUrls":[
-                            ],
-                            "javascriptUrls":[
-                            ]
-                        }
-                    ]
-                },
+                }
+            ]
+        },
+        {
+            "name":"事件的订阅、取消订阅",
+            "apis":[
                 {
                     "name":"on",
                     "type":"Function",
@@ -182,7 +165,70 @@
             ]
         },
         {
-            "name":"on的种特殊用法",
+            "name":"事件触发、事件管道(pipe)",
+            "apis":[
+
+                {
+                    "name":"emit",
+                    "type":"Function",
+                    "desc":"触发事件.当需要向外部抛出一个事件的时候，使用该方法。该方法返回调用对象自身。",
+                    "returned":"this",
+                    "params":[
+                        {"name":"eventName","type":"String","desc":"要触发的事件名称\r\n<span class='warn-notice'>需要注意的是，如果使用emit('*',...)发射事件，则只会触发on('*')1次</span>"},
+                        {"name":"[arg1,arg2...]","type":"args","desc":"传递给事件处理函数的参数"}
+                    ],
+                    "demoCodeRefs":[
+                        {
+                            "name":"emit语法示例",
+                            "desc":"",
+                            "type":"example",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.emit.js",
+                            "cssUrls":[
+                            ],
+                            "javascriptUrls":[
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name":"pipe",
+                    "type":"Function",
+                    "desc":"功能类似emit,不过是以管道的方式触发事件.\r\n类似bash/shell的'|'操作符,当调用pipe来发射事件时，<span class='warn-notice'>使用on订阅的处理函数会多接收一个参数next(最后一个参数),处理函数通过调用next()方法，把事件处理权利交给下一个订阅者。</span>\r\n每个订阅者按照调用on的先后顺序进行调用，<span class='warn-notice'>但是如果某一个处理函数没有调用next(),则执行链条会中断</span>\r\n<span class='warn-notice'>如果希望在执行过程中修改待处理的参数(即pipe(p1,p2...)),则可以通过调用next(newP1,newP2)来实现</span>",
+                    "returned":"this",
+                    "params":[
+                        {"name":"eventName","type":"String","desc":"要触发的事件名称"},
+                        {"name":"[arg1,arg2...]","type":"args","desc":"传递给事件处理函数的参数"},
+                        {"name":"next","type":"function(...args)","desc":"执行流交给下一个订阅者开始执行\r\n往next函数中传入新的参数，可以修改执行流的参数"}
+                    ],
+                    "demoCodeRefs":[
+                        {
+                            "name":"pipe 语法示例",
+                            "desc":"",
+                            "type":"example",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.pipe.js",
+                            "cssUrls":[
+                            ],
+                            "javascriptUrls":[
+                            ]
+                        },
+                        {
+                            "name":"点击下面按钮运行示例",
+                            "desc":"",
+                            "type":"real",
+                            "codeUrl":"../demoData/OneLib.EventEmitter/example.pipe.html",
+                            "cssUrls":[
+                            ],
+                            "javascriptUrls":[
+                                "../../src/OneLib.EventEmitter.js",
+                                "../demoData/OneLib.EventEmitter/example.pipe.js"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name":"on的特殊用法",
             "apis":[
                 {
                     "name":"on('*')",
