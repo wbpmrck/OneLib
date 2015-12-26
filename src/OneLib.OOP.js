@@ -31,8 +31,8 @@ define('OneLib.OOP', [], function (require, exports, module) {
                 if(parentClass !== undefined){
                     F.prototype = parentClass.prototype;
                     realCons = function(){
-                        parentClass.call(this);//call parent to initial instance properties
-                        cons.call(this);//then call sub
+                        parentClass.apply(this,[].slice.call(arguments));//call parent to initial instance properties
+                        cons.apply(this,[].slice.call(arguments));//then call sub
                         return this;
                     }
 

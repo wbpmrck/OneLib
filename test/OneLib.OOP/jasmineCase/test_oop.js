@@ -12,8 +12,9 @@ describe('OneLib.OOP ', function () {
             var OOP = require('OneLib.OOP');
 
             var Animal = OOP.defineClass({
-                constructor:function(){
+                constructor:function(name){
                     var self = this;
+                    self.name = name;
                     self.isAnimal = true;
                 },
                 prototype:{
@@ -31,9 +32,10 @@ describe('OneLib.OOP ', function () {
             expect(aAnimal.die()).toEqual("i was dead");
 
             var Dog = OOP.defineClass({
-                constructor:function(){
+                constructor:function(name,dogType){
                     var self = this;//save the this ref
                     self.isDog = true;
+                    self.dogType = dogType;
                 },
                 prototype:{
                     makeSound : function(){
@@ -43,11 +45,15 @@ describe('OneLib.OOP ', function () {
                 supper:Animal
             })
 
-            var tom = new Dog();
+            var tom = new Dog("tom","big dog");
 
             expect(tom instanceof Dog).toBe(true);
             expect(tom.isAnimal).toBe(true);
             expect(tom.isDog).toBe(true);
+
+            expect(tom.name).toBe("tom");
+            expect(tom.dogType).toBe("big dog");
+
 
             expect(tom.makeSound).toBeDefined();
             expect(tom.makeSound()).toBe("woof!");
