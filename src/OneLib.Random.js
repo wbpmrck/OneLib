@@ -4,6 +4,11 @@
 
 define('OneLib.Random', [], function (require, exports, module) {
 
+    /**
+     * 生成一组根据weights数组指定的权重的数字
+     * @param weights，权重参数表，比如1,1.则代表生成的数字会均匀分散在[0,0.5][0.5,1]2个区间中
+     * @returns {*}
+     */
     function randomFor( weights ){
         if( arguments.length > 1 ){
             weights = [].slice.call( arguments );
