@@ -46,7 +46,7 @@ define('OneLib.Utils.Array', [], function (require, exports, module) {
      * @param identifier(可选):filter函数，其用于决定item中的什么字段来决定item的唯一性
      * @private
      */
-    exports.removeArrayDump = function(arr,reverseOrder,/* optional */identifier){
+    exports.removeDump = function(arr,reverseOrder,/* optional */identifier){
         var _dic={},cut=false;
         if(!identifier){
             identifier = function(item){return item};
