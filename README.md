@@ -101,43 +101,36 @@
     * 以上实现都要考虑duration模式和frame模式
 * 重构CMDSyntax模块：
     * 修改名字，为OneLib.Runtime(运行时的意思是)
-<ul>
-  
-  <li>新增一个OneLib.JsAnalyze模块，专门提供对js语法本身的分析功能，比如，获得函数定义的参数列表，参数个数等</li>
-  
-  <li>demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json</li>
-  <li>将Min heap(小顶堆)的测试用例，和demo补充完整</li>
-  <li>扩展Math.Random功能，实现生成一个范围内随机数功能</li>
-  <li>扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面</li>
-  <li>补充Location模块的testCase</li>
-  <li>补充Location模块的Demo</li>
- <li>集成fis环境，发布的文件进行压缩.</li>
-  <li>新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况</li>
-  <li>添加OneLib.IS.(一系列的isXXX方法判断数据类型)</li>
- <li>url、queryString的操作类.</li>
- <li>常用设计模式模块封装.</li>
- <li>Json序(反序)列化模块.</li>
- <li>在ScriptLoader里面增加jsonp功能（需要定义一个接受json string的函数，然后外部json文件通过func(<json>)实现。要用到json反序列化）.</li>
- <li>DOM模块.</li>
- <li>类jQuery选择器实现.</li>
- <li>优化js和css加载器，不仅可以发出下载完成的回调，还可以知道文件是加载成还是失败了</li>
- <li>进行HTML escape和unescape.</li>
- <li>完成OneLib.Scroll的测试用例</li>
-  <li>增强scriptLoader
-    <ul>
-        <li>不用定义moduleName和dependencies,直接使用文件所在路径作为模块名，require的模块作为依赖</li>
-        <li>可以使用path配置各种路径的简称，让编写更方便，比如，var ko = require('$common$/tip.js')</li>
-    </ul>
- </li>
-</ul>
+    
+
+* 新增一个OneLib.JsAnalyze模块，专门提供对js语法本身的分析功能，比如，获得函数定义的参数列表，参数个数等
+* demo项目的api信息目前都是手写，需要调研一种方法，直接分析jsdoc注释，生成api说明json
+* 将Min heap(小顶堆)的测试用例，和demo补充完整
+* 扩展Math.Random功能，实现生成一个范围内随机数功能
+* 扩充Location模块:将原先Url和Navigation模块里的功能也集成到Location里面
+* 补充Location模块的testCase
+* 补充Location模块的Demo
+* 集成fis环境，发布的文件进行压缩.
+* 新增模块:CPUMonitor:使用setTimeout打点的方式.判断当前cpu繁忙情况
+* 添加OneLib.IS.(一系列的isXXX方法判断数据类型)
+* url、queryString的操作类.
+* 常用设计模式模块封装.
+* json序(反序)列化模块.
+* 在ScriptLoader里面增加jsonp功能（需要定义一个接受json string的函数，然后外部json文件通过func(<json>)实现。要用到json反序列化）.
+* DOM模块.
+* 类jQuery选择器实现.
+* 优化js和css加载器，不仅可以发出下载完成的回调，还可以知道文件是加载成还是失败了
+* 进行HTML escape和unescape.
+* 完成OneLib.Scroll的测试用例
+* 增强scriptLoader
+    * 不用定义moduleName和dependencies,直接使用文件所在路径作为模块名，require的模块作为依赖
+    * 可以使用path配置各种路径的简称，让编写更方便，比如，var ko = require('$common$/tip.js')
 
 
 ##Features
-<ul>
- <li>统一的语法定义(CMD).</li>
- <li>完整的示例.</li>
- <li>完善的测试用例.</li>
-</ul>
+* 统一的语法定义(CMD).
+* 完整的示例.
+* 完善的测试用例.
 
 ## License
 
