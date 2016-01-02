@@ -10,7 +10,7 @@ describe('OneLib.Validation ', function () {
     });
 
 
-    it('should can use targetWrapper to begin validation', function () {
+    it('should can use targetWrapper to start a validation', function () {
         define('testRemoveDump3', [], function (require, exports, module) {
 
             var validation = require('OneLib.Validation');
@@ -42,16 +42,32 @@ describe('Built-in Validator:', function () {
 
             var validation = require('OneLib.Validation').targetWrapper;
 
-            var someInput = '13865803583';
+            var someInput = '13374823341';
 
             validation(someInput).isPhoneNo().
                 failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
                 }).
                 passed(function () {
-                    cb();
+                    expect(true).toBe(true); //passed
                 }).
                 run();
 
         });
+    });
+});
+
+describe('Custom Validator:', function () {
+    beforeEach(function () {
+        //run before each test
+    });
+
+    afterEach(function () {
+        //run after each test
+    });
+
+    it('should can add your own validator', function () {
+        //do some assert
+
     });
 });

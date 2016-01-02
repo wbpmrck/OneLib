@@ -77,6 +77,20 @@ define('OneLib.Validation', [], function (require, exports, module) {
             },
             desc:"必须是正整数"
         },
+        //浮点数
+        positiveFloat:{
+            /**
+             * 验证输入是一个正浮点数(首位不是0)
+             * @param intLen：可设定整数部分长度(最小是1)
+             * @param decimalLen：可设定小数部分长度(最小是1)
+             * @param cb
+             */
+            fn: function (intLen,decimalLen,cb) {
+                var reg = new RegExp(['^[1-9][0-9]{0,',(intLen-1)<0?'1':(intLen-1),'}(.[0-9]{1,',decimalLen||1,'})?$'].join(''))
+                cb&&cb(reg.test(this.origin));
+            },
+            desc:"必须是整数位不超过{1},小数位不超过{2}的正数,不能用0开头"
+        },
         biggerThan:{
             fn: function (that, cb) {
                 cb && cb(this.origin>that)
