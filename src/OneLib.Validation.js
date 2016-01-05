@@ -23,24 +23,23 @@ define('OneLib.Validation', [], function (require, exports, module) {
      * @type {{isPhoneNo: Function, isValidCode: Function, isNumber: Function, is: Function}}
      */
     var validateFunctions={
-        //是否手机号
-        isPhoneNo:{fn:function (cb) {
+        //是否手机号类型的文本
+        isPhoneNoStr:{fn:function (cb) {
             var reg = /^1[0-9]{10}$/;
             cb&&cb(reg.test(this.origin));
         },desc:"必须是合法的手机号格式"},
-        //是否验证码
-        isValidCode:{fn:function (cb) {
-            var reg = /^[0-9]{4}$/;
+        //是否数字类型的文本
+        isNumStr:{fn:function (len,cb) {
+            //var reg = /^[0-9]{4}$/;
+            var reg = new RegExp(['^[0-9]{',len,'}$'].join(''));
             cb&&cb(reg.test(this.origin));
-        },desc:"必须是4位数字"},
+        },desc:"必须是{1}位数字"},
         //验证是数字类型
         isNum:{fn:function(cb){
             cb&&cb(this.type ==='number' && !isNaN(this.origin))
         },desc:"必须是数字类型"},
-        //验证是表示数字的字符
-        isNumStr:{fn:function(cb){
-            cb&&cb(this.type ==='string' && !isNaN(parseInt(this.origin)))
-        },desc:"必须是数字字符串"},
+
+
         //验证是字符串
         isStr:{fn:function(cb){
             cb&&cb(this.type ==='string')
@@ -49,9 +48,10 @@ define('OneLib.Validation', [], function (require, exports, module) {
         notEmptyStr:{fn:function(cb){
             cb&&cb(this.origin.trim()!=='')
         },desc:"不能为空"},
-        //验证输入不含特殊字符(只含有数字、英文、中文、下划线、空格)
+        //验证输入不含特殊字符(只含有数字、英文、中文、下划线、空格,以及单引号、双引号、逗号、问号、句号的中英文版本)
         noSpecialStr: {fn:function (cb) {
-            var reg =/^[\u4E00-\u9FA5A-Za-z0-9_\x20]+$/;
+            //var reg =/^[\u4E00-\u9FA5A-Za-z0-9_\x20]+$/;
+            var reg =/^[\u4E00-\u9FA5A-Za-z0-9_\x20\u2018\u2019\uff1f\uff0c\u3002\u0027\u0022\u002c\u002e\u003f]+$/;
             cb &&cb(reg.test(this.origin))
         },desc:"不能包含特殊字符"},
         //长度区间。可以使用*表示不限，比如lengthBetween('*',5)相当于<=5
@@ -152,13 +152,18 @@ define('OneLib.Validation', [], function (require, exports, module) {
     /**
      * 订阅验证组的失败事件
      *  回调函数参数：验证值对象，描述，失败的验证函数名，失败的验证参数
-     * @param cb(val,desc,funcName,funcArgs)
+     * @param cb(val,desc,funcName,funcArgs，funcDesc)
      */
     ValidateGroup.prototype.failed= function (cb) {
         this.once("failed",cb)
         return this;
     }
 
+    /**
+     * 订阅验证组的成功事件
+     * @param cb(val,desc)
+     * @returns {ValidateGroup}
+     */
     ValidateGroup.prototype.passed= function (cb) {
         this.once("passed",cb)
         return this;
@@ -178,7 +183,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
                     next();
                 }else{
                     //如果都执行完了，说明成功
-                    self.emit("passed")
+                    self.emit("passed",target.origin,target.desc)
                 }
             })._run();
         });
