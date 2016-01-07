@@ -29,11 +29,11 @@ define('OneLib.Validation', [], function (require, exports, module) {
             cb&&cb(reg.test(this.origin));
         },desc:"必须是合法的手机号格式"},
         //是否数字类型的文本
-        isNumStr:{fn:function (len,cb) {
+        isNumStr:{fn:function (lenBegin,lenEnd,cb) {
             //var reg = /^[0-9]{4}$/;
-            var reg = new RegExp(['^[0-9]{',len,'}$'].join(''));
+            var reg = new RegExp(['^[0-9]{',lenBegin,',',lenEnd,'}$'].join(''));
             cb&&cb(reg.test(this.origin));
-        },desc:"必须是{1}位数字"},
+        },desc:"必须是{1}~{2}位数字"},
         //验证是数字类型
         isNum:{fn:function(cb){
             cb&&cb(this.type ==='number' && !isNaN(this.origin))
@@ -48,7 +48,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         notEmptyStr:{fn:function(cb){
             cb&&cb(this.origin.trim()!=='')
         },desc:"不能为空"},
-        //验证输入不含特殊字符(只含有数字、英文、中文、下划线、空格,以及单引号、双引号、逗号、问号、句号的中英文版本)
+        //验证输入不含特殊字符(只含有数字、英文、中文、下划线、空格,单引号、双引号、以及逗号、问号、句号的中英文版本)
         noSpecialStr: {fn:function (cb) {
             //var reg =/^[\u4E00-\u9FA5A-Za-z0-9_\x20]+$/;
             var reg =/^[\u4E00-\u9FA5A-Za-z0-9_\x20\u2018\u2019\uff1f\uff0c\u3002\u0027\u0022\u002c\u002e\u003f]+$/;
@@ -61,7 +61,16 @@ define('OneLib.Validation', [], function (require, exports, module) {
                 max==='*'&& (max=this.origin.length)
                 cb && cb(this.origin.length>=min && this.origin.length<=max)
             },
-            desc:"长度必须在{1}和{2}之间"
+            //desc:"长度必须在{1}和{2}之间"
+            desc:function(min,max){
+                if(min==='*'){
+                    return "长度必须小于"+max
+                }else if(max ==='*'){
+                    return "长度必须大于"+min
+                }else{
+                    return ['长度必须在',min,'和',max,'之间'].join('')
+                }
+            }
         },
         notNull:{
             fn: function (cb) {
@@ -77,19 +86,38 @@ define('OneLib.Validation', [], function (require, exports, module) {
             },
             desc:"必须是正整数"
         },
-        //浮点数
+        //正浮点数
         positiveFloat:{
             /**
-             * 验证输入是一个正浮点数(首位不是0)
-             * @param intLen：可设定整数部分长度(最小是1)
+             * 验证输入是一个正浮点数
+             * @param intLen：可设定整数部分长度
              * @param decimalLen：可设定小数部分长度(最小是1)
              * @param cb
              */
             fn: function (intLen,decimalLen,cb) {
-                var reg = new RegExp(['^[1-9][0-9]{0,',(intLen-1)<0?'1':(intLen-1),'}(.[0-9]{1,',decimalLen||1,'})?$'].join(''))
+                var reg = new RegExp(['^[0-9]{0,',intLen,'}(\\.[0-9]{0,',decimalLen,'})?$'].join(''))
                 cb&&cb(reg.test(this.origin));
             },
-            desc:"必须是整数位不超过{1},小数位不超过{2}的正数,不能用0开头"
+            desc:"必须是整数位不超过{1},小数位不超过{2}的正数"
+        },
+
+        /**
+         * 等于比较符号，使用==验证相等
+         */
+        equalTo:{
+            fn: function (that, cb) {
+                cb && cb(this.origin==that)
+            },
+            desc:"必须等于{1}"
+        },
+        /**
+         * 等价比较符，更为严格，使用===进行比较
+         */
+        sameTo:{
+            fn: function (that, cb) {
+                cb && cb(this.origin===that)
+            },
+            desc:"必须等价于{1}"
         },
         biggerThan:{
             fn: function (that, cb) {
@@ -130,11 +158,11 @@ define('OneLib.Validation', [], function (require, exports, module) {
 
         //一个验证组开启的时候，可以含有一个初始的验证字段
         self.targets=[];
-        if(param!==undefined){
+        //if(param!==undefined){
             self.curTarget = new ValidateTarget(self,param,desc);
             self.targets.push(self.curTarget);
             //return target;
-        }
+        //}
     }
     /**
      * 级联另外一个验证对象
@@ -264,9 +292,16 @@ define('OneLib.Validation', [], function (require, exports, module) {
                 }else{
                     //执行失败，发射failed消息
                     var errTemplate = validateFunc.desc;
-                    for(var i=0,j=args.length;i<j;i++){
-                        var a = args[i];
-                        errTemplate = errTemplate.replace("{"+(i+1)+'}',a)
+                    //如果desc配置的是字符串，则支持占位符替换
+                    if(typeof errTemplate ==='string'){
+                        for(var i=0,j=args.length;i<j;i++){
+                            var a = args[i];
+                            errTemplate = errTemplate.replace("{"+(i+1)+'}',a)
+                        }
+                    }
+                    //如果desc配置的是函数，则支持使用自定义函数返回提示信息
+                    else if(typeof errTemplate ==='function'){
+                        errTemplate = errTemplate.apply(self,args);
                     }
                     self.emit("failed",item.key,item.args,errTemplate)
                 }
