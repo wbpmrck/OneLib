@@ -6,6 +6,8 @@
 
 
 ###Doing
+* 重构CMDSyntax模块，使其100%兼容、支持requireJs的AMD风格语法
+    * 使用第三方框架库测试
 * 新增 Utils.Array模块,添加testCase
 * 新增validation模块，并完善其demo
     * demo:
