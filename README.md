@@ -8,6 +8,9 @@
 ###Doing
 * 重构CMDSyntax模块，使其100%兼容、支持requireJs的AMD风格语法
     * 使用第三方框架库测试
+* 增加给eventName添加默认callback的功能
+	* 使用场景：在微信接口准备好之后，做xxx事情
+
 * 新增 Utils.Array模块,添加testCase
 * 新增validation模块，并完善其demo
     * demo:
@@ -22,6 +25,8 @@
 
 ###Done
 
+* 新增Thunk模块,用于生成Thunkfy的函数
+    * Thunk用于把异步调用的函数结构成fn(其他参数)(回调函数)的统一格式.
 * 增强EventEmitter,新增pipe方法以管道的方式派发事件+参数
     * 这种模式下，事件处理函数会多一个末位参数 next,可以通过调用next通知下一个注册的处理函数开始执行
     * next函数如果带参数，则下一个处理函数收到的是修改后的参数。

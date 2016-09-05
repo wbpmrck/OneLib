@@ -1,0 +1,27 @@
+{
+  "name": "wbpmrck-onelib.js",
+  "version": "1.0.0",
+  "description": "A common library set for daily development.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wbpmrck/OneLib.git"
+  },
+  "keywords": [
+    "util",
+    "common",
+    "lib"
+  ],
+  "author": "https://github.com/wbpmrck",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wbpmrck/OneLib/issues"
+  },
+  "homepage": "https://github.com/wbpmrck/OneLib#readme"
+}
