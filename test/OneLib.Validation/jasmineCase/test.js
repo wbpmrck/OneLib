@@ -748,3 +748,33 @@ describe('Custom Validator:', function () {
 
     });
 });
+describe('Batch Validator:', function () {
+    beforeEach(function () {
+        //run before each test
+    });
+
+    afterEach(function () {
+        //run after each test
+    });
+
+    it('should can add multiple validator use and', function () {
+        define('multiple', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput='123abc',someInput2='222';
+            validation(someInput,'输入信息').notEmptyStr().lengthBetween(1,11).
+                and(someInput2).isNumStr(3,3).sameTo('222').
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    passCalled = true;
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual(undefined);
+                }).
+                run();
+        });
+
+    });
+});
