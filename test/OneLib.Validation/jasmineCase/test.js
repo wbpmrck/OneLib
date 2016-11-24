@@ -27,6 +27,34 @@ describe('OneLib.Validation ', function () {
     });
 });
 
+describe("Promise return", function () {
+    beforeEach(function () {
+        //run before each test
+    });
+    afterEach(function () {
+        //run after each test
+    });
+
+    it("can return promise", function () {
+
+
+        define("test promise",function(require,exports,module){
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput = '13374823341',passCalled = false;
+
+            var v = validation(someInput,'正确的输入示例').isPhoneNoStr().runAsPromise();
+
+            v.then(function (result) {
+                expect(result.pass).toBe(true);
+                expect(result.origin).toEqual(someInput);
+                expect(result.desc).toEqual('正确的输入示例');
+
+            });
+        });
+    });
+});
 describe('Built-in Validator:', function () {
     beforeEach(function () {
         //run before each test
