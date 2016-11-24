@@ -218,6 +218,34 @@ define('OneLib.Validation', [], function (require, exports, module) {
 
     }
 
+    /**
+     * 开始运行验证器,返回promise
+     */
+    ValidateGroup.prototype.runAsPromise= function () {
+        var self = this;//save the this ref
+
+        return new Promise(function (resolve,reject) {
+
+            //todo:遍历内部的验证器，一个个执行,并设置参数
+            arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
+                target._failed(function (funcKey,args,funcDesc) {
+                    self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc);
+                    resolve({pass:false,origin:target.origin,desc:target.desc,funcKey:funcKey,args:args,funcDesc:funcDesc})
+                })._passed(function () {
+                    if(idx<self.targets.length-1){
+                        next();
+                    }else{
+                        //如果都执行完了，说明成功
+                        self.emit("passed",target.origin,target.desc)
+                        resolve({pass:true,origin:target.origin,desc:target.desc})
+                    }
+                })._run();
+            })
+
+        });
+
+    }
+
 
     function ValidateTarget(group,param,desc){
         var self = this;

@@ -6,6 +6,8 @@
 
 
 ###Doing
+* 修改Validation模块，使其run方法返回一个Promise,使用Promise的then来处理验证结果
+    * 由于promise.resolve只能传入一个参数，所以原先的验证结果的诸多字段，封装在一个对象里给出
 * 重构CMDSyntax模块，使其100%兼容、支持requireJs的AMD风格语法
     * 使用第三方框架库测试
 * 增加给eventName添加默认callback的功能

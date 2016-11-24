@@ -18,8 +18,8 @@
  @created：|kaicui| 2013-12-01 21:25.
  --------------------------------------------
  */
-
-var global = global||window;
+var global = global|| (typeof window !=='undefined'?window:{});
+// var global = global||window;
 var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={})));
 
 OneLib.EventEmitter = (function (my) {
