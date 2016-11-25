@@ -143,6 +143,45 @@ describe('Built-in Validator:', function () {
         });
     });
 
+    it('should can work with "isOneOf" validator', function () {
+        define('test-isNum', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput = 123,passCalled = false;
+            var someInput2 = '123',failedCalled = false;
+
+            validation(someInput,'正确的输入示例').isOneOf([123,234,456]).
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    passCalled = true;
+                    expect(val).toEqual(someInput);
+                    expect(desc).toEqual('正确的输入示例');
+                }).
+                run();
+            expect(passCalled).toBe(true);
+
+            validation(someInput2,"错误的输入示例").isOneOf([123,234,456]).
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    failedCalled = true;
+
+                    //get info when failed
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual('错误的输入示例');
+                    expect(funcDesc).toEqual('必须取集合[123,234,456]中的值');
+
+                }).
+                passed(function () {
+                    throw new Error("this code should not be called!")
+                }).
+                run();
+            expect(failedCalled).toBe(true);
+
+        });
+    });
+
     it('should can work with "isNumStr" validator', function () {
         define('test-isNumStr', [], function (require, exports, module) {
 

@@ -39,6 +39,17 @@ define('OneLib.Validation', [], function (require, exports, module) {
             cb&&cb(this.type ==='number' && !isNaN(this.origin))
         },desc:"必须是数字类型"},
 
+        //验证值在给出的范围内
+        isOneOf:{fn:function(rangeArray,cb){
+            var find = false;
+            for(var i=0,j=rangeArray.length;i<j;i++){
+                if(rangeArray[i]===this.origin){
+                    find=true;
+                }
+            }
+            cb&&cb(find)
+        },desc:"必须取集合[{1}]中的值"},
+
 
         //验证是字符串
         isStr:{fn:function(cb){
