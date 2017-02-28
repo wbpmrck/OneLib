@@ -212,50 +212,77 @@ define('OneLib.Validation', [], function (require, exports, module) {
      */
     ValidateGroup.prototype.run= function () {
         var self = this;//save the this ref
-
-        //todo:遍历内部的验证器，一个个执行,并设置参数
-        arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
-            target._failed(function (funcKey,args,funcDesc) {
-                self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc)
-            })._passed(function () {
-                if(idx<self.targets.length-1){
-                    next();
-                }else{
-                    //如果都执行完了，说明成功
-                    self.emit("passed",target.origin,target.desc)
-                }
-            })._run();
-        });
-
-    }
-
-    /**
-     * 开始运行验证器,返回promise
-     */
-    ValidateGroup.prototype.runAsPromise= function () {
-        var self = this;//save the this ref
-
+    
         return new Promise(function (resolve,reject) {
-
-            //todo:遍历内部的验证器，一个个执行,并设置参数
-            arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
-                target._failed(function (funcKey,args,funcDesc) {
-                    self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc);
-                    resolve({pass:false,origin:target.origin,desc:target.desc,funcKey:funcKey,args:args,funcDesc:funcDesc})
-                })._passed(function () {
-                    if(idx<self.targets.length-1){
-                        next();
-                    }else{
-                        //如果都执行完了，说明成功
-                        self.emit("passed",target.origin,target.desc)
-                        resolve({pass:true,origin:target.origin,desc:target.desc})
-                    }
-                })._run();
-            })
-
+        
+            if(self.targets && self.targets.length){
+                //todo:遍历内部的验证器，一个个执行,并设置参数
+                arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
+                    target._failed(function (funcKey,args,funcDesc) {
+                        self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc);
+                        resolve({pass:false,origin:target.origin,desc:target.desc,funcKey:funcKey,args:args,funcDesc:funcDesc})
+                    })._passed(function () {
+                        if(idx<self.targets.length-1){
+                            next();
+                        }else{
+                            //如果都执行完了，说明成功
+                            self.emit("passed",target.origin,target.desc)
+                            resolve({pass:true,origin:target.origin,desc:target.desc})
+                        }
+                    })._run();
+                })
+            }else{
+                //如果都执行完了，说明成功
+                self.emit("passed");
+                resolve({pass:true});
+            }
+        
         });
+    
+        
+        // //todo:遍历内部的验证器，一个个执行,并设置参数
+        // arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
+        //     target._failed(function (funcKey,args,funcDesc) {
+        //         self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc)
+        //     })._passed(function () {
+        //         if(idx<self.targets.length-1){
+        //             next();
+        //         }else{
+        //             //如果都执行完了，说明成功
+        //             self.emit("passed",target.origin,target.desc)
+        //         }
+        //     })._run();
+        // });
 
     }
+
+    // /**
+    //  * 开始运行验证器,返回promise
+    //  */
+    // ValidateGroup.prototype.runAsPromise= function () {
+    //     var self = this;//save the this ref
+    //
+    //     return new Promise(function (resolve,reject) {
+    //
+    //         //todo:遍历内部的验证器，一个个执行,并设置参数
+    //         arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
+    //             target._failed(function (funcKey,args,funcDesc) {
+    //                 self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc);
+    //                 resolve({pass:false,origin:target.origin,desc:target.desc,funcKey:funcKey,args:args,funcDesc:funcDesc})
+    //             })._passed(function () {
+    //                 if(idx<self.targets.length-1){
+    //                     next();
+    //                 }else{
+    //                     //如果都执行完了，说明成功
+    //                     self.emit("passed",target.origin,target.desc)
+    //                     resolve({pass:true,origin:target.origin,desc:target.desc})
+    //                 }
+    //             })._run();
+    //         })
+    //
+    //     });
+    //
+    // }
 
 
     function ValidateTarget(group,param,desc){
@@ -312,41 +339,46 @@ define('OneLib.Validation', [], function (require, exports, module) {
      */
     ValidateTarget.prototype._run= function () {
         var self = this;//save the this ref
-
-        //遍历内部的验证器，一个个执行,并设置参数
-        arrayExt.eachAsync(self.funcChain,function(item,idx,next,cancel){
-            var validateFunc = validateFunctions[item.key],
-                args = item.args;
-
-            //组织入参，并调用内部的验证函数。入参的最后一个参数，总是回调
-            validateFunc.fn.apply(self,args.concat(function (pass) {
-                if(pass){
-                    if(idx<self.funcChain.length-1){
-                        //如果还有验证函数没执行完，继续执行
-                        next();
-                    }else{
-                        //如果都执行完了，说明成功
-                        self.emit("passed")
-                    }
-                }else{
-                    //执行失败，发射failed消息
-                    var errTemplate = validateFunc.desc;
-                    //如果desc配置的是字符串，则支持占位符替换
-                    if(typeof errTemplate ==='string'){
-                        for(var i=0,j=args.length;i<j;i++){
-                            var a = args[i];
-                            errTemplate = errTemplate.replace("{"+(i+1)+'}',a)
+    
+        if(self.funcChain && self.funcChain.length) {
+            //遍历内部的验证器，一个个执行,并设置参数
+            arrayExt.eachAsync(self.funcChain, function (item, idx, next, cancel) {
+                var validateFunc = validateFunctions[item.key],
+                    args = item.args;
+        
+                //组织入参，并调用内部的验证函数。入参的最后一个参数，总是回调
+                validateFunc.fn.apply(self, args.concat(function (pass) {
+                    if (pass) {
+                        if (idx < self.funcChain.length - 1) {
+                            //如果还有验证函数没执行完，继续执行
+                            next();
+                        } else {
+                            //如果都执行完了，说明成功
+                            self.emit("passed")
                         }
+                    } else {
+                        //执行失败，发射failed消息
+                        var errTemplate = validateFunc.desc;
+                        //如果desc配置的是字符串，则支持占位符替换
+                        if (typeof errTemplate === 'string') {
+                            for (var i = 0, j = args.length; i < j; i++) {
+                                var a = args[i];
+                                errTemplate = errTemplate.replace("{" + (i + 1) + '}', a)
+                            }
+                        }
+                        //如果desc配置的是函数，则支持使用自定义函数返回提示信息
+                        else if (typeof errTemplate === 'function') {
+                            errTemplate = errTemplate.apply(self, args);
+                        }
+                        self.emit("failed", item.key, item.args, errTemplate)
                     }
-                    //如果desc配置的是函数，则支持使用自定义函数返回提示信息
-                    else if(typeof errTemplate ==='function'){
-                        errTemplate = errTemplate.apply(self,args);
-                    }
-                    self.emit("failed",item.key,item.args,errTemplate)
-                }
-            }));
-        });
-
+                }));
+            });
+        }else{
+    
+            //没有可验证的函数，说明成功
+            self.emit("passed")
+        }
     }
 //保留的方法key,防止被冲
     var reservedKey={};

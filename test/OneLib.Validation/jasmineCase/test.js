@@ -44,7 +44,8 @@ describe("Promise return", function () {
 
             var someInput = '13374823341',passCalled = false;
 
-            var v = validation(someInput,'正确的输入示例').isPhoneNoStr().runAsPromise();
+            // var v = validation(someInput,'正确的输入示例').isPhoneNoStr().runAsPromise();
+            var v = validation(someInput,'正确的输入示例').isPhoneNoStr().run();
 
             v.then(function (result) {
                 expect(result.pass).toBe(true);
