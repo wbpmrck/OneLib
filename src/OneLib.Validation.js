@@ -347,7 +347,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
                     args = item.args;
         
                 //组织入参，并调用内部的验证函数。入参的最后一个参数，总是回调
-                validateFunc.fn.apply(self, args.concat(function (pass) {
+                validateFunc.fn.apply(self, args.concat(function (pass,otherErrMsg) {
                     if (pass) {
                         if (idx < self.funcChain.length - 1) {
                             //如果还有验证函数没执行完，继续执行
@@ -359,6 +359,11 @@ define('OneLib.Validation', [], function (require, exports, module) {
                     } else {
                         //执行失败，发射failed消息
                         var errTemplate = validateFunc.desc;
+    
+                        //如果执行过程中发现了其他错误消息，则不使用验证项目的模板消息
+                        if(otherErrMsg){
+                            errTemplate=otherErrMsg;
+                        }
                         //如果desc配置的是字符串，则支持占位符替换
                         if (typeof errTemplate === 'string') {
                             for (var i = 0, j = args.length; i < j; i++) {

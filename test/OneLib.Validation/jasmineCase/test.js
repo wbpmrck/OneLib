@@ -815,6 +815,54 @@ describe('Custom Validator:', function () {
         });
 
     });
+    it('should can change errorMsg template if need', function () {
+        define('test.changeErrorMsg', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation');
+            //添加一个自定义验证器，验证某个输入必须是x的2倍
+            validation.setValidateFunction("mustDoubleTo", {
+                fn:function (that, cb) {
+                    //验证器逻辑：当被验证的值(origin)为目标的2倍时，为true(通过)
+                    cb&&cb(this.origin == 2*that,"听到了吗，输入必须是{1}的2倍");
+                },
+                desc:'输入必须是{1}的2倍' //使用{index}来引用函数的输入参数
+            });
+
+            var someInput = 4,passCalled = false;
+            var someInput2 = 5,failedCalled = false;
+
+            validation.targetWrapper(someInput,'正确的输入示例').mustDoubleTo(2).
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    passCalled = true;
+                    expect(val).toEqual(someInput);
+                    expect(desc).toEqual('正确的输入示例');
+                }).
+                run();
+            expect(passCalled).toBe(true);
+
+            validation.targetWrapper(someInput2,"错误的输入示例").mustDoubleTo(6).
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    failedCalled = true;
+
+                    //get info when failed
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual('错误的输入示例');
+                    expect(funcDesc).toEqual('听到了吗，输入必须是6的2倍');
+
+                }).
+                passed(function () {
+                    throw new Error("this code should not be called!")
+                }).
+                run();
+            expect(failedCalled).toBe(true);
+
+
+        });
+
+    });
 });
 describe('Batch Validator:', function () {
     beforeEach(function () {
