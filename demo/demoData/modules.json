@@ -54,5 +54,10 @@
         "moduleName":"OneLib.Animation",
         "desc":"提供基于timer实现的，支持固定时长和固定帧2种渲染方式的动画框架。并且内置了常用的delta函数(增量计算)可以实现大部分简单的动画效果。支持动画暂停、继续等操作。支持事件订阅",
         "linkEnable":true
+    },
+    {
+        "moduleName":"OneLib.Validation",
+        "desc":"提供使用便捷、易读性好、且扩展方便的验证框架",
+        "linkEnable":true
     }
 ]
