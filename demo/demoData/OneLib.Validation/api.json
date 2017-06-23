@@ -10,7 +10,7 @@
 
             },
             {
-                "name":"模块引入方式",
+                "name":"模块引入方式-普通引入(推荐)",
                 "type":"Description",
                 "returned":"String",
                 "desc":"直接在页面上引入模块的js文件即可",
@@ -20,6 +20,24 @@
                         "desc":"",
                         "type":"example",
                         "codeUrl":"../demoData/OneLib.Validation/useExample.html",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    }
+                ]
+            },
+            {
+                "name":"模块引入方式-OneLib.CMD方式引入(可选)",
+                "type":"Description",
+                "returned":"String",
+                "desc":"引入CMD需要的js文件即可",
+                "demoCodeRefs":[
+                    {
+                        "name":"",
+                        "desc":"",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.Validation/useExample-cmd.html",
                         "cssUrls":[
                         ],
                         "javascriptUrls":[
@@ -36,7 +54,7 @@
                 "name":"setValidateFunction",
                 "type":"Function",
                 "returned":"undefined",
-                "desc":"向验证库注册一个自定义的验证函数",
+                "desc":"OneLib.Validation 不仅支持以上的内置验证函数。同时也支持开发者自己向验证库注册一个自定义的验证函数 \r\n 调用本方法就可以注册自己的验证逻辑",
                 "params":[
                     {"name":"key","type":"String","desc":"验证器的唯一标识"},
                     {"name":"func","type":"Object","desc":"验证函数信息 \r\n<span class='warn-notice'>该对象包含2个属性:fn,和desc:</span><ul><li>fn(...,cb):验证函数，对输入参数进行验证，并将结果通过cb回调函数通知验证器</li><li>desc:描述当验证失败之后的提示语。内部可以用{n}来指代fn中的输入参数,比如：'必须是{1}~{2}位数字'</li></ul>"}
@@ -53,6 +71,16 @@
                         ]
                     },
                     {
+                        "name":"",
+                        "desc":"使用CMD风格的写法是这样的",
+                        "type":"example",
+                        "codeUrl":"../demoData/OneLib.Validation/example.1.cmd.js",
+                        "cssUrls":[
+                        ],
+                        "javascriptUrls":[
+                        ]
+                    },
+                    {
                         "name":"点击下面按钮运行示例",
                         "desc":"",
                         "type":"real",
@@ -62,7 +90,7 @@
                         "javascriptUrls":[
                             "../../src/OneLib.Utils.Array.js",
                             "../../src/OneLib.Validation.js",
-                            "../demoData/OneLib.Validation/example.1.js"
+                            "../demoData/OneLib.Validation/example.1.cmd.js"
                         ]
                     }
                 ]
