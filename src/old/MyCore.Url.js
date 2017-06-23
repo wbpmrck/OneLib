@@ -20,6 +20,11 @@ var MyCore = (function (my) {
 } (MyCore || {}));
 
 MyCore.Url = (function (my) {
+
+    var getHref = function () {
+        return decodeURIComponent(location.href);
+    }
+
     my.root = "";
     my.setRoot = function (root) {
         my.root = root;
@@ -35,16 +40,47 @@ MyCore.Url = (function (my) {
         };
         return my.root;
     };
+
+    /**
+     * 回到跳转过来的页面
+     */
+    my.returnBack = function(){
+        var queryObj = my.getQueryStrObj(window.location.search);
+        //如果当前页面是从一个【同域名】的其他页面跳转过来，则返回
+        if(queryObj._from && queryObj._from.split('/')[2]===location.host){
+            console.log('return to %s',queryObj._from)
+            location.href = queryObj._from
+        }
+    }
+    /**
+     * 跳转到一个目标页面。会在请求参数里带上_from字段，方便后者再跳回来
+     * @param action
+     * @param controller
+     * @param paras
+     */
+    my.redirectTo = function(action, controller, paras){
+
+        paras = paras ||{};
+        var oldUrl = getHref();
+        paras._from = oldUrl;
+        var url = my.action(action,controller,paras);
+
+        console.log('redirect from %s to %s',getHref(),url)
+        location.href = url;
+    }
+
     my.action = function (action, controller, paras) {
         //        return controller + "/" + action;
         var rootUrl = my.getRoot();
         var paraString = my.getQueryStrFromObj(paras);
         return rootUrl + "/" + controller + "/" + action + paraString;
     };
-    //根据传入的url，分析出查询字符串，返回对象
+
+
+//根据传入的url，分析出查询字符串，返回对象
     my.getQueryStrObj = function (url) {
         var name, value, i;
-        var str = url || location.href;
+        var str = url || getHref();
         var num = str.indexOf("?")
         str = str.substr(num + 1);
         var arrtmp = str.split("&");
@@ -53,7 +89,7 @@ MyCore.Url = (function (my) {
             num = arrtmp[i].indexOf("=");
             if (num > 0) {
                 name = arrtmp[i].substring(0, num);
-                value = arrtmp[i].substr(num + 1);
+                value = decodeURIComponent(arrtmp[i].substr(num + 1));
                 obj[name] = value;
             }
         }
@@ -72,13 +108,13 @@ MyCore.Url = (function (my) {
         };
         return obj;
     };
-    //返回当前Url对象，可以对url的参数进行修改，转化为新的url
+//返回当前Url对象，可以对url的参数进行修改，转化为新的url
     my.getNowUrlObj = function () {
-        var nowurl = window.location.href,
-        server_port = window.location.host,
-        protocol = window.location.protocol,
-        pathName = window.location.pathname,
-        query = my.getQueryStrObj(window.location.search);
+        var nowurl = getHref(),
+            server_port = location.host,
+            protocol = location.protocol,
+            pathName = location.pathname,
+            query = my.getQueryStrObj(window.location.search);
         return {
             RawUrl: nowurl,
             Server: server_port,
@@ -90,7 +126,7 @@ MyCore.Url = (function (my) {
             }
         };
     };
-    //根据传入的参数对象，拼出querystring
+//根据传入的参数对象，拼出querystring
     my.getQueryStrFromObj = function (paras) {
         var paraString = "";
         if (paras) {

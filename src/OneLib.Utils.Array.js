@@ -3,8 +3,11 @@
  * 数组常用的一些辅助方法
  */
 
-define('OneLib.Utils.Array', [], function (require, exports, module) {
-
+;(function () {
+    
+    var __pub__ = {};
+    
+    
     /**
      * 一个异步对数组进行遍历处理的辅助方法
      * @param ar：要遍历的数组
@@ -15,16 +18,16 @@ define('OneLib.Utils.Array', [], function (require, exports, module) {
         console.log('running on:'+item);
         setTimeout(function(){next();},1000);
     })
-
+     
      running on:1  (1s)
      running on:2  (2s)
      running on:3  (3s)
      running on:4  (4s)
      */
-    exports.eachAsync = function (ar, asyncFunc) {
+    __pub__.eachAsync = function (ar, asyncFunc) {
         function _each(ar,now,asyncFunc){
             var _item = ar[now];
-
+            
             asyncFunc && asyncFunc(_item,now, function _next() {
                 if(now == ar.length-1){
                     return;
@@ -38,15 +41,15 @@ define('OneLib.Utils.Array', [], function (require, exports, module) {
         if(ar && ar.length>0){
             _each(ar,0,asyncFunc);
         }
-    }
-
+    };
+    
     /**
      * 去除数组里重复项的helper
      * @reverseOrder:遍历顺序，false为正序，true为逆序  默认正序：从0->length-1.
      * @param identifier(可选):filter函数，其用于决定item中的什么字段来决定item的唯一性
      * @private
      */
-    exports.removeArrayDump = function(arr,reverseOrder,/* optional */identifier){
+    __pub__.removeDump = function(arr,reverseOrder,/* optional */identifier){
         var _dic={},cut=false;
         if(!identifier){
             identifier = function(item){return item};
@@ -62,7 +65,7 @@ define('OneLib.Utils.Array', [], function (require, exports, module) {
                     _dic[_key] = true
                 }
             }
-
+            
         }else{
             for(var i= 0,j=arr.length;i<j;(cut&&j--) || i++){
                 var _item = arr[i],_key = identifier(_item);
@@ -75,6 +78,24 @@ define('OneLib.Utils.Array', [], function (require, exports, module) {
                 }
             }
         }
+    };
+    
+    
+    //amd loader
+    if("function"==typeof define&&define.amd){
+        define([],function(){"use strict";return __pub__});
     }
-
-});
+    //commonjs loader
+    else if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = __pub__;
+    }
+    //oneLib.CMDSyntax loader
+    else if("function"==typeof define&&define.oneLib){
+        define("OneLib.Utils.Array",function(){return __pub__});
+    }
+        //no module loader
+        window['OneLib'] || (window['OneLib']={});
+        window['OneLib']['Utils'] || (window['OneLib']['Utils']={});
+        window['OneLib']['Utils'].Array = __pub__;
+    
+})()

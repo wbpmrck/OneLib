@@ -18,16 +18,14 @@
  @created：|kaicui| 2013-12-01 21:25.
  --------------------------------------------
  */
-
-var global = global||window;
-var OneLib = (function (my) {return my;} (global['OneLib'] ||(global['OneLib']={})));
-
-OneLib.EventEmitter = (function (my) {
+;(function () {
+    
+    var __pub__={};
     var slotSeed= 1,
         _slice = Array.prototype.slice,
         ALL_TOKEN='*';
-
-
+    
+    
     function EventEmitter(){};
     EventEmitter.prototype	= {
         once: function(evtName, cb){
@@ -45,11 +43,11 @@ OneLib.EventEmitter = (function (my) {
             this._events = this._events || {};
             this._events[evtName] = this._events[evtName]	|| [];
             cb&&this._events[evtName].push(cb);
-
+            
             cb&&(cb._slotId=slotSeed)&&ttl&&ttl>0&&(cb._ttl=ttl);
             return slotSeed++;
         },
-
+        
         /**
          * 取消事件订阅
          * @param evtName:要取消订阅的事件
@@ -59,7 +57,7 @@ OneLib.EventEmitter = (function (my) {
         off	: function(evtName, cb){
             this._events = this._events || {};
             if( evtName in this._events === false  )	return;
-
+            
             var t = typeof cb;
             if(t=="number"){
                 for(var i=this._events[evtName].length-1;i>=0;i--){
@@ -72,7 +70,7 @@ OneLib.EventEmitter = (function (my) {
             }else if( (t=="string" && cb.toLowerCase()=="all") ||(t=="undefined")){
                 delete this._events[evtName];
             }else if(t=="function"){
-
+                
                 for(var i=this._events[evtName].length-1;i>=0;i--){
                     var _item = this._events[evtName][i];
                     if(_item.toString() === cb.toString()){
@@ -96,7 +94,7 @@ OneLib.EventEmitter = (function (my) {
             this._events = this._events || {};
             var cb,
                 cut=false;//由于是正向遍历，且遍历过程中可能删除回调数组元素，所以需要标记是否删除，来控制for循环
-
+            
             function _dispatch(subEvtName){
                 var _args = _slice.call(arguments, 1);
                 for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
@@ -106,7 +104,7 @@ OneLib.EventEmitter = (function (my) {
                     cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
                 }
             }
-
+            
             //如果 要发射的事件名称被订阅过，并且该事件并非“*”事件，则开始发射（避免 on("*")触发2次）
             if( evtName in this._events && evtName !==ALL_TOKEN){
                 _dispatch.apply(this,_slice.call(arguments));
@@ -128,17 +126,17 @@ OneLib.EventEmitter = (function (my) {
          */
         pipe	: function(evtName /* , args... */){
             var self = this;//save the this ref
-
+            
             self._events = self._events || {};
             var cur,
                 cut=false;//由于是正向遍历，且遍历过程中可能删除回调数组元素，所以需要标记是否删除，来控制for循环
-
+            
             function _dispatch(subEvtName){
                 var _args = _slice.call(arguments, 1,arguments.length-1),
                     over = arguments[arguments.length-1],
                     _iteratorArgs;
                 var i= 0,j=self._events.hasOwnProperty(subEvtName)?self._events[subEvtName].length:0;
-
+                
                 function _next(){
                     cur && Object.prototype.hasOwnProperty.call(cur,"_ttl") && (--cur._ttl<=0) && (cut = true) &&  self._events[subEvtName].splice(i, 1);
                     (cut&&j--) || i++
@@ -153,11 +151,11 @@ OneLib.EventEmitter = (function (my) {
                         if(_iteratorArgs.length===0){
                             _iteratorArgs = _slice.call(_args);
                         } //if not modify params,use the origin params
-
-
+                        
+                        
                         //add next arg for pipe to next
                         _iteratorArgs.push(_next);
-
+                        
                         //add evtName param to * handler
                         //subEvtName === ALL_TOKEN && _iteratorArgs.unshift(ALL_TOKEN)
                         _cur.apply(self,_iteratorArgs);
@@ -167,7 +165,7 @@ OneLib.EventEmitter = (function (my) {
                     }
                 }
                 _iterator();//start the iterator calling.
-
+                
                 //for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
                 //    cut = false;
                 //    (cb=this._events[subEvtName][i])&&(cb.apply(this, _args));
@@ -175,9 +173,9 @@ OneLib.EventEmitter = (function (my) {
                 //    cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
                 //}
             }
-
+            
             var _originArgs=  evtName === ALL_TOKEN?[ALL_TOKEN].concat(_slice.call(arguments)):_slice.call(arguments);
-
+            
             //如果 要发射的事件名称被订阅过，并且该事件并非“*”事件，则开始发射（避免 on("*")触发2次）
             //if( evtName in self._events && evtName !==ALL_TOKEN){
             _dispatch.apply(self,_originArgs.concat([function (_iteratorArgs) {
@@ -201,8 +199,8 @@ OneLib.EventEmitter = (function (my) {
             return self;
         }
     };
-    my.EventEmitter	= EventEmitter;
-    my.mixin	= function(destObject){
+    __pub__.EventEmitter	= EventEmitter;
+    __pub__.mixin	= function(destObject){
         var props	= ['on','once', 'off', 'emit','pipe'];
         for(var i = 0; i < props.length; i ++){
             if( typeof destObject === 'function' ){
@@ -212,5 +210,20 @@ OneLib.EventEmitter = (function (my) {
             }
         }
     }
-    return my;
-}(OneLib.EventEmitter || {}));
+    
+    //amd loader
+    if("function"==typeof define&&define.amd){
+        define([],function(){"use strict";return __pub__});
+    }
+    //commonjs loader
+    else if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = __pub__;
+    }
+    //oneLib.CMDSyntax loader
+    else if("function"==typeof define&&define.oneLib){
+        define("OneLib.EventEmitter",function(){return __pub__});
+    }
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].EventEmitter = __pub__;
+})();

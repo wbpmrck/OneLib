@@ -6,11 +6,13 @@
  * 1、OneLib.EventEmitter
  * Created by cuikai on 2015/12/30.
  */
-define('OneLib.Validation', [], function (require, exports, module) {
 
-    var event = require("OneLib.EventEmitter");
-    var arrayExt = require("OneLib.Utils.Array");
-
+;(function () {
+    
+    var __pub__={};
+    var event = typeof require ==='function'?require("OneLib.EventEmitter"):window.OneLib.EventEmitter;
+    var arrayExt = typeof require ==='function'?require("OneLib.Utils.Array"):window.OneLib.Utils.Array;
+    
     /**
      * 保存内置的常用验证器
      * 可以自定义验证器：
@@ -38,7 +40,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         isNum:{fn:function(cb){
             cb&&cb(this.type ==='number' && !isNaN(this.origin))
         },desc:"必须是数字类型"},
-
+        
         //验证值在给出的范围内
         isOneOf:{fn:function(rangeArray,cb){
             var find = false;
@@ -49,8 +51,8 @@ define('OneLib.Validation', [], function (require, exports, module) {
             }
             cb&&cb(find)
         },desc:"必须取集合[{1}]中的值"},
-
-
+        
+        
         //验证是字符串
         isStr:{fn:function(cb){
             cb&&cb(this.type ==='string')
@@ -111,7 +113,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
             },
             desc:"必须是整数位不超过{1},小数位不超过{2}的正数"
         },
-
+        
         /**
          * 等于比较符号，使用==验证相等
          */
@@ -155,7 +157,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
             desc:"必须小于等于{1}"
         }
     }
-
+    
     /**
      * 验证组构造器
      * PS:由于外部API用户往往是从开始验证一个字段来开启一个验证组，所以这2个参数和target的参数是一样的
@@ -166,13 +168,13 @@ define('OneLib.Validation', [], function (require, exports, module) {
     function ValidateGroup(param,desc){
         var self = this;
         event.mixin(ValidateGroup);
-
+        
         //一个验证组开启的时候，可以含有一个初始的验证字段
         self.targets=[];
         //if(param!==undefined){
-            self.curTarget = new ValidateTarget(self,param,desc);
-            self.targets.push(self.curTarget);
-            //return target;
+        self.curTarget = new ValidateTarget(self,param,desc);
+        self.targets.push(self.curTarget);
+        //return target;
         //}
     }
     /**
@@ -187,7 +189,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         return self;
         //return target; //返回target,这样api层面可以直接对对象进行验证操作
     };
-
+    
     /**
      * 订阅验证组的失败事件
      *  回调函数参数：验证值对象，描述，失败的验证函数名，失败的验证参数
@@ -197,7 +199,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         this.once("failed",cb)
         return this;
     }
-
+    
     /**
      * 订阅验证组的成功事件
      * @param cb(val,desc)
@@ -212,9 +214,9 @@ define('OneLib.Validation', [], function (require, exports, module) {
      */
     ValidateGroup.prototype.run= function () {
         var self = this;//save the this ref
-    
-        return new Promise(function (resolve,reject) {
         
+        return new Promise(function (resolve,reject) {
+            
             if(self.targets && self.targets.length){
                 //todo:遍历内部的验证器，一个个执行,并设置参数
                 arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
@@ -236,62 +238,19 @@ define('OneLib.Validation', [], function (require, exports, module) {
                 self.emit("passed");
                 resolve({pass:true});
             }
-        
+            
         });
-    
         
-        // //todo:遍历内部的验证器，一个个执行,并设置参数
-        // arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
-        //     target._failed(function (funcKey,args,funcDesc) {
-        //         self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc)
-        //     })._passed(function () {
-        //         if(idx<self.targets.length-1){
-        //             next();
-        //         }else{
-        //             //如果都执行完了，说明成功
-        //             self.emit("passed",target.origin,target.desc)
-        //         }
-        //     })._run();
-        // });
-
     }
-
-    // /**
-    //  * 开始运行验证器,返回promise
-    //  */
-    // ValidateGroup.prototype.runAsPromise= function () {
-    //     var self = this;//save the this ref
-    //
-    //     return new Promise(function (resolve,reject) {
-    //
-    //         //todo:遍历内部的验证器，一个个执行,并设置参数
-    //         arrayExt.eachAsync(self.targets,function(target,idx,next,cancel){
-    //             target._failed(function (funcKey,args,funcDesc) {
-    //                 self.emit("failed",target.origin,target.desc,funcKey,args,funcDesc);
-    //                 resolve({pass:false,origin:target.origin,desc:target.desc,funcKey:funcKey,args:args,funcDesc:funcDesc})
-    //             })._passed(function () {
-    //                 if(idx<self.targets.length-1){
-    //                     next();
-    //                 }else{
-    //                     //如果都执行完了，说明成功
-    //                     self.emit("passed",target.origin,target.desc)
-    //                     resolve({pass:true,origin:target.origin,desc:target.desc})
-    //                 }
-    //             })._run();
-    //         })
-    //
-    //     });
-    //
-    // }
-
-
+    
+    
     function ValidateTarget(group,param,desc){
         var self = this;
-
+        
         event.mixin(ValidateTarget);
-
+        
         self.group=group;//每个验证目标都有一个所属的验证组
-
+        
         self.origin=param;//存储原始的值
         self.desc=desc;//存储值的描述
         //下面提供一些现成的标记，辅助进行参数校验
@@ -299,7 +258,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         self.type=typeof param;
         self.isNull=param===null;
         self.isUndefined=param===undefined;
-
+        
         self.funcChain=[];//保存要在对象上进行的验证列表
     }
     /**
@@ -320,7 +279,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
         this.once("failed",cb)
         return this;
     }
-
+    
     ValidateTarget.prototype._passed= function (cb) {
         this.once("passed",cb)
         return this;
@@ -339,13 +298,13 @@ define('OneLib.Validation', [], function (require, exports, module) {
      */
     ValidateTarget.prototype._run= function () {
         var self = this;//save the this ref
-    
+        
         if(self.funcChain && self.funcChain.length) {
             //遍历内部的验证器，一个个执行,并设置参数
             arrayExt.eachAsync(self.funcChain, function (item, idx, next, cancel) {
                 var validateFunc = validateFunctions[item.key],
                     args = item.args;
-        
+                
                 //组织入参，并调用内部的验证函数。入参的最后一个参数，总是回调
                 validateFunc.fn.apply(self, args.concat(function (pass,otherErrMsg) {
                     if (pass) {
@@ -359,7 +318,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
                     } else {
                         //执行失败，发射failed消息
                         var errTemplate = validateFunc.desc;
-    
+                        
                         //如果执行过程中发现了其他错误消息，则不使用验证项目的模板消息
                         if(otherErrMsg){
                             errTemplate=otherErrMsg;
@@ -380,12 +339,12 @@ define('OneLib.Validation', [], function (require, exports, module) {
                 }));
             });
         }else{
-    
+            
             //没有可验证的函数，说明成功
             self.emit("passed")
         }
     }
-//保留的方法key,防止被冲
+    //保留的方法key,防止被冲
     var reservedKey={};
     for(var k in ValidateTarget.prototype){
         reservedKey[k] = true;
@@ -393,7 +352,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
     var _addHelperToTarget =function (key,func){
         ValidateGroup.prototype[key]= function () {
             var args = [].slice.call(arguments);
-
+            
             this.curTarget.funcChain.push({key:key,args:args});
             return this;
         }
@@ -408,7 +367,7 @@ define('OneLib.Validation', [], function (require, exports, module) {
      * @param key
      * @param func
      */
-    exports.setValidateFunction = function (key,func) {
+    __pub__.setValidateFunction = function (key,func) {
         if(key in reservedKey){
             throw new Error("key:"+key +" is reserved!")
         }else{
@@ -420,7 +379,24 @@ define('OneLib.Validation', [], function (require, exports, module) {
      * 将待验证对象包装起来，以便于进行后续的验证
      * @param param
      */
-    exports.targetWrapper = function (param,desc) {
+    __pub__.targetWrapper = function (param,desc) {
         return new ValidateGroup(param,desc);
     }
-});
+    
+    //amd loader
+    if("function"==typeof define&&define.amd){
+        define([],function(){"use strict";return __pub__});
+    }
+    //commonjs loader
+    else if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = __pub__;
+    }
+    //oneLib.CMDSyntax loader
+    else if("function"==typeof define&&define.oneLib){
+        define("OneLib.Validation",function(){return __pub__});
+    }
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].Validation = __pub__;
+    
+})();
