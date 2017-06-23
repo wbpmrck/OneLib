@@ -118,10 +118,9 @@
     //oneLib.CMDSyntax loader
     else if("function"==typeof define&&define.oneLib){
         define("OneLib.Log",function(){return __pub__});
-    }else{
-        //no module loader
-        window['OneLib'] || (window['OneLib']={});
-        window['OneLib'].Log = __pub__;
     }
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].Log = __pub__;
     
 })();

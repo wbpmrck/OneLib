@@ -461,10 +461,10 @@
     //oneLib.CMDSyntax loader
     else if("function"==typeof define&&define.oneLib){
         define("OneLib.ScriptLoader",function(){return __pub__});
-    }else{
-        //no module loader
-        window['OneLib'] || (window['OneLib']={});
-        window['OneLib'].ScriptLoader = __pub__;
     }
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].ScriptLoader = __pub__;
+    
     
 })();

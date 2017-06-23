@@ -4,11 +4,20 @@ describe('OneLib.Validation ', function () {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 20*1000
 
     });
-
+ 
     afterEach(function () {
         //run after each test
     });
 
+    it("should also work when no loader in browser document", function () {
+        
+        define("testNoLoader",function(require,exports,module){
+            //2种方式拿到的module的属性在内存中是一块
+            expect(window.OneLib.Validation.targetWrapper).toBe(require('OneLib.Validation').targetWrapper);
+            expect(window.OneLib.Validation.setValidateFunction).toBe(require('OneLib.Validation').setValidateFunction);
+        });
+        
+    });
 
     it('should can use targetWrapper to start a validation', function () {
         define('testRemoveDump3', [], function (require, exports, module) {

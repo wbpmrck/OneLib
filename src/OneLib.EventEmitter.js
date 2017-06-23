@@ -222,9 +222,8 @@
     //oneLib.CMDSyntax loader
     else if("function"==typeof define&&define.oneLib){
         define("OneLib.EventEmitter",function(){return __pub__});
-    }else{
-        //no module loader
-        window['OneLib'] || (window['OneLib']={});
-        window['OneLib'].EventEmitter = __pub__;
     }
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].EventEmitter = __pub__;
 })();

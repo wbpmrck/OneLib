@@ -92,10 +92,10 @@
     //oneLib.CMDSyntax loader
     else if("function"==typeof define&&define.oneLib){
         define("OneLib.Utils.Array",function(){return __pub__});
-    }else{
+    }
         //no module loader
         window['OneLib'] || (window['OneLib']={});
         window['OneLib']['Utils'] || (window['OneLib']['Utils']={});
         window['OneLib']['Utils'].Array = __pub__;
-    }
+    
 })()

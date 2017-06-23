@@ -9,7 +9,7 @@
 
 ;(function () {
     
-    var exports={};
+    var __pub__={};
     var event = typeof require ==='function'?require("OneLib.EventEmitter"):window.OneLib.EventEmitter;
     var arrayExt = typeof require ==='function'?require("OneLib.Utils.Array"):window.OneLib.Utils.Array;
     
@@ -367,7 +367,7 @@
      * @param key
      * @param func
      */
-    exports.setValidateFunction = function (key,func) {
+    __pub__.setValidateFunction = function (key,func) {
         if(key in reservedKey){
             throw new Error("key:"+key +" is reserved!")
         }else{
@@ -379,27 +379,24 @@
      * 将待验证对象包装起来，以便于进行后续的验证
      * @param param
      */
-    exports.targetWrapper = function (param,desc) {
+    __pub__.targetWrapper = function (param,desc) {
         return new ValidateGroup(param,desc);
     }
     
     //amd loader
     if("function"==typeof define&&define.amd){
-        define([],function(){"use strict";return window.Swiper});
+        define([],function(){"use strict";return __pub__});
     }
     //commonjs loader
     else if (typeof module !== 'undefined' && typeof exports === 'object') {
-        module.exports = AlloyCrop;
+        module.exports = __pub__;
     }
     //oneLib.CMDSyntax loader
     else if("function"==typeof define&&define.oneLib){
-        define([],function(){"use strict";return window.Swiper});
-    }else{
-        //no module loader
+        define("OneLib.Validation",function(){return __pub__});
     }
-        
-    })();
-// define('OneLib.Validation', [], function (require, exports, module) {
-//
-//
-// });
+    //no module loader
+    window['OneLib'] || (window['OneLib']={});
+    window['OneLib'].Validation = __pub__;
+    
+})();
