@@ -11,7 +11,6 @@ process.on('uncaughtException', function(err) {
 });
 
 //通用配置
-app.configure(function(){
     app.set('port',"19527");
     //app.set('views', __dirname + '/view');
     //app.set('view engine', 'html');
@@ -23,7 +22,6 @@ app.configure(function(){
     app.use(app.router);
     app.use(express.static(path.resolve(__dirname, '../../../')));
 
-});
 
 var httpServer=http.createServer(app);
 httpServer.listen(app.get('port'), function(){

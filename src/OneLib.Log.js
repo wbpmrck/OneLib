@@ -11,30 +11,30 @@
  2012年3月25日10:18:02      版本创建
  //////////////////////////////////////////////////////////////////*/
 
-var global = global||window;
-var OneLib = (function (my) {return my;} (global['OneLib'] || (global['OneLib']={})));
 
-OneLib.Log = (function (my) {
-    my.configs = {
+;(function () {
+    var __pub__={};
+    
+    __pub__.configs = {
         enable: undefined //全局是否启用日志标志,为undefined则不影响内部配置,为true则无视内部配置，全部有效，为false则全部无效
     };
     /**
      * 修改全局日志配置
      * @param configs
      */
-    my.config = function (configs) {
+    __pub__.config = function (configs) {
         for (var i in configs){
-            my.configs[i] = configs[i];
+            __pub__.configs[i] = configs[i];
         }
     };
-
+    
     /**
      * 类定义：日志记录器
      * @constructor
      */
-    my.Logger = function(enable){
+    __pub__.Logger = function(enable){
         var self = this;//save the this ref
-
+        
         self.enable = enable;
         self.count=0;
         var _style="color:red;",
@@ -45,8 +45,9 @@ OneLib.Log = (function (my) {
              * @return {Function}
              * @private
              */
-                _getRewrittenLog =function (type){
-                if((type === undefined && global.console) || (type ===0 && (window.console&&window.console.log))){
+            _getRewrittenLog =function (type){
+                // if((type === undefined && window.console) || (type ===0 && (window.console&&window.console.log))){
+                if(type ===0 && (window.console&&window.console.log)){
                     var _l= function (msg){
                         self.count++;//增加次数
                         console.log(msg);
@@ -70,7 +71,7 @@ OneLib.Log = (function (my) {
                     return _l2;
                 }
             };
-
+        
         /**
          * 写一行日志
          * @param msg
@@ -80,7 +81,7 @@ OneLib.Log = (function (my) {
                 _logMethod(msg);
             }
         };
-
+        
         /**
          * 清除所有日志
          */
@@ -94,7 +95,7 @@ OneLib.Log = (function (my) {
         self.setStyle=function(style){
             _style = style;
         };
-
+        
         /**
          * 设置写log方式：
          * @param mode:0代表console,1代表DOM
@@ -102,7 +103,25 @@ OneLib.Log = (function (my) {
         self.setMode=function(mode){
             _logMethod = _getRewrittenLog(mode)
         };
-        self.setMode();
+        self.setMode(1);
     };
-    return my;
-} (OneLib.Log || {}));
+    
+    
+    //amd loader
+    if("function"==typeof define&&define.amd){
+        define([],function(){"use strict";return __pub__});
+    }
+    //commonjs loader
+    else if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = __pub__;
+    }
+    //oneLib.CMDSyntax loader
+    else if("function"==typeof define&&define.oneLib){
+        define("OneLib.Log",function(){return __pub__});
+    }else{
+        //no module loader
+        window['OneLib'] || (window['OneLib']={});
+        window['OneLib'].Log = __pub__;
+    }
+    
+})();

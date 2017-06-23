@@ -4,6 +4,27 @@
 这是一个通用代码库，里面包含了日常web开发过程中基类下来的一些类库、使用CMD语法规范进行重新定义、整合.项目demo地址：<a href="http://wbpmrck.github.io/OneLib/demo/html/index.html" target="_blank">点击打开</a>
 <hr/>
 
+### how to run test:
+
+#### install karma
+```
+# Install Karma:
+$ npm install karma --save-dev
+
+# Install plugins that your project needs:
+$ npm install karma-jasmine karma-chrome-launcher jasmine-core --save-dev
+```
+
+#### install dependency
+```
+$ npm install
+```
+
+#### run test
+```
+$ cd test/OneLib.XXX
+$ karma start
+```
 
 ###Doing
 * 修改Validation模块，使其run方法返回一个Promise,使用Promise的then来处理验证结果

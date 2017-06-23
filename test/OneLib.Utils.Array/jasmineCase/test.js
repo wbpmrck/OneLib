@@ -8,7 +8,8 @@ describe('arrayUtils ', function () {
     afterEach(function () {
         //run after each test
     });
-
+    
+     
     it('should can use eachAsync ', function (done) {
         define('test1', function (require, exports, module) {
             var arrayUtil = require('OneLib.Utils.Array');

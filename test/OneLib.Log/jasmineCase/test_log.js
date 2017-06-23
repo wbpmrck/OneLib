@@ -3,8 +3,8 @@ describe("Logger.writeLine ", function() {
     beforeEach(function() {
         _logger = new OneLib.Log.Logger(true);
         _disabledLogger = new OneLib.Log.Logger(false);
-        spyOn(_logger,'writeLine').andCallThrough();
-        spyOn(_disabledLogger,'writeLine').andCallThrough();
+        spyOn(_logger,'writeLine').and.callThrough();
+        spyOn(_disabledLogger,'writeLine').and.callThrough();
     });
 
     afterEach(function() {
@@ -17,20 +17,20 @@ describe("Logger.writeLine ", function() {
     it("should write sth to DOM by default", function() {
         _logger.writeLine('this is a log message');
         expect(_logger.writeLine).toHaveBeenCalled();
-        expect(_logger.writeLine.calls.length).toEqual(1);
+        expect(_logger.writeLine.calls.count()).toEqual(1);
         expect(_logger.count).toBe(1);
         expect( $(".__log__").length).toBe(1);
-
+ 
         _logger.writeLine('this is a log message');
-        expect(_logger.writeLine.calls.length).toEqual(2);
+        expect(_logger.writeLine.calls.count()).toEqual(2);
         expect(_logger.count).toBe(2);
         expect( $(".__log__").length).toBe(2);
-        expect(_logger.writeLine.calls.length).toEqual(2);
+        expect(_logger.writeLine.calls.count()).toEqual(2);
     });
     it("should write nothing when logger is disabled", function() {
         _disabledLogger.writeLine('this is a log message');
         expect(_disabledLogger.writeLine).toHaveBeenCalled();
-        expect(_disabledLogger.writeLine.calls.length).toEqual(1);
+        expect(_disabledLogger.writeLine.calls.count()).toEqual(1);
         expect(_disabledLogger.count).toBe(0);
         expect( $(".__log__").length).toBe(0);
     });
