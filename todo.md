@@ -1,10 +1,6 @@
-#开发计划
+# Dev Plan
 
-###Doing
-* 修改Validation模块，使其run方法返回一个Promise,使用Promise的then来处理验证结果
-    * 由于promise.resolve只能传入一个参数，所以原先的验证结果的诸多字段，封装在一个对象里给出
-* 重构CMDSyntax模块，使其100%兼容、支持requireJs的AMD风格语法
-    * 使用第三方框架库测试
+## Doing
 * 增加给eventName添加默认callback的功能
 	* 使用场景：在微信接口准备好之后，做xxx事情
 
@@ -20,8 +16,10 @@
 * 考虑新增一个模块，把事件处理(addEventLister等)，DOM访问等常见方法兼容性问题处理好，作为核心模块之一被其他模块依赖，无需多次定义
 
 
-###Done
+## Done
 
+* 修改Validation模块，使其run方法返回一个Promise,使用Promise的then来处理验证结果
+    * 由于promise.resolve只能传入一个参数，所以原先的验证结果的诸多字段，封装在一个对象里给出
 * 新增Thunk模块,用于生成Thunkfy的函数
     * Thunk用于把异步调用的函数结构成fn(其他参数)(回调函数)的统一格式.
 * 增强EventEmitter,新增pipe方法以管道的方式派发事件+参数
@@ -97,7 +95,7 @@
 </ul>
 
 
-###Todos
+## Todos
 * 添加动画的快近、快退、设置倍速（1/2X,2X,4X）功能
     * 多倍速：在不改变帧速的情况下，通过多次调用delta函数来实现“加速”变化效果
     * 慢速：不降低interval频率，考虑如何实现
@@ -130,13 +128,3 @@
     * 不用定义moduleName和dependencies,直接使用文件所在路径作为模块名，require的模块作为依赖
     * 可以使用path配置各种路径的简称，让编写更方便，比如，var ko = require('$common$/tip.js')
 
-
-##Features
-* 统一的语法定义(CMD).
-* 完整的示例.
-* 完善的测试用例.
-
-## License
-
-MIT
-##End
