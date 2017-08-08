@@ -62,6 +62,7 @@ describe('OneLib.OOP ', function () {
             expect(tom.die()).toBe("i was dead");
 
             expect(OOP.getSupper(Dog)).toBe(Animal.prototype);
+            expect(OOP.getSupper(tom)).toBe(Animal.prototype);
         });
     });
 });

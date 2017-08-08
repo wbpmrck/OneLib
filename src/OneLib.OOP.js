@@ -58,7 +58,13 @@ define('OneLib.OOP', [], function (require, exports, module) {
     return {
         defineClass:_defineClass,
         getSupper:function(classRef){
-            return classRef.__supperClassProto__;
+            
+            if(typeof  classRef ==='function'){
+                return classRef.__supperClassProto__ ;
+            }
+            if(typeof  classRef ==='object'){
+                return classRef.constructor.__supperClassProto__ ;
+            }
         }
     }
 
