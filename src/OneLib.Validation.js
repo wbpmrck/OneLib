@@ -30,12 +30,14 @@
             var reg = /^1[0-9]{10}$/;
             cb&&cb(reg.test(this.origin));
         },desc:"必须是合法的手机号格式"},
-        //是否数字类型的文本
-        isNumStr:{fn:function (lenBegin,lenEnd,cb) {
-            //var reg = /^[0-9]{4}$/;
-            var reg = new RegExp(['^[0-9]{',lenBegin,',',lenEnd,'}$'].join(''));
+    
+        //是否整数数字类型的文本
+        isIntStr:{fn:function (lenBegin,lenEnd,cb) {
+            // ^(\-|\+)?\d+(\.\d+)?$
+            var reg = new RegExp(['^(\\-|\\+)?\\d{',lenBegin,',',lenEnd,'}$'].join(''));
             cb&&cb(reg.test(this.origin));
-        },desc:"必须是{1}~{2}位数字"},
+        },desc:"必须是{1}~{2}位整数数字"},
+        
         //验证是数字类型
         isNum:{fn:function(cb){
             cb&&cb(this.type ==='number' && !isNaN(this.origin))

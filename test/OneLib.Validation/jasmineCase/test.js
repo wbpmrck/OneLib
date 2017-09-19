@@ -192,15 +192,15 @@ describe('Built-in Validator:', function () {
         });
     });
 
-    it('should can work with "isNumStr" validator', function () {
-        define('test-isNumStr', [], function (require, exports, module) {
+    it('should can work with "isIntStr" validator', function () {
+        define('test-isIntStr', [], function (require, exports, module) {
 
             var validation = require('OneLib.Validation').targetWrapper;
 
             var someInput = '123456',passCalled = false;
             var someInput2 = 'wrong1',failedCalled = false;
 
-            validation(someInput,'正确的输入示例').isNumStr(6,6).
+            validation(someInput,'正确的输入示例').isIntStr(6,6).
                 failed(function (val,desc,funcKey,args,funcDesc) {
                     throw new Error("this code should not be called!")
                 }).
@@ -212,14 +212,14 @@ describe('Built-in Validator:', function () {
                 run();
             expect(passCalled).toBe(true);
 
-            validation(someInput2,"错误的输入示例").isNumStr(6,6).
+            validation(someInput2,"错误的输入示例").isIntStr(6,6).
                 failed(function (val,desc,funcKey,args,funcDesc) {
                     failedCalled = true;
 
                     //get info when failed
                     expect(val).toEqual(someInput2);
                     expect(desc).toEqual('错误的输入示例');
-                    expect(funcDesc).toEqual('必须是6~6位数字');
+                    expect(funcDesc).toEqual('必须是6~6位整数数字');
 
                 }).
                 passed(function () {
@@ -889,7 +889,7 @@ describe('Batch Validator:', function () {
 
             var someInput='123abc',someInput2='222';
             validation(someInput,'输入信息').notEmptyStr().lengthBetween(1,11).
-                and(someInput2).isNumStr(3,3).sameTo('222').
+                and(someInput2).isIntStr(3,3).sameTo('222').
                 failed(function (val,desc,funcKey,args,funcDesc) {
                     throw new Error("this code should not be called!")
                 }).
