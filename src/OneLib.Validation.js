@@ -4,6 +4,7 @@
  *
  * 依赖：
  * 1、OneLib.EventEmitter
+ * 1、OneLib.Utils.Array
  * Created by cuikai on 2015/12/30.
  */
 
