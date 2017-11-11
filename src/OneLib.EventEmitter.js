@@ -1,24 +1,5 @@
-/**
- * @Created by kaicui.
- * @Date:2013-12-01 21:25
- * @Desc: 提供类似node.js的eventEmitter的事件发布处理机制
- * 1、可以直接继承eventEmitter来让自身具备事件发射功能
- * 2、也可以使用mixin方法来让已有对象具备发射功能
- *
- * PS:侵入说明：会给回调函数对象，增加_slotId和_ttl属性，分别表示事件槽号，和剩余可回调次数
- * PPS:现在的emit都是同步的，以后会不会有异步的notify,也可以考虑添加(使用setTimeout)
- * @Change History:
- *
- * kaicui 2015-11-11 增加pipe特性
- * kaicui 2015-09-15 10:05  增加功能
- *  1、增加once功能，可以定义只触发一次的事件(使用ttl实现)
- *  2、去除CMD的包裹，event机制作为做基础的扩展，很可能被CMD模块本身所依赖
- *
- --------------------------------------------
- @created：|kaicui| 2013-12-01 21:25.
- --------------------------------------------
- */
-;(function () {
+
+;(function (global) {
     
     var __pub__={};
     var slotSeed= 1,
@@ -58,17 +39,38 @@
             this._events = this._events || {};
             if( evtName in this._events === false  )	return;
             
+            /**
+             * 异步的清除Hoster内部注册的事件订阅(脏标记=true)
+             * @param hoster
+             * @private
+             */
+            function _asyncClearEvents(hoster,en) {
+                for(var i=hoster._events[en].length-1;i>=0;i--){
+                    var _item = hoster._events[en][i];
+                    if(_item._waitOff){
+                        hoster._events[en].splice(i, 1);
+                    }
+                }
+            }
+            
             var t = typeof cb;
             if(t=="number"){
                 for(var i=this._events[evtName].length-1;i>=0;i--){
                     var _item = this._events[evtName][i];
                     if(_item._slotId == cb){
-                        this._events[evtName].splice(i, 1);
+                        // this._events[evtName].splice(i, 1);
+                        this._events[evtName][i]["_waitOff"]=true;//设置脏标记，cb不会再被调用，这样在emit里，也不影响其他后续cb的调用
+                        
+                        setTimeout((function (hoster,en) {
+                            return function () {
+                                _asyncClearEvents(hoster,en);
+                            }
+                        })(this,evtName),0)
                         break;
                     }
                 }
             }else if( (t=="string" && cb.toLowerCase()=="all") ||(t=="undefined")){
-                delete this._events[evtName];
+                delete this._events[evtName]; //移除所有的
             }else if(t=="function"){
                 
                 for(var i=this._events[evtName].length-1;i>=0;i--){
@@ -76,7 +78,12 @@
                     if(_item.toString() === cb.toString()){
                         //本来想用函数上保存的slotId来标识，但是很可能函数是反复创建的函数对象
                         //if(_item._slotId === cb._slotId){
-                        this._events[evtName].splice(i, 1);
+                        // this._events[evtName].splice(i, 1);
+                        this._events[evtName][i]["_waitOff"]=true;//设置脏标记，cb不会再被调用，这样在emit里，也不影响其他后续cb的调用
+                        
+                        setTimeout((function (hoster,en) {
+                            _asyncClearEvents(hoster,en);
+                        })(this,evtName),0)
                         break;
                     }
                 }
@@ -97,11 +104,19 @@
             
             function _dispatch(subEvtName){
                 var _args = _slice.call(arguments, 1);
-                for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&&j--) || i++){
+                // for(var i = 0, j=this._events[subEvtName].length; i<j;(cut&& (j--||true)) || i++){
+                for(var i = 0, j=this._events[subEvtName].length; i<j;){
                     cut = false;
-                    (cb=this._events[subEvtName][i])&&(cb.apply(this, _args));
+                    // (cb=this._events[subEvtName][i])&&(cb.apply(this, _args));
+                    //如果回调函数存在，并且并非处于被"off"状态，则调用
+                    (cb=this._events[subEvtName][i]) && (cb["_waitOff"]!==true) && (cb.apply(this, _args));
                     //do with TTL
                     cb && Object.prototype.hasOwnProperty.call(cb,"_ttl") && (--cb._ttl<=0) && (cut = true) &&  this._events[subEvtName].splice(i, 1);
+                    
+                    //如果上一个事件被移除，那么i不增长。否则i增长1
+                    if(!cut){
+                        i++;
+                    }
                 }
             }
             
@@ -224,6 +239,6 @@
         define("OneLib.EventEmitter",function(){return __pub__});
     }
     //no module loader
-    window['OneLib'] || (window['OneLib']={});
-    window['OneLib'].EventEmitter = __pub__;
-})();
+    global['OneLib'] || (global['OneLib']={});
+    global['OneLib'].EventEmitter = __pub__;
+})(this);
