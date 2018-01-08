@@ -1,6 +1,7 @@
 # Dev Plan
 
 ## Doing
+* 所有文件名按照规范进行重构、包括demo工程
 * 增加给eventName添加默认callback的功能
 	* 使用场景：在微信接口准备好之后，做xxx事情
 
