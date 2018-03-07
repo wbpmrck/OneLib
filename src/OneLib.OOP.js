@@ -15,7 +15,7 @@ define('OneLib.OOP', [], function (require, exports, module) {
     var _hasProp = Object.prototype.hasOwnProperty;
     /**
      * 定义类
-     * @param metaData:{constructor,prototype,supper}
+     * @param metaData:{constructor,prototype,super}
      * @param base
      * @private
      */
@@ -26,8 +26,8 @@ define('OneLib.OOP', [], function (require, exports, module) {
             var cons = metaData["constructor"],
                 realCons=cons;
             //如果是继承，则添加中介对象
-            if(_hasProp.call(metaData,"supper")){
-                var parentClass = metaData["supper"];
+            if(_hasProp.call(metaData,"super")){
+                var parentClass = metaData["super"];
                 if(parentClass !== undefined){
                     F.prototype = parentClass.prototype;
                     realCons = function(){

@@ -42,7 +42,7 @@ describe('OneLib.OOP ', function () {
                         return "woof!"
                     }
                 },
-                supper:Animal
+                super:Animal
             })
 
             var tom = new Dog("tom","big dog");
