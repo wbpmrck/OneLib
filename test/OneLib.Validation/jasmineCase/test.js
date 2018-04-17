@@ -75,6 +75,44 @@ describe('Built-in Validator:', function () {
         //run after each test
     });
 
+    it('should can work with "isEmail" validator', function () {
+        define('test-isEmail', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput = 'wbpmrck@gmail.com',passCalled = false;
+            var someInput2 = 's74823341@332',failedCalled = false;
+
+            validation(someInput,'正确的输入示例').isEmail().
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    passCalled = true;
+                    expect(val).toEqual(someInput);
+                    expect(desc).toEqual('正确的输入示例');
+                }).
+                run();
+            expect(passCalled).toBe(true);
+
+            validation(someInput2,"错误的输入示例").isEmail().
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    failedCalled = true;
+
+                    //get info when failed
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual('错误的输入示例');
+                    expect(funcDesc).toEqual('必须是合法的邮箱格式');
+
+                }).
+                passed(function () {
+                    throw new Error("this code should not be called!")
+                }).
+                run();
+            expect(failedCalled).toBe(true);
+
+        });
+    });
     it('should can work with "isPhoneNoStr" validator', function () {
         define('test-isPhoneNoStr', [], function (require, exports, module) {
 
@@ -894,11 +932,65 @@ describe('Batch Validator:', function () {
                     throw new Error("this code should not be called!")
                 }).
                 passed(function (val,desc) {
-                    passCalled = true;
                     expect(val).toEqual(someInput2);
                     expect(desc).toEqual(undefined);
                 }).
                 run();
+        });
+
+    });
+
+    it('should can add conditional validator use if', function () {
+        define('if keyword', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput='123abc',someInput2=undefined;
+            validation(someInput,'输入信息').notEmptyStr().lengthBetween(1,11).
+                and(someInput2).if(someInput!==undefined).lengthBetween(1,3).
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual(undefined);
+                }).
+                run();
+        });
+
+        define('if keyword 2', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput='123abc',someInput2="1112";
+            validation(someInput,'输入信息').notEmptyStr().lengthBetween(1,11).
+                and(someInput2,'输入2').if(someInput!==undefined).lengthBetween(1,3). //当输入1有值的时候，才检查输入2
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    expect(val).toEqual(someInput2);
+                    expect(desc).toEqual('输入2');
+                    expect(funcDesc).toEqual('长度必须在1和3之间');
+                }).
+                passed(function (val,desc) {
+                    throw new Error("this code should not be called!")
+                }).
+                run();
+        });
+        define('if keyword 3', [], function (require, exports, module) {
+
+            var validation = require('OneLib.Validation').targetWrapper;
+
+            var someInput='123abc',someInput2="1112";
+            var passCalled = false;
+            validation(someInput,'输入信息').notEmptyStr().lengthBetween(1,11).
+                and(someInput2,'输入2').if(function(){someInput===null}).lengthBetween(1,3). //当输入1为null，才检查输入2
+                failed(function (val,desc,funcKey,args,funcDesc) {
+                    throw new Error("this code should not be called!")
+                }).
+                passed(function (val,desc) {
+                    passCalled = true;
+                }).
+                run();
+            expect(passCalled).toEqual(true);
         });
 
     });

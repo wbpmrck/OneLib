@@ -26,12 +26,18 @@
      * @type {{isPhoneNo: Function, isValidCode: Function, isNumber: Function, is: Function}}
      */
     var validateFunctions={
+        //邮箱
+        isEmail:{fn:function (cb) {
+            var reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+            cb&&cb(reg.test(this.origin));
+        },desc:"必须是合法的邮箱格式"},
+
         //是否手机号类型的文本
         isPhoneNoStr:{fn:function (cb) {
             var reg = /^1[0-9]{10}$/;
             cb&&cb(reg.test(this.origin));
         },desc:"必须是合法的手机号格式"},
-    
+
         //是否整数数字类型的文本
         isIntStr:{fn:function (lenBegin,lenEnd,cb) {
             // ^(\-|\+)?\d+(\.\d+)?$
@@ -213,6 +219,30 @@
         return this;
     }
     /**
+     * 从验证对象中移除最后一项
+     * @returns {ValidateGroup}
+     */
+    ValidateGroup.prototype.popLast= function () {
+        this.targets.splice(this.targets.length-1,1);
+        this.currentTarget = this.targets[this.targets.length-1];
+        return this;
+    }
+
+    ValidateGroup.prototype.if= function (conditionFn) {
+        if(conditionFn && typeof conditionFn === 'function'){
+            var appendTarget = conditionFn();
+            if(!appendTarget){
+                this.popLast();
+            }
+        }else if(conditionFn){
+            //do nothing because condition is true
+        }
+        else{
+            this.popLast();
+        }
+        return this;
+    }
+    /**
      * 开始运行验证器
      */
     ValidateGroup.prototype.run= function () {
@@ -272,6 +302,14 @@
      */
     ValidateTarget.prototype.and= function (param,desc) {
         return this.group.and.call(this.group,param,desc);
+    }
+    /**
+     * 判断生效函数的返回结果，如果false，则删除之前加入的验证对象
+     * @param conditionFn
+     * @returns {ValidateTarget}
+     */
+    ValidateTarget.prototype.if= function (conditionFn) {
+        return this.group.if(conditionFn);
     }
     /**
      * 订阅失败事件
